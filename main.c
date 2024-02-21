@@ -89,8 +89,17 @@ int main(int argc, char** argv)
     init();
 
     bool quit = false;
+    SDL_Event event;
     while (!quit)
     {
+        while (SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_QUIT)
+            {
+                quit = true;
+            }
+        }
+
         SDL_PumpEvents();
         const Uint8* keys = SDL_GetKeyboardState(NULL);
         if (keys[SDL_SCANCODE_LEFT])
@@ -99,6 +108,7 @@ int main(int argc, char** argv)
             x_vault += 10;
         if (keys[SDL_SCANCODE_ESCAPE])
             quit=true;
+
 
         draw();
         SDL_UpdateWindowSurface(pWindow);
