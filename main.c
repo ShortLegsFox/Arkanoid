@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 const int FPS=60.0;
+const int RECTIF = 5;
 struct { double pos_x; double pos_y;  double vitesse_x; double vitesse_y; } stats_balle; // On utilise un struct car il nous faut des doubles pour la précision des calculs
 
 Uint64 prev, now; // Timers
@@ -18,6 +19,9 @@ SDL_Surface* textures_fenetre = NULL; // Planche de la texture de la fenetre
 SDL_Rect source_texture_fond = {0, 128, 96, 128 }; // Le point (0,0) est en haut a gauche
 SDL_Rect source_texture_balle = {0, 96, 24, 24 };
 SDL_Rect source_texture_vaisseau = {128, 0, 128, 32 };
+
+// -- Permet d'éviter que la collision entre la balle et le vaisseau se fasse trop de fois en même temps causant ainsi un bug
+bool premiere_collision_vaisseau = false;
 
 
 void init_balle() {
@@ -66,19 +70,23 @@ void draw()
     stats_balle.pos_y += stats_balle.vitesse_y;// / delta_t;
 
     // Collision bord
-    if ((stats_balle.pos_x < 1) || (stats_balle.pos_x > (surface_fenetre->w - balle.w)))
+    if ((stats_balle.pos_x < 1) || (stats_balle.pos_x > (surface_fenetre->w - balle.w))) {
         stats_balle.vitesse_x *= -1;
-    if ((stats_balle.pos_y < 1))
+        premiere_collision_vaisseau = false;
+    }
+    if ((stats_balle.pos_y < 1)) {
         stats_balle.vitesse_y *= -1;
+        premiere_collision_vaisseau = false;
+    }
 
     // Collision vaisseau
-    if(SDL_HasIntersection(&balle, &vaisseau)){
-        stats_balle.pos_y -= 5;
+    if ((SDL_HasIntersection(&balle, &vaisseau)) && premiere_collision_vaisseau == false){
         stats_balle.vitesse_y *= -1;
+        premiere_collision_vaisseau = true;
     }
 
     // Sortie par le bas
-    if (stats_balle.pos_y > (surface_fenetre->h - balle.h)) {
+    if (stats_balle.pos_y > (surface_fenetre->h - balle.h - RECTIF)) {
         init_balle();
     }
 
