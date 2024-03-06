@@ -4,33 +4,39 @@
 #include <stdbool.h>
 
 const int FPS=60.0;
-//struct { double x; double y; } ball_speed;
-struct { double x; double y;  double vx; double vy;} ball;
+struct { double pos_x; double pos_y;  double vitesse_x; double vitesse_y; } stats_balle; // On utilise un struct car il nous faut des doubles pour la précision des calculs
 
-Uint64 prev, now; // timers
-double delta_t;  // durée frame en ms
-int x_vault;
+Uint64 prev, now; // Timers
+double delta_t;  // Durée frame en ms
+int x_pos_vaisseau; // Position horizontale du vaisseau
 
-SDL_Window* pWindow = NULL;
-SDL_Surface* win_surf = NULL;
-SDL_Surface* plancheSprites = NULL;
+SDL_Window* pointeur_fenetre = NULL; // Pointeur vers la fenetre SDL
+SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
+SDL_Surface* textures_fenetre = NULL; // Planche de la texture de la fenetre
 
-SDL_Rect srcBg = { 0,128, 96,128 }; // x,y, w,h (0,0) en haut a gauche
-SDL_Rect srcBall = { 0,96,24,24 };
-SDL_Rect srcVaiss = {128, 0, 128, 32 };
+// -- Découpage sur la planche de texture --
+SDL_Rect source_texture_fond = {0, 128, 96, 128 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_balle = {0, 96, 24, 24 };
+SDL_Rect source_texture_vaisseau = {128, 0, 128, 32 };
 
+
+void init_balle() {
+    stats_balle.pos_x = surface_fenetre->w / 2;
+    stats_balle.pos_y = surface_fenetre->h / 2;
+    stats_balle.vitesse_x = 2.0;
+    stats_balle.vitesse_y = 2.4;
+}
 
 void init()
 {
-    pWindow = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
-    win_surf = SDL_GetWindowSurface(pWindow);
-    plancheSprites = SDL_LoadBMP("./sprites.bmp");
-    SDL_SetColorKey(plancheSprites, true, 0);  // 0: 00/00/00 noir -> transparent
+    pointeur_fenetre = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
+    surface_fenetre = SDL_GetWindowSurface(pointeur_fenetre);
+    textures_fenetre = SDL_LoadBMP("./sprites.bmp");
+    // Les parties de la textures qui sont noires deviennent transparentes
+    SDL_SetColorKey(textures_fenetre, true, 0);
 
-    ball.x = win_surf->w / 2;
-    ball.y = win_surf->h / 2;
-    ball.vx = 1.0;
-    ball.vy = 1.4;
+    // balle (avec struct)
+    init_balle();
 
     now = SDL_GetPerformanceCounter();
 }
@@ -40,48 +46,53 @@ void draw()
 {
     // remplit le fond
     SDL_Rect dest = { 0,0,0,0 };
-    for (int j = 0; j < win_surf->h; j+=128)
-        for (int i = 0; i < win_surf->w; i += 96)
+    for (int j = 0; j < surface_fenetre->h; j+=128)
+        for (int i = 0; i < surface_fenetre->w; i += 96)
         {
             dest.x = i;
             dest.y = j;
-            SDL_BlitSurface(plancheSprites, &srcBg, win_surf, &dest);
+            SDL_BlitSurface(textures_fenetre, &source_texture_fond, surface_fenetre, &dest);
         }
 
+    // Entitées dessinées
+    SDL_Rect vaisseau = {x_pos_vaisseau, surface_fenetre->h - 32, source_texture_vaisseau.w, source_texture_vaisseau.h};
+    SDL_Rect balle = {stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h};
 
-    // affiche balle
-    SDL_Rect dstBall = {ball.x, ball.y, 0, 0};
-    SDL_BlitSurface(plancheSprites, &srcBall, win_surf, &dstBall);
+    // Afficher balle
+    SDL_BlitSurface(textures_fenetre, &source_texture_balle, surface_fenetre, &balle);
 
-    // dedplacement
-    ball.x += ball.vx;// / delta_t;
-    ball.y += ball.vy;// / delta_t;
+    // Dédplacement
+    stats_balle.pos_x += stats_balle.vitesse_x;// / delta_t;
+    stats_balle.pos_y += stats_balle.vitesse_y;// / delta_t;
 
-    // collision bord
-    SDL_Rect vaisseau = {x_vault, win_surf->h - 32, srcVaiss.w, srcVaiss.h};
-    SDL_Rect balle = {ball.x, ball.y, srcBall.w, srcBall.h};
-    if ((ball.x < 1) || (ball.x > (win_surf->w - 25)))
-        ball.vx *= -1;
-    if ((ball.y < 1) || SDL_HasIntersection(&balle, &vaisseau))
-        ball.vy *= -1;
+    // Collision bord
+    if ((stats_balle.pos_x < 1) || (stats_balle.pos_x > (surface_fenetre->w - 25)))
+        stats_balle.vitesse_x *= -1;
+    if ((stats_balle.pos_y < 1))
+        stats_balle.vitesse_y *= -1;
+
+    // Collision vaisseau
+    if(SDL_HasIntersection(&balle, &vaisseau)){
+        stats_balle.pos_y -= 5;
+        stats_balle.vitesse_y *= -1;
+    }
 
     // Sortie par le bas
-    if (ball.y > (win_surf->h - 25)) {
-        ball.x = win_surf->w / 2;
-        ball.y = win_surf->h / 2;
+    if (stats_balle.pos_y > (surface_fenetre->h - 25)) {
+        init_balle();
     }
 
     // touche bas -> rouge
-    if (ball.y >(win_surf->h - 25))
-        srcBall.y = 64;
+    if (stats_balle.pos_y > (surface_fenetre->h - 25))
+        source_texture_balle.y = 64;
     // touche bas -> vert
-    if (ball.y < 1)
-        srcBall.y = 96;
+    if (stats_balle.pos_y < 1)
+        source_texture_balle.y = 96;
 
     // vaisseau
-    dest.x = x_vault;
-    dest.y = win_surf->h - 32;
-    SDL_BlitSurface(plancheSprites, &srcVaiss, win_surf, &dest);
+    dest.x = x_pos_vaisseau;
+    dest.y = surface_fenetre->h - 32;
+    SDL_BlitSurface(textures_fenetre, &source_texture_vaisseau, surface_fenetre, &dest);
 }
 
 int main(int argc, char** argv)
@@ -108,18 +119,18 @@ int main(int argc, char** argv)
         SDL_PumpEvents();
         const Uint8* keys = SDL_GetKeyboardState(NULL);
         int min_x =  0;
-        int max_x = win_surf->w -  128;
+        int max_x = surface_fenetre->w - 128;
 
         if (keys[SDL_SCANCODE_LEFT]) {
-            x_vault -= 10;
-            if(x_vault < min_x) {
-                x_vault = min_x;
+            x_pos_vaisseau -= 10;
+            if(x_pos_vaisseau < min_x) {
+                x_pos_vaisseau = min_x;
             }
         }
         if (keys[SDL_SCANCODE_RIGHT]) {
-            x_vault += 10;
-            if(x_vault > max_x) {
-                x_vault = max_x;
+            x_pos_vaisseau += 10;
+            if(x_pos_vaisseau > max_x) {
+                x_pos_vaisseau = max_x;
             }
         }
         if (keys[SDL_SCANCODE_ESCAPE])
@@ -127,7 +138,7 @@ int main(int argc, char** argv)
 
 
         draw();
-        SDL_UpdateWindowSurface(pWindow);
+        SDL_UpdateWindowSurface(pointeur_fenetre);
         now = SDL_GetPerformanceCounter();
         delta_t = 1.0/FPS - (double)(now - prev) / (double)SDL_GetPerformanceFrequency();
         prev = now;
