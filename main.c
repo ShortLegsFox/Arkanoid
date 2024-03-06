@@ -35,6 +35,50 @@ void init()
     now = SDL_GetPerformanceCounter();
 }
 
+// Vérifie la collision entre deux objets sdl_rect
+bool check_collision(SDL_Rect rectA, SDL_Rect rectB) {
+    //Les cotes des rectangles
+    int leftA, leftB;
+    int rightA, rightB;
+    int topA, topB;
+    int bottomA, bottomB;
+
+    //Calcul les cotes du rectangle A
+    leftA = rectA.x;
+    rightA = rectA.x + rectA.w;
+    topA = rectA.y;
+    bottomA = rectA.y + rectA.h;
+
+    //Calcul les cotes du rectangle B
+    leftB = rectB.x;
+    rightB = rectB.x + rectB.w;
+    topB = rectB.y;
+    bottomB = rectB.y + rectB.h;
+
+    //Tests de collision
+    if( bottomA <= topB )
+    {
+        return false;
+    }
+
+    if( topA >= bottomB )
+    {
+        return false;
+    }
+
+    if( rightA <= leftB )
+    {
+        return false;
+    }
+
+    if( leftA >= rightB )
+    {
+        return false;
+    }
+
+    //Si conditions collision detectee
+    return true;
+}
 
 // fonction qui met à jour la surface de la fenetre "win_surf"
 void draw()
@@ -59,10 +103,18 @@ void draw()
     ball.y += ball.vy;// / delta_t;
 
     // collision bord
+    SDL_Rect vaisseau = {x_vault, win_surf->h - 32, srcVaiss.w, srcVaiss.h};
+    SDL_Rect balle = {ball.x, ball.y, srcBall.w, srcBall.h};
     if ((ball.x < 1) || (ball.x > (win_surf->w - 25)))
         ball.vx *= -1;
-    if ((ball.y < 1) || (ball.y > (win_surf->h - 25)))
+    if ((ball.y < 1) || check_collision(balle, vaisseau))
         ball.vy *= -1;
+
+    // Sortie par le bas
+    if (ball.y > (win_surf->h - 25)) {
+        ball.x = win_surf->w / 2;
+        ball.y = win_surf->h / 2;
+    }
 
     // touche bas -> rouge
     if (ball.y >(win_surf->h - 25))
@@ -75,13 +127,7 @@ void draw()
     dest.x = x_vault;
     dest.y = win_surf->h - 32;
     SDL_BlitSurface(plancheSprites, &srcVaiss, win_surf, &dest);
-
-    // collision vaisseau
-    if ((ball.x > dest.x) && (ball.x < dest.x + srcVaiss.w) && (ball.y > dest.y) && (ball.y < dest.y + srcVaiss.h))
-        ball.vx *= -1;
 }
-
-
 
 int main(int argc, char** argv)
 {
