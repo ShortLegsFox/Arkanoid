@@ -17,7 +17,7 @@ SDL_Surface* plancheSprites = NULL;
 
 SDL_Rect srcBg = { 0,128, 96,128 }; // x,y, w,h (0,0) en haut a gauche
 SDL_Rect srcBall = { 0,96,24,24 };
-SDL_Rect scrVaiss = { 128,0,128,32 };
+SDL_Rect srcVaiss = {128, 0, 128, 32 };
 
 
 void init()
@@ -74,7 +74,11 @@ void draw()
     // vaisseau
     dest.x = x_vault;
     dest.y = win_surf->h - 32;
-    SDL_BlitSurface(plancheSprites, &scrVaiss, win_surf, &dest);
+    SDL_BlitSurface(plancheSprites, &srcVaiss, win_surf, &dest);
+
+    // collision vaisseau
+    if ((ball.x > dest.x) && (ball.x < dest.x + srcVaiss.w) && (ball.y > dest.y) && (ball.y < dest.y + srcVaiss.h))
+        ball.vx *= -1;
 }
 
 
@@ -102,10 +106,21 @@ int main(int argc, char** argv)
 
         SDL_PumpEvents();
         const Uint8* keys = SDL_GetKeyboardState(NULL);
-        if (keys[SDL_SCANCODE_LEFT])
+        int min_x =  0;
+        int max_x = win_surf->w -  128;
+
+        if (keys[SDL_SCANCODE_LEFT]) {
             x_vault -= 10;
-        if (keys[SDL_SCANCODE_RIGHT])
+            if(x_vault < min_x) {
+                x_vault = min_x;
+            }
+        }
+        if (keys[SDL_SCANCODE_RIGHT]) {
             x_vault += 10;
+            if(x_vault > max_x) {
+                x_vault = max_x;
+            }
+        }
         if (keys[SDL_SCANCODE_ESCAPE])
             quit=true;
 
