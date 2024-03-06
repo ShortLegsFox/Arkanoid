@@ -104,15 +104,15 @@ int main(int argc, char** argv)
 
     init();
 
-    bool quit = false;
-    SDL_Event event;
-    while (!quit)
+    bool quitter = false;
+    SDL_Event evenement;
+    while (!quitter)
     {
-        while (SDL_PollEvent(&event))
+        while (SDL_PollEvent(&evenement))
         {
-            if (event.type == SDL_QUIT)
+            if (evenement.type == SDL_QUIT)
             {
-                quit = true;
+                quitter = true;
             }
         }
 
@@ -134,10 +134,10 @@ int main(int argc, char** argv)
             }
         }
         if (keys[SDL_SCANCODE_ESCAPE])
-            quit=true;
-
+            quitter=true;
 
         draw();
+
         SDL_UpdateWindowSurface(pointeur_fenetre);
         now = SDL_GetPerformanceCounter();
         delta_t = 1.0/FPS - (double)(now - prev) / (double)SDL_GetPerformanceFrequency();
