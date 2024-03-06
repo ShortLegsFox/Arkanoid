@@ -45,13 +45,13 @@ void init()
 void draw()
 {
     // remplit le fond
-    SDL_Rect dest = { 0,0,0,0 };
+    SDL_Rect curseur_texture = {0, 0, 0, 0 };
     for (int j = 0; j < surface_fenetre->h; j+=128)
         for (int i = 0; i < surface_fenetre->w; i += 96)
         {
-            dest.x = i;
-            dest.y = j;
-            SDL_BlitSurface(textures_fenetre, &source_texture_fond, surface_fenetre, &dest);
+            curseur_texture.x = i;
+            curseur_texture.y = j;
+            SDL_BlitSurface(textures_fenetre, &source_texture_fond, surface_fenetre, &curseur_texture);
         }
 
     // Entitées dessinées
@@ -66,7 +66,7 @@ void draw()
     stats_balle.pos_y += stats_balle.vitesse_y;// / delta_t;
 
     // Collision bord
-    if ((stats_balle.pos_x < 1) || (stats_balle.pos_x > (surface_fenetre->w - 25)))
+    if ((stats_balle.pos_x < 1) || (stats_balle.pos_x > (surface_fenetre->w - balle.w)))
         stats_balle.vitesse_x *= -1;
     if ((stats_balle.pos_y < 1))
         stats_balle.vitesse_y *= -1;
@@ -78,21 +78,21 @@ void draw()
     }
 
     // Sortie par le bas
-    if (stats_balle.pos_y > (surface_fenetre->h - 25)) {
+    if (stats_balle.pos_y > (surface_fenetre->h - balle.h)) {
         init_balle();
     }
 
     // touche bas -> rouge
-    if (stats_balle.pos_y > (surface_fenetre->h - 25))
+    if (stats_balle.pos_y > (surface_fenetre->h - balle.h))
         source_texture_balle.y = 64;
     // touche bas -> vert
     if (stats_balle.pos_y < 1)
         source_texture_balle.y = 96;
 
-    // vaisseau
-    dest.x = x_pos_vaisseau;
-    dest.y = surface_fenetre->h - 32;
-    SDL_BlitSurface(textures_fenetre, &source_texture_vaisseau, surface_fenetre, &dest);
+    // Afficher vaisseau
+    curseur_texture.x = x_pos_vaisseau;
+    curseur_texture.y = surface_fenetre->h - vaisseau.h;
+    SDL_BlitSurface(textures_fenetre, &source_texture_vaisseau, surface_fenetre, &curseur_texture);
 }
 
 int main(int argc, char** argv)
