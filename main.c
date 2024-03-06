@@ -35,51 +35,6 @@ void init()
     now = SDL_GetPerformanceCounter();
 }
 
-// Vérifie la collision entre deux objets sdl_rect
-bool check_collision(SDL_Rect rectA, SDL_Rect rectB) {
-    //Les cotes des rectangles
-    int leftA, leftB;
-    int rightA, rightB;
-    int topA, topB;
-    int bottomA, bottomB;
-
-    //Calcul les cotes du rectangle A
-    leftA = rectA.x;
-    rightA = rectA.x + rectA.w;
-    topA = rectA.y;
-    bottomA = rectA.y + rectA.h;
-
-    //Calcul les cotes du rectangle B
-    leftB = rectB.x;
-    rightB = rectB.x + rectB.w;
-    topB = rectB.y;
-    bottomB = rectB.y + rectB.h;
-
-    //Tests de collision
-    if( bottomA <= topB )
-    {
-        return false;
-    }
-
-    if( topA >= bottomB )
-    {
-        return false;
-    }
-
-    if( rightA <= leftB )
-    {
-        return false;
-    }
-
-    if( leftA >= rightB )
-    {
-        return false;
-    }
-
-    //Si conditions collision detectee
-    return true;
-}
-
 // fonction qui met à jour la surface de la fenetre "win_surf"
 void draw()
 {
@@ -107,7 +62,7 @@ void draw()
     SDL_Rect balle = {ball.x, ball.y, srcBall.w, srcBall.h};
     if ((ball.x < 1) || (ball.x > (win_surf->w - 25)))
         ball.vx *= -1;
-    if ((ball.y < 1) || check_collision(balle, vaisseau))
+    if ((ball.y < 1) || SDL_HasIntersection(&balle, &vaisseau))
         ball.vy *= -1;
 
     // Sortie par le bas
