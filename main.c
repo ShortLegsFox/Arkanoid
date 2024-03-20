@@ -3,9 +3,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+
 const int FPS = 60;
 const int RECTIF = 5;
 struct { double pos_x; double pos_y;  double vitesse_x; double vitesse_y; } stats_balle; // On utilise un struct car il nous faut des doubles pour la précision des calculs
+typedef struct { int pos_x; int pos_y; bool estBrique } stats_brique; //
+stats_brique briques[100][100];
 
 Uint64 precedent, maintenant; // Timers
 double delta_temps;  // Durée frame en ms
@@ -14,15 +17,52 @@ int x_pos_vaisseau; // Position horizontale du vaisseau
 SDL_Window* pointeur_fenetre = NULL; // Pointeur vers la fenetre SDL
 SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
 SDL_Surface* textures_fenetre = NULL; // Planche de la texture de la fenetre
+SDL_Surface* textures_objets = NULL; // Planche des textures des objets (briques)
 
 // -- Découpage sur la planche de texture --
 SDL_Rect source_texture_fond = {0, 128, 96, 128 }; // Le point (0,0) est en haut a gauche
 SDL_Rect source_texture_balle = {0, 96, 24, 24 };
 SDL_Rect source_texture_vaisseau = {128, 0, 128, 32 };
+SDL_Rect source_texture_brique = { 0, 0, 30, 14 };
 
-// -- Permet d'éviter que la collision entre la balle et le vaisseau se fasse trop de fois en même temps causant ainsi un bug
+// -- Permet d'éviter que la collision entre la balle et le vaisseau se fasse trop de fois en même temps causant ainsi un bug --
 bool premiere_collision_vaisseau = false;
 
+void Recupere_Niveau(const char* nomFichier) {
+    FILE *fichier = fopen(nomFichier, "r");
+    if (!fichier) {
+        perror("Erreur lors de l'ouverture du fichier niveau");
+        return;
+    }
+
+    char ligne[256];
+    int largeurMax = 100;
+    bool nextLine = false;
+
+    int y = 0;
+    int x = 0;
+    while (fgets(ligne, sizeof(ligne), fichier)) {
+        nextLine = false;
+        while(!nextLine) {
+            if (ligne[x] == '#') {
+                briques[y][x].pos_x = x * 30;
+                briques[y][x].pos_y = y * 14;
+                briques[y][x].estBrique = true; // Brick
+            } else {
+                briques[y][x].pos_x = x * 30;
+                briques[y][x].pos_y = y * 14;
+                briques[y][x].estBrique = false; // Empty
+            }
+
+            if(ligne[x] == 'F') {
+                y++;
+                nextLine = true;
+            }
+            x++;
+        }
+        x = 0;
+    }
+}
 
 void Initialise_Balle() {
     stats_balle.pos_x = surface_fenetre->w / 2;
@@ -36,8 +76,12 @@ void Initialise()
     pointeur_fenetre = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
     surface_fenetre = SDL_GetWindowSurface(pointeur_fenetre);
     textures_fenetre = SDL_LoadBMP("./sprites.bmp");
+    textures_objets = SDL_LoadBMP("../assets/Arkanoid_sprites.bmp");
     // Les parties de la textures qui sont noires deviennent transparentes
     SDL_SetColorKey(textures_fenetre, true, 0);
+
+    // Init les briques
+    Recupere_Niveau("../niveaux/niveau1.txt");
 
     // balle (avec struct)
     Initialise_Balle();
@@ -62,6 +106,19 @@ void Dessine()
             curseur_texture.y = j;
             SDL_BlitSurface(textures_fenetre, &source_texture_fond, surface_fenetre, &curseur_texture);
         }
+
+    // remplit les briques
+    SDL_Rect curseur_texture_briques = {0, 0, 0, 0 };
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) {
+            if (briques[i][j].estBrique) {
+                curseur_texture_briques.x = briques[i][j].pos_x;
+                curseur_texture_briques.y = briques[i][j].pos_y;
+                SDL_BlitSurface(textures_objets, &source_texture_brique, surface_fenetre, &curseur_texture_briques);
+            }
+        }
+    }
+
 
     // Entitées dessinées
     SDL_Rect vaisseau = {x_pos_vaisseau, surface_fenetre->h - 32, source_texture_vaisseau.w, source_texture_vaisseau.h};
