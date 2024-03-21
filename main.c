@@ -18,12 +18,23 @@ SDL_Window* pointeur_fenetre = NULL; // Pointeur vers la fenetre SDL
 SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
 SDL_Surface* textures_fenetre = NULL; // Planche de la texture de la fenetre
 SDL_Surface* textures_objets = NULL; // Planche des textures des objets (briques)
+SDL_Surface* textures_ascii = NULL; // Planche des textures des ASCII (aplphabet et chiffres)
 
 // -- Découpage sur la planche de texture --
 SDL_Rect source_texture_fond = {0, 128, 96, 128 }; // Le point (0,0) est en haut a gauche
 SDL_Rect source_texture_balle = {0, 96, 24, 24 };
 SDL_Rect source_texture_vaisseau = {128, 0, 128, 32 };
 SDL_Rect source_texture_brique = { 0, 0, 30, 14 };
+
+// -- Alphabet
+SDL_Rect source_texture_A = {32, 70, 15, 19 };
+SDL_Rect source_texture_B = {128, 0, 128, 32 };
+SDL_Rect source_texture_C = {128, 0, 128, 32 };
+
+// -- Chiffres
+SDL_Rect source_texture_1 = {34, 38, 13, 19 };
+SDL_Rect source_texture_2 = {128, 0, 128, 32 };
+SDL_Rect source_texture_3 = {128, 0, 128, 32 };
 
 // -- Permet d'éviter que la collision entre la balle et le vaisseau se fasse trop de fois en même temps causant ainsi un bug --
 bool premiere_collision_vaisseau = false;
@@ -77,6 +88,7 @@ void Initialise()
     surface_fenetre = SDL_GetWindowSurface(pointeur_fenetre);
     textures_fenetre = SDL_LoadBMP("./sprites.bmp");
     textures_objets = SDL_LoadBMP("../assets/Arkanoid_sprites.bmp");
+    textures_ascii = SDL_LoadBMP("../assets/Arkanoid_ascii.bmp");
     // Les parties de la textures qui sont noires deviennent transparentes
     SDL_SetColorKey(textures_fenetre, true, 0);
 
@@ -106,6 +118,9 @@ void Dessine()
             curseur_texture.y = j;
             SDL_BlitSurface(textures_fenetre, &source_texture_fond, surface_fenetre, &curseur_texture);
         }
+    // affiche une truc
+    SDL_Rect positionTextureA = {100, 100, source_texture_A.w, source_texture_A.h};
+    SDL_BlitSurface(textures_ascii,&source_texture_A, surface_fenetre, &positionTextureA);
 
     // remplit les briques
     SDL_Rect curseur_texture_briques = {0, 0, 0, 0 };
