@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-
+int vies = 3;
 const int FPS = 60;
 const int RECTIF = 5;
 struct { double pos_x; double pos_y;  double vitesse_x; double vitesse_y; } stats_balle; // On utilise un struct car il nous faut des doubles pour la précision des calculs
@@ -28,13 +28,21 @@ SDL_Rect source_texture_brique = { 0, 0, 30, 14 };
 
 // -- Alphabet
 SDL_Rect source_texture_A = {32, 70, 15, 19 };
-SDL_Rect source_texture_B = {128, 0, 128, 32 };
-SDL_Rect source_texture_C = {128, 0, 128, 32 };
+SDL_Rect source_texture_V = {193, 102, 15, 19 };
+SDL_Rect source_texture_i = {290, 131, 13, 22 };
+SDL_Rect source_texture_e = {161, 139, 13, 14 };
 
 // -- Chiffres
+SDL_Rect source_texture_0 = {2, 38, 13, 19 };
 SDL_Rect source_texture_1 = {34, 38, 13, 19 };
-SDL_Rect source_texture_2 = {128, 0, 128, 32 };
-SDL_Rect source_texture_3 = {128, 0, 128, 32 };
+SDL_Rect source_texture_2 = {66, 38, 13, 19 };
+SDL_Rect source_texture_3 = {98, 38, 13, 19 };
+SDL_Rect source_texture_4 = {130, 38, 13, 19 };
+SDL_Rect source_texture_5 = {162, 38, 13, 19 };
+SDL_Rect source_texture_6 = {194, 38, 13, 19 };
+SDL_Rect source_texture_7 = {226, 38, 13, 19 };
+SDL_Rect source_texture_8 = {258, 38, 13, 19 };
+SDL_Rect source_texture_9 = {290, 38, 13, 19 };
 
 // -- Permet d'éviter que la collision entre la balle et le vaisseau se fasse trop de fois en même temps causant ainsi un bug --
 bool premiere_collision_vaisseau = false;
@@ -91,6 +99,7 @@ void Initialise()
     textures_ascii = SDL_LoadBMP("../assets/Arkanoid_ascii.bmp");
     // Les parties de la textures qui sont noires deviennent transparentes
     SDL_SetColorKey(textures_fenetre, true, 0);
+    SDL_SetColorKey(textures_ascii, true, 0);
 
     // Init les briques
     Recupere_Niveau("../niveaux/niveau1.txt");
@@ -118,9 +127,6 @@ void Dessine()
             curseur_texture.y = j;
             SDL_BlitSurface(textures_fenetre, &source_texture_fond, surface_fenetre, &curseur_texture);
         }
-    // affiche une truc
-    SDL_Rect positionTextureA = {100, 100, source_texture_A.w, source_texture_A.h};
-    SDL_BlitSurface(textures_ascii,&source_texture_A, surface_fenetre, &positionTextureA);
 
     // remplit les briques
     SDL_Rect curseur_texture_briques = {0, 0, 0, 0 };
@@ -162,7 +168,43 @@ void Dessine()
 
     // Sortie par le bas
     if (stats_balle.pos_y > (surface_fenetre->h - balle.h)) {
+        vies--;
         Initialise_Balle();
+    }
+
+    // Gestion vie
+    SDL_Rect positionTexture0 = {10, 540, source_texture_0.w, source_texture_0.h};
+    SDL_Rect positionTexture1 = {10, 540, source_texture_1.w, source_texture_1.h};
+    SDL_Rect positionTexture2 = {10, 540, source_texture_2.w, source_texture_2.h};
+    SDL_Rect positionTexture3 = {10, 540, source_texture_3.w, source_texture_3.h};
+
+    SDL_Rect positionTextureV = {30, 540, source_texture_V.w, source_texture_V.h}; // Affiche V i e
+    SDL_BlitSurface(textures_ascii,&source_texture_V, surface_fenetre, &positionTextureV);
+    SDL_Rect positionTexturei = {50, 540, source_texture_i.w, source_texture_i.h};
+    SDL_BlitSurface(textures_ascii,&source_texture_i, surface_fenetre, &positionTexturei);
+    SDL_Rect positionTexturee = {70, 540, source_texture_e.w, source_texture_e.h};
+    SDL_BlitSurface(textures_ascii,&source_texture_e, surface_fenetre, &positionTexturee);
+
+    if (vies >= 0){
+        switch (vies) {
+            case 3:
+                SDL_BlitSurface(textures_ascii,&source_texture_3, surface_fenetre, &positionTexture3);
+                break;
+            case 2:
+                SDL_BlitSurface(textures_ascii,&source_texture_2, surface_fenetre, &positionTexture2);
+                break;
+            case 1:
+                SDL_BlitSurface(textures_ascii,&source_texture_1, surface_fenetre, &positionTexture1);
+                break;
+            case 0:
+                SDL_BlitSurface(textures_ascii,&source_texture_0, surface_fenetre, &positionTexture0);
+                // todo Afficher un écran de game over & mieux placer les lettres
+                SDL_Quit();
+                break;
+            default:
+                SDL_Quit();
+                break;
+        }
     }
 
     // Touche le bas -> rouge
