@@ -143,7 +143,7 @@ void Afficher_Game_Over()
     // Fond noir
     SDL_FillRect(surface_fenetre, NULL, SDL_MapRGB(surface_fenetre->format, 0, 0, 0));
 
-    // Afficher Game Over
+    // Afficher Game Over t
     SDL_Rect gameover = {0, 0, source_texture_gameover.w, source_texture_gameover.h};
     SDL_BlitSurface(textures_gameover, &source_texture_gameover, surface_fenetre, &gameover);
     SDL_UpdateWindowSurface(pointeur_fenetre);
