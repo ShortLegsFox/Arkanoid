@@ -28,14 +28,14 @@ SDL_Rect source_texture_brique = { 0, 0, 30, 14 };
 
 // -- Alphabet
 SDL_Rect source_texture_A = {32, 70, 15, 19 };
-SDL_Rect source_texture_V = {193, 102, 15, 19 };
+SDL_Rect source_texture_V = {193, 102, 15, 22 };
 SDL_Rect source_texture_i = {290, 131, 13, 22 };
-SDL_Rect source_texture_e = {161, 139, 13, 14 };
+SDL_Rect source_texture_e = {161, 139, 15, 20 };
 
 // -- Chiffres
-SDL_Rect source_texture_0 = {2, 38, 13, 19 };
-SDL_Rect source_texture_1 = {34, 38, 13, 19 };
-SDL_Rect source_texture_2 = {66, 38, 13, 19 };
+SDL_Rect source_texture_0 = {2, 38, 16, 22 };
+SDL_Rect source_texture_1 = {34, 38, 16, 22 };
+SDL_Rect source_texture_2 = {66, 38, 16, 22 };
 SDL_Rect source_texture_3 = {98, 38, 13, 19 };
 SDL_Rect source_texture_4 = {130, 38, 13, 19 };
 SDL_Rect source_texture_5 = {162, 38, 13, 19 };
@@ -115,6 +115,23 @@ void Deplace_Balle(){
     stats_balle.pos_y += stats_balle.vitesse_y;// / delta_t;
 }
 
+//Casse les briques lors de la colision
+void Collision_Balle_Brique() {
+    SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) {
+            if (briques[i][j].estBrique) {
+                SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
+                if (SDL_HasIntersection(&balleRect, &briqueRect)) {
+                    stats_balle.vitesse_y *= -1;
+                    briques[i][j].estBrique = false;    // Marque la brique comme cassée
+                    return;
+                }
+            }
+        }
+    }
+}
+
 // fonction qui met à jour la surface de la fenetre "win_surf"
 void Dessine()
 {
@@ -180,25 +197,24 @@ void Dessine()
 
     SDL_Rect positionTextureV = {30, 540, source_texture_V.w, source_texture_V.h}; // Affiche V i e
     SDL_BlitSurface(textures_ascii,&source_texture_V, surface_fenetre, &positionTextureV);
-    SDL_Rect positionTexturei = {50, 540, source_texture_i.w, source_texture_i.h};
+    SDL_Rect positionTexturei = {50, 538, source_texture_i.w, source_texture_i.h};
     SDL_BlitSurface(textures_ascii,&source_texture_i, surface_fenetre, &positionTexturei);
-    SDL_Rect positionTexturee = {70, 540, source_texture_e.w, source_texture_e.h};
+    SDL_Rect positionTexturee = {70, 545, source_texture_e.w, source_texture_e.h};
     SDL_BlitSurface(textures_ascii,&source_texture_e, surface_fenetre, &positionTexturee);
 
     if (vies >= 0){
         switch (vies) {
             case 3:
-                SDL_BlitSurface(textures_ascii,&source_texture_3, surface_fenetre, &positionTexture3);
-                break;
-            case 2:
                 SDL_BlitSurface(textures_ascii,&source_texture_2, surface_fenetre, &positionTexture2);
                 break;
-            case 1:
+            case 2:
                 SDL_BlitSurface(textures_ascii,&source_texture_1, surface_fenetre, &positionTexture1);
                 break;
-            case 0:
+            case 1:
                 SDL_BlitSurface(textures_ascii,&source_texture_0, surface_fenetre, &positionTexture0);
-                // todo Afficher un écran de game over & mieux placer les lettres
+                break;
+            case 0:
+                // todo Afficher un écran de game over
                 SDL_Quit();
                 break;
             default:
@@ -261,6 +277,7 @@ int main(int argc, char** argv)
         if (keys[SDL_SCANCODE_ESCAPE])
             quitter=true;
 
+        Collision_Balle_Brique();
         Dessine();
 
         SDL_UpdateWindowSurface(pointeur_fenetre);
