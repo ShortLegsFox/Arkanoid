@@ -7,7 +7,7 @@ int vies = 3;
 const int FPS = 60;
 const int RECTIF = 5;
 struct { double pos_x; double pos_y;  double vitesse_x; double vitesse_y; } stats_balle; // On utilise un struct car il nous faut des doubles pour la précision des calculs
-typedef struct { int pos_x; int pos_y; bool estBrique } stats_brique; //
+typedef struct { int pos_x; int pos_y; bool estBrique; } stats_brique; //
 stats_brique briques[100][100];
 
 Uint64 precedent, maintenant; // Timers
@@ -19,6 +19,7 @@ SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
 SDL_Surface* textures_fenetre = NULL; // Planche de la texture de la fenetre
 SDL_Surface* textures_objets = NULL; // Planche des textures des objets (briques)
 SDL_Surface* textures_ascii = NULL; // Planche des textures des ASCII (aplphabet et chiffres)
+SDL_Surface* textures_gameover = NULL; // Planche des textures game over
 
 // -- Découpage sur la planche de texture --
 SDL_Rect source_texture_fond = {0, 128, 96, 128 }; // Le point (0,0) est en haut a gauche
@@ -36,13 +37,16 @@ SDL_Rect source_texture_e = {161, 139, 15, 20 };
 SDL_Rect source_texture_0 = {2, 38, 16, 22 };
 SDL_Rect source_texture_1 = {34, 38, 16, 22 };
 SDL_Rect source_texture_2 = {66, 38, 16, 22 };
-SDL_Rect source_texture_3 = {98, 38, 13, 19 };
-SDL_Rect source_texture_4 = {130, 38, 13, 19 };
-SDL_Rect source_texture_5 = {162, 38, 13, 19 };
-SDL_Rect source_texture_6 = {194, 38, 13, 19 };
-SDL_Rect source_texture_7 = {226, 38, 13, 19 };
-SDL_Rect source_texture_8 = {258, 38, 13, 19 };
-SDL_Rect source_texture_9 = {290, 38, 13, 19 };
+SDL_Rect source_texture_3 = {98, 38, 16, 22 };
+SDL_Rect source_texture_4 = {130, 38, 16, 22 };
+SDL_Rect source_texture_5 = {162, 38, 16, 22 };
+SDL_Rect source_texture_6 = {194, 38, 16, 22 };
+SDL_Rect source_texture_7 = {226, 38, 16, 22 };
+SDL_Rect source_texture_8 = {258, 38, 16, 22 };
+SDL_Rect source_texture_9 = {290, 38, 16, 22 };
+
+// -- Game over
+SDL_Rect source_texture_gameover = {0, 0, 558, 518};
 
 // -- Permet d'éviter que la collision entre la balle et le vaisseau se fasse trop de fois en même temps causant ainsi un bug --
 bool premiere_collision_vaisseau = false;
@@ -97,9 +101,11 @@ void Initialise()
     textures_fenetre = SDL_LoadBMP("./sprites.bmp");
     textures_objets = SDL_LoadBMP("../assets/Arkanoid_sprites.bmp");
     textures_ascii = SDL_LoadBMP("../assets/Arkanoid_ascii.bmp");
+    textures_gameover = SDL_LoadBMP("../assets/gameover.bmp");
     // Les parties de la textures qui sont noires deviennent transparentes
     SDL_SetColorKey(textures_fenetre, true, 0);
     SDL_SetColorKey(textures_ascii, true, 0);
+    SDL_SetColorKey(textures_gameover, true, 0);
 
     // Init les briques
     Recupere_Niveau("../niveaux/niveau1.txt");
@@ -130,6 +136,34 @@ void Collision_Balle_Brique() {
             }
         }
     }
+}
+
+void Afficher_Game_Over()
+{
+    // Fond noir
+    SDL_FillRect(surface_fenetre, NULL, SDL_MapRGB(surface_fenetre->format, 0, 0, 0));
+
+    // Afficher Game Over
+    SDL_Rect gameover = {0, 0, source_texture_gameover.w, source_texture_gameover.h};
+    SDL_BlitSurface(textures_gameover, &source_texture_gameover, surface_fenetre, &gameover);
+    SDL_UpdateWindowSurface(pointeur_fenetre);
+
+    // Attendre une entrée utilisateur avant de quitter
+    SDL_Event evenement;
+    bool attend = true;
+    while (attend) {
+        while (SDL_PollEvent(&evenement)) {
+            if (evenement.type == SDL_KEYDOWN) { // Attend que l'utilisateur appuie sur une touche (bouton power)
+                attend = false;
+            }
+            if (evenement.type == SDL_QUIT) {
+                attend = false;
+            }
+        }
+    }
+
+    SDL_Quit();
+    exit(0);
 }
 
 // fonction qui met à jour la surface de la fenetre "win_surf"
@@ -214,8 +248,7 @@ void Dessine()
                 SDL_BlitSurface(textures_ascii,&source_texture_0, surface_fenetre, &positionTexture0);
                 break;
             case 0:
-                // todo Afficher un écran de game over
-                SDL_Quit();
+                Afficher_Game_Over();
                 break;
             default:
                 SDL_Quit();
