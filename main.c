@@ -7,7 +7,7 @@ int vies = 3;
 const int FPS = 60;
 const int RECTIF = 5;
 struct { double pos_x; double pos_y;  double vitesse_x; double vitesse_y; } stats_balle; // On utilise un struct car il nous faut des doubles pour la précision des calculs
-typedef struct { int pos_x; int pos_y; bool estBrique } stats_brique; //
+typedef struct { int pos_x; int pos_y; bool estBrique; } stats_brique; //
 stats_brique briques[100][100];
 
 Uint64 precedent, maintenant; // Timers
