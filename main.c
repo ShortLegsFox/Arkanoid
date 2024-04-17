@@ -127,6 +127,28 @@ void Ajuster_Score() {
     }
 }
 
+void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
+    // Assuming the sprite starts with a space character (ASCII 32)
+    int asciiValue = (int)character;
+    int charIndex = asciiValue - 32; // Adjust for the starting character
+
+    int row = charIndex / charsPerLine;
+    int col = charIndex % charsPerLine;
+
+    sourceRect->x = col * spriteWidth;
+    sourceRect->y = row * spriteHeight;
+    sourceRect->w = spriteWidth;
+    sourceRect->h = spriteHeight;
+}
+
+void AfficheRectangleCaractereSprite(char character, int coord_x, int coord_y) {
+    SDL_Rect source_rect = {};
+    CalculRectangleCaractereSprite(character, &source_rect, 32, 32, 16);
+    SDL_Rect position_rect = {coord_x, coord_y, source_rect.w, source_rect.h};
+    SDL_BlitSurface(textures_ascii,&source_rect, surface_fenetre, &position_rect);
+}
+
+
 //Casse les briques lors de la colision
 void Collision_Balle_Brique() {
     SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
@@ -154,6 +176,18 @@ void Afficher_Game_Over()
     // Afficher Game Over t
     SDL_Rect gameover = {0, 0, source_texture_gameover.w, source_texture_gameover.h};
     SDL_BlitSurface(textures_gameover, &source_texture_gameover, surface_fenetre, &gameover);
+
+    AfficheRectangleCaractereSprite('S', 190, 10);
+    AfficheRectangleCaractereSprite('c', 210, 10);
+    AfficheRectangleCaractereSprite('o', 230, 10);
+    AfficheRectangleCaractereSprite('r', 250, 10);
+    AfficheRectangleCaractereSprite('e', 270, 10);
+    AfficheRectangleCaractereSprite('0'+score_joueur_dix_milliers, 300, 10);
+    AfficheRectangleCaractereSprite('0'+score_joueur_milliers, 320, 10);
+    AfficheRectangleCaractereSprite('0'+score_joueur_centaine, 340, 10);
+    AfficheRectangleCaractereSprite('0'+score_joueur_dizaine, 360, 10);
+    AfficheRectangleCaractereSprite('0'+score_joueur_unite, 380, 10);
+
     SDL_UpdateWindowSurface(pointeur_fenetre);
 
     // Attendre une entrée utilisateur avant de quitter
@@ -172,27 +206,6 @@ void Afficher_Game_Over()
 
     SDL_Quit();
     exit(0);
-}
-
-void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
-    // Assuming the sprite starts with a space character (ASCII 32)
-    int asciiValue = (int)character;
-    int charIndex = asciiValue - 32; // Adjust for the starting character
-
-    int row = charIndex / charsPerLine;
-    int col = charIndex % charsPerLine;
-
-    sourceRect->x = col * spriteWidth;
-    sourceRect->y = row * spriteHeight;
-    sourceRect->w = spriteWidth;
-    sourceRect->h = spriteHeight;
-}
-
-void AfficheRectangleCaractereSprite(char character, int coord_x, int coord_y) {
-    SDL_Rect source_rect = {};
-    CalculRectangleCaractereSprite(character, &source_rect, 32, 32, 16);
-    SDL_Rect position_rect = {coord_x, coord_y, source_rect.w, source_rect.h};
-    SDL_BlitSurface(textures_ascii,&source_rect, surface_fenetre, &position_rect);
 }
 
 // fonction qui met à jour la surface de la fenetre "win_surf"
