@@ -3,83 +3,17 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-int vies = 2;
-int score_joueur_unite = 0;
-int score_joueur_dizaine = 0;
-int score_joueur_centaine = 0;
-int score_joueur_milliers = 0;
-int score_joueur_dix_milliers = 0;
+#include "game-manager/game_manager.h"
+#include "rendering/rendering.h"
+#include "game-objects/ball.h"
+#include "game-objects/bricks.h"
+#include "game-objects/ship.h"
+
 const int FPS = 60;
 const int RECTIF = 5;
-struct { double pos_x; double pos_y;  double vitesse_x; double vitesse_y; } stats_balle; // On utilise un struct car il nous faut des doubles pour la précision des calculs
-typedef struct { int pos_x; int pos_y; bool estBrique; } stats_brique; //
-stats_brique briques[100][100];
 
 Uint64 precedent, maintenant; // Timers
 double delta_temps;  // Durée frame en ms
-int x_pos_vaisseau; // Position horizontale du vaisseau
-
-SDL_Window* pointeur_fenetre = NULL; // Pointeur vers la fenetre SDL
-SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
-SDL_Surface* textures_fenetre = NULL; // Planche de la texture de la fenetre
-SDL_Surface* textures_objets = NULL; // Planche des textures des objets (briques)
-SDL_Surface* textures_ascii = NULL; // Planche des textures des ASCII (aplphabet et chiffres)
-SDL_Surface* textures_gameover = NULL; // Planche des textures game over
-
-// -- Découpage sur la planche de texture --
-SDL_Rect source_texture_fond = {0, 128, 96, 128 }; // Le point (0,0) est en haut a gauche
-SDL_Rect source_texture_balle = {0, 96, 24, 24 };
-SDL_Rect source_texture_vaisseau = {128, 0, 128, 32 };
-SDL_Rect source_texture_brique = { 0, 0, 30, 14 };
-
-// -- Game over
-SDL_Rect source_texture_gameover = {0, 0, 558, 518};
-
-// -- Permet d'éviter que la collision entre la balle et le vaisseau se fasse trop de fois en même temps causant ainsi un bug --
-bool premiere_collision_vaisseau = false;
-
-void Recupere_Niveau(const char* nomFichier) {
-    FILE *fichier = fopen(nomFichier, "r");
-    if (!fichier) {
-        perror("Erreur lors de l'ouverture du fichier niveau");
-        return;
-    }
-
-    char ligne[256];
-    int largeurMax = 100;
-    bool nextLine = false;
-
-    int y = 0;
-    int x = 0;
-    while (fgets(ligne, sizeof(ligne), fichier)) {
-        nextLine = false;
-        while(!nextLine) {
-            if (ligne[x] == '#') {
-                briques[y][x].pos_x = x * 30;
-                briques[y][x].pos_y = y * 14;
-                briques[y][x].estBrique = true; // Brick
-            } else {
-                briques[y][x].pos_x = x * 30;
-                briques[y][x].pos_y = y * 14;
-                briques[y][x].estBrique = false; // Empty
-            }
-
-            if(ligne[x] == 'F') {
-                y++;
-                nextLine = true;
-            }
-            x++;
-        }
-        x = 0;
-    }
-}
-
-void Initialise_Balle() {
-    stats_balle.pos_x = surface_fenetre->w / 2;
-    stats_balle.pos_y = surface_fenetre->h / 2;
-    stats_balle.vitesse_x = 2.0;
-    stats_balle.vitesse_y = 2.4;
-}
 
 void Initialise()
 {
@@ -101,111 +35,6 @@ void Initialise()
     Initialise_Balle();
 
     maintenant = SDL_GetPerformanceCounter();
-}
-
-void Deplace_Balle(){
-    stats_balle.pos_x += stats_balle.vitesse_x;// / delta_t;
-    stats_balle.pos_y += stats_balle.vitesse_y;// / delta_t;
-}
-
-void Ajuster_Score() {
-    if (score_joueur_unite > 9) {
-        score_joueur_unite = 0;
-        score_joueur_dizaine ++;
-    }
-    if (score_joueur_dizaine > 9) {
-        score_joueur_dizaine= 0;
-        score_joueur_centaine ++;
-    }
-    if (score_joueur_centaine > 9) {
-        score_joueur_centaine = 0;
-        score_joueur_milliers ++;
-    }
-    if (score_joueur_milliers > 9) {
-        score_joueur_milliers = 0;
-        score_joueur_dix_milliers ++;
-    }
-}
-
-void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
-    // Assuming the sprite starts with a space character (ASCII 32)
-    int asciiValue = (int)character;
-    int charIndex = asciiValue - 32; // Adjust for the starting character
-
-    int row = charIndex / charsPerLine;
-    int col = charIndex % charsPerLine;
-
-    sourceRect->x = col * spriteWidth;
-    sourceRect->y = row * spriteHeight;
-    sourceRect->w = spriteWidth;
-    sourceRect->h = spriteHeight;
-}
-
-void AfficheRectangleCaractereSprite(char character, int coord_x, int coord_y) {
-    SDL_Rect source_rect = {};
-    CalculRectangleCaractereSprite(character, &source_rect, 32, 32, 16);
-    SDL_Rect position_rect = {coord_x, coord_y, source_rect.w, source_rect.h};
-    SDL_BlitSurface(textures_ascii,&source_rect, surface_fenetre, &position_rect);
-}
-
-
-//Casse les briques lors de la colision
-void Collision_Balle_Brique() {
-    SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
-    for (int i = 0; i < 100; i++) {
-        for (int j = 0; j < 100; j++) {
-            if (briques[i][j].estBrique) {
-                SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
-                if (SDL_HasIntersection(&balleRect, &briqueRect)) {
-                    stats_balle.vitesse_y *= -1;
-                    briques[i][j].estBrique = false;    // Marque la brique comme cassée
-                    score_joueur_unite++;
-                    Ajuster_Score();
-                    return;
-                }
-            }
-        }
-    }
-}
-
-void Afficher_Game_Over()
-{
-    // Fond noir
-    SDL_FillRect(surface_fenetre, NULL, SDL_MapRGB(surface_fenetre->format, 0, 0, 0));
-
-    // Afficher Game Over t
-    SDL_Rect gameover = {0, 0, source_texture_gameover.w, source_texture_gameover.h};
-    SDL_BlitSurface(textures_gameover, &source_texture_gameover, surface_fenetre, &gameover);
-
-    AfficheRectangleCaractereSprite('S', 190, 10);
-    AfficheRectangleCaractereSprite('c', 210, 10);
-    AfficheRectangleCaractereSprite('o', 230, 10);
-    AfficheRectangleCaractereSprite('r', 250, 10);
-    AfficheRectangleCaractereSprite('e', 270, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_dix_milliers, 300, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_milliers, 320, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_centaine, 340, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_dizaine, 360, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_unite, 380, 10);
-
-    SDL_UpdateWindowSurface(pointeur_fenetre);
-
-    // Attendre une entrée utilisateur avant de quitter
-    SDL_Event evenement;
-    bool attend = true;
-    while (attend) {
-        while (SDL_PollEvent(&evenement)) {
-            if (evenement.type == SDL_KEYDOWN) { // Attend que l'utilisateur appuie sur une touche (bouton power)
-                attend = false;
-            }
-            if (evenement.type == SDL_QUIT) {
-                attend = false;
-            }
-        }
-    }
-
-    SDL_Quit();
-    exit(0);
 }
 
 // fonction qui met à jour la surface de la fenetre "win_surf"
