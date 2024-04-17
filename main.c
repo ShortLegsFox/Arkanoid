@@ -150,7 +150,7 @@ void Afficher_Game_Over()
     exit(0);
 }
 
-void calculateCharacterRect(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
+void calculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
     // Assuming the sprite starts with a space character (ASCII 32)
     int asciiValue = (int)character;
     int charIndex = asciiValue - 32; // Adjust for the starting character
@@ -230,7 +230,6 @@ void Dessine()
 
     SDL_Rect positionTextureV = {30, 540, source_texture_V.w, source_texture_V.h}; // Affiche V i e
     SDL_BlitSurface(textures_ascii,&source_texture_V, surface_fenetre, &positionTextureV);
-
     SDL_Rect positionTexturei = {50, 540, source_texture_i.w, source_texture_i.h};
     SDL_BlitSurface(textures_ascii,&source_texture_i, surface_fenetre, &positionTexturei);
     SDL_Rect positionTexturee = {70, 540, source_texture_e.w, source_texture_e.h};
