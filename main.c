@@ -3,12 +3,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-int vies = 3;
+int vies = 2;
 const int FPS = 60;
 const int RECTIF = 5;
 struct { double pos_x; double pos_y;  double vitesse_x; double vitesse_y; } stats_balle; // On utilise un struct car il nous faut des doubles pour la précision des calculs
 typedef struct { int pos_x; int pos_y; bool estBrique; } stats_brique; //
 stats_brique briques[100][100];
+int score_joueur;
 
 Uint64 precedent, maintenant; // Timers
 double delta_temps;  // Durée frame en ms
@@ -26,24 +27,6 @@ SDL_Rect source_texture_fond = {0, 128, 96, 128 }; // Le point (0,0) est en haut
 SDL_Rect source_texture_balle = {0, 96, 24, 24 };
 SDL_Rect source_texture_vaisseau = {128, 0, 128, 32 };
 SDL_Rect source_texture_brique = { 0, 0, 30, 14 };
-
-// -- Alphabet
-SDL_Rect source_texture_A = {32, 70, 15, 19 };
-SDL_Rect source_texture_V = {193, 102, 15, 22 };
-SDL_Rect source_texture_i = {290, 131, 13, 22 };
-SDL_Rect source_texture_e = {161, 139, 15, 20 };
-
-// -- Chiffres
-SDL_Rect source_texture_0 = {2, 38, 16, 22 };
-SDL_Rect source_texture_1 = {34, 38, 16, 22 };
-SDL_Rect source_texture_2 = {66, 38, 16, 22 };
-SDL_Rect source_texture_3 = {98, 38, 16, 22 };
-SDL_Rect source_texture_4 = {130, 38, 16, 22 };
-SDL_Rect source_texture_5 = {162, 38, 16, 22 };
-SDL_Rect source_texture_6 = {194, 38, 16, 22 };
-SDL_Rect source_texture_7 = {226, 38, 16, 22 };
-SDL_Rect source_texture_8 = {258, 38, 16, 22 };
-SDL_Rect source_texture_9 = {290, 38, 16, 22 };
 
 // -- Game over
 SDL_Rect source_texture_gameover = {0, 0, 558, 518};
@@ -131,6 +114,7 @@ void Collision_Balle_Brique() {
                 if (SDL_HasIntersection(&balleRect, &briqueRect)) {
                     stats_balle.vitesse_y *= -1;
                     briques[i][j].estBrique = false;    // Marque la brique comme cassée
+                    score_joueur++;
                     return;
                 }
             }
@@ -164,6 +148,20 @@ void Afficher_Game_Over()
 
     SDL_Quit();
     exit(0);
+}
+
+void calculateCharacterRect(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
+    // Assuming the sprite starts with a space character (ASCII 32)
+    int asciiValue = (int)character;
+    int charIndex = asciiValue - 32; // Adjust for the starting character
+
+    int row = charIndex / charsPerLine;
+    int col = charIndex % charsPerLine;
+
+    sourceRect->x = col * spriteWidth;
+    sourceRect->y = row * spriteHeight;
+    sourceRect->w = spriteWidth;
+    sourceRect->h = spriteHeight;
 }
 
 // fonction qui met à jour la surface de la fenetre "win_surf"
@@ -223,37 +221,29 @@ void Dessine()
         Initialise_Balle();
     }
 
-    // Gestion vie
-    SDL_Rect positionTexture0 = {10, 540, source_texture_0.w, source_texture_0.h};
-    SDL_Rect positionTexture1 = {10, 540, source_texture_1.w, source_texture_1.h};
-    SDL_Rect positionTexture2 = {10, 540, source_texture_2.w, source_texture_2.h};
-    SDL_Rect positionTexture3 = {10, 540, source_texture_3.w, source_texture_3.h};
+    SDL_Rect source_texture_V = {};
+    calculateCharacterRect('V', &source_texture_V, 32, 32, 16);
+    SDL_Rect source_texture_i = {};
+    calculateCharacterRect('i', &source_texture_i, 32, 32, 16);
+    SDL_Rect source_texture_e = {};
+    calculateCharacterRect('e', &source_texture_e, 32, 32, 16);
 
     SDL_Rect positionTextureV = {30, 540, source_texture_V.w, source_texture_V.h}; // Affiche V i e
     SDL_BlitSurface(textures_ascii,&source_texture_V, surface_fenetre, &positionTextureV);
-    SDL_Rect positionTexturei = {50, 538, source_texture_i.w, source_texture_i.h};
+
+    SDL_Rect positionTexturei = {50, 540, source_texture_i.w, source_texture_i.h};
     SDL_BlitSurface(textures_ascii,&source_texture_i, surface_fenetre, &positionTexturei);
-    SDL_Rect positionTexturee = {70, 545, source_texture_e.w, source_texture_e.h};
+    SDL_Rect positionTexturee = {70, 540, source_texture_e.w, source_texture_e.h};
     SDL_BlitSurface(textures_ascii,&source_texture_e, surface_fenetre, &positionTexturee);
 
     if (vies >= 0){
-        switch (vies) {
-            case 3:
-                SDL_BlitSurface(textures_ascii,&source_texture_2, surface_fenetre, &positionTexture2);
-                break;
-            case 2:
-                SDL_BlitSurface(textures_ascii,&source_texture_1, surface_fenetre, &positionTexture1);
-                break;
-            case 1:
-                SDL_BlitSurface(textures_ascii,&source_texture_0, surface_fenetre, &positionTexture0);
-                break;
-            case 0:
-                Afficher_Game_Over();
-                break;
-            default:
-                SDL_Quit();
-                break;
-        }
+        SDL_Rect source_texture_nombre_vies = {};
+        calculateCharacterRect('0' + vies, &source_texture_nombre_vies, 32, 32, 16);
+        SDL_Rect positionTextureVies = {10, 540, source_texture_nombre_vies.w, source_texture_nombre_vies.h};
+        SDL_BlitSurface(textures_ascii,&source_texture_nombre_vies, surface_fenetre, &positionTextureVies);
+    }
+    else {
+        Afficher_Game_Over();
     }
 
     // Touche le bas -> rouge
