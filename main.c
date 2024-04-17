@@ -254,6 +254,14 @@ void Dessine()
 
     // Collision vaisseau
     if ((SDL_HasIntersection(&balle, &vaisseau)) && premiere_collision_vaisseau == false){
+        int collisionX = balle.x + balle.w / 2; // Position x de la collision
+        int vaisseauX = vaisseau.x + vaisseau.w / 2; // Position x du centre du vaisseau
+
+        if (collisionX < vaisseauX) {
+            stats_balle.vitesse_x = -abs(stats_balle.vitesse_x);
+        } else {
+            stats_balle.vitesse_x = abs(stats_balle.vitesse_x);
+        }
         stats_balle.vitesse_y *= -1;
         premiere_collision_vaisseau = true;
     }
