@@ -244,6 +244,7 @@ void Dessine()
     }
     else {
         Afficher_Game_Over();
+
     }
 
     // Touche le bas -> rouge
