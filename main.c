@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -8,6 +8,7 @@
 #include "game-objects/ball.h"
 #include "game-objects/bricks.h"
 #include "game-objects/ship.h"
+
 
 const int FPS = 60;
 const int RECTIF = 5;
@@ -101,7 +102,7 @@ void Dessine()
         Initialise_Balle();
     }
 
-    AfficheRectangleCaractereSprite('S', 10, 10);
+    //AfficheRectangleCaractereSprite('S', 10, 10);
     AfficheRectangleCaractereSprite('c', 30, 10);
     AfficheRectangleCaractereSprite('o', 50, 10);
     AfficheRectangleCaractereSprite('r', 70, 10);
@@ -141,6 +142,9 @@ void Dessine()
 
 int main(int argc, char** argv)
 {
+    (void)argc;
+    (void)argv;
+    
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO ) != 0 )
     {
         return 1;

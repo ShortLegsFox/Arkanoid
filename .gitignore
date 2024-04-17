@@ -1,0 +1,19 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Ignore build directory
+/build/
+
+# Ignore .vscode directory
+/.vscode/
+
+# Ignore .idea directory
+/.idea/
+
+#CMakeLists
+/CMakeLists.txt
