@@ -102,7 +102,7 @@ void Dessine()
         Initialise_Balle();
     }
 
-    //AfficheRectangleCaractereSprite('S', 10, 10);
+    AfficheRectangleCaractereSprite('S', 10, 10);
     AfficheRectangleCaractereSprite('c', 30, 10);
     AfficheRectangleCaractereSprite('o', 50, 10);
     AfficheRectangleCaractereSprite('r', 70, 10);
