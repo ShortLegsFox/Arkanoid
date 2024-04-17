@@ -150,7 +150,7 @@ void Afficher_Game_Over()
     exit(0);
 }
 
-void calculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
+void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
     // Assuming the sprite starts with a space character (ASCII 32)
     int asciiValue = (int)character;
     int charIndex = asciiValue - 32; // Adjust for the starting character
@@ -162,6 +162,13 @@ void calculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int sp
     sourceRect->y = row * spriteHeight;
     sourceRect->w = spriteWidth;
     sourceRect->h = spriteHeight;
+}
+
+void AfficheRectangleCaractereSprite(char character, int coord_x, int coord_y) {
+    SDL_Rect source_rect = {};
+    CalculRectangleCaractereSprite(character, &source_rect, 32, 32, 16);
+    SDL_Rect position_rect = {coord_x, coord_y, source_rect.w, source_rect.h};
+    SDL_BlitSurface(textures_ascii,&source_rect, surface_fenetre, &position_rect);
 }
 
 // fonction qui met à jour la surface de la fenetre "win_surf"
@@ -221,23 +228,13 @@ void Dessine()
         Initialise_Balle();
     }
 
-    SDL_Rect source_texture_V = {};
-    calculateCharacterRect('V', &source_texture_V, 32, 32, 16);
-    SDL_Rect source_texture_i = {};
-    calculateCharacterRect('i', &source_texture_i, 32, 32, 16);
-    SDL_Rect source_texture_e = {};
-    calculateCharacterRect('e', &source_texture_e, 32, 32, 16);
-
-    SDL_Rect positionTextureV = {30, 540, source_texture_V.w, source_texture_V.h}; // Affiche V i e
-    SDL_BlitSurface(textures_ascii,&source_texture_V, surface_fenetre, &positionTextureV);
-    SDL_Rect positionTexturei = {50, 540, source_texture_i.w, source_texture_i.h};
-    SDL_BlitSurface(textures_ascii,&source_texture_i, surface_fenetre, &positionTexturei);
-    SDL_Rect positionTexturee = {70, 540, source_texture_e.w, source_texture_e.h};
-    SDL_BlitSurface(textures_ascii,&source_texture_e, surface_fenetre, &positionTexturee);
+    AfficheRectangleCaractereSprite('V', 30, 540);
+    AfficheRectangleCaractereSprite('i', 50, 540);
+    AfficheRectangleCaractereSprite('e', 70, 540);
 
     if (vies >= 0){
         SDL_Rect source_texture_nombre_vies = {};
-        calculateCharacterRect('0' + vies, &source_texture_nombre_vies, 32, 32, 16);
+        CalculRectangleCaractereSprite('0' + vies, &source_texture_nombre_vies, 32, 32, 16);
         SDL_Rect positionTextureVies = {10, 540, source_texture_nombre_vies.w, source_texture_nombre_vies.h};
         SDL_BlitSurface(textures_ascii,&source_texture_nombre_vies, surface_fenetre, &positionTextureVies);
     }
