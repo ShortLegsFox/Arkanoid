@@ -4,12 +4,16 @@
 #include <stdbool.h>
 
 int vies = 2;
+int score_joueur_unite = 0;
+int score_joueur_dizaine = 0;
+int score_joueur_centaine = 0;
+int score_joueur_milliers = 0;
+int score_joueur_dix_milliers = 0;
 const int FPS = 60;
 const int RECTIF = 5;
 struct { double pos_x; double pos_y;  double vitesse_x; double vitesse_y; } stats_balle; // On utilise un struct car il nous faut des doubles pour la précision des calculs
 typedef struct { int pos_x; int pos_y; bool estBrique; } stats_brique; //
 stats_brique briques[100][100];
-int score_joueur;
 
 Uint64 precedent, maintenant; // Timers
 double delta_temps;  // Durée frame en ms
@@ -104,6 +108,25 @@ void Deplace_Balle(){
     stats_balle.pos_y += stats_balle.vitesse_y;// / delta_t;
 }
 
+void Ajuster_Score() {
+    if (score_joueur_unite > 9) {
+        score_joueur_unite = 0;
+        score_joueur_dizaine ++;
+    }
+    if (score_joueur_dizaine > 9) {
+        score_joueur_dizaine= 0;
+        score_joueur_centaine ++;
+    }
+    if (score_joueur_centaine > 9) {
+        score_joueur_centaine = 0;
+        score_joueur_milliers ++;
+    }
+    if (score_joueur_milliers > 9) {
+        score_joueur_milliers = 0;
+        score_joueur_dix_milliers ++;
+    }
+}
+
 //Casse les briques lors de la colision
 void Collision_Balle_Brique() {
     SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
@@ -114,7 +137,8 @@ void Collision_Balle_Brique() {
                 if (SDL_HasIntersection(&balleRect, &briqueRect)) {
                     stats_balle.vitesse_y *= -1;
                     briques[i][j].estBrique = false;    // Marque la brique comme cassée
-                    score_joueur++;
+                    score_joueur_unite++;
+                    Ajuster_Score();
                     return;
                 }
             }
@@ -196,7 +220,6 @@ void Dessine()
         }
     }
 
-
     // Entitées dessinées
     SDL_Rect vaisseau = {x_pos_vaisseau, surface_fenetre->h - 32, source_texture_vaisseau.w, source_texture_vaisseau.h};
     SDL_Rect balle = {stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h};
@@ -228,19 +251,29 @@ void Dessine()
         Initialise_Balle();
     }
 
-    AfficheRectangleCaractereSprite('V', 30, 540);
-    AfficheRectangleCaractereSprite('i', 50, 540);
-    AfficheRectangleCaractereSprite('e', 70, 540);
+    AfficheRectangleCaractereSprite('S', 10, 10);
+    AfficheRectangleCaractereSprite('c', 30, 10);
+    AfficheRectangleCaractereSprite('o', 50, 10);
+    AfficheRectangleCaractereSprite('r', 70, 10);
+    AfficheRectangleCaractereSprite('e', 90, 10);
+    AfficheRectangleCaractereSprite('0'+score_joueur_dix_milliers, 130, 10);
+    AfficheRectangleCaractereSprite('0'+score_joueur_milliers, 150, 10);
+    AfficheRectangleCaractereSprite('0'+score_joueur_centaine, 170, 10);
+    AfficheRectangleCaractereSprite('0'+score_joueur_dizaine, 190, 10);
+    AfficheRectangleCaractereSprite('0'+score_joueur_unite, 210, 10);
+
+    AfficheRectangleCaractereSprite('V', 500, 10);
+    AfficheRectangleCaractereSprite('i', 520, 10);
+    AfficheRectangleCaractereSprite('e', 540, 10);
 
     if (vies >= 0){
         SDL_Rect source_texture_nombre_vies = {};
         CalculRectangleCaractereSprite('0' + vies, &source_texture_nombre_vies, 32, 32, 16);
-        SDL_Rect positionTextureVies = {10, 540, source_texture_nombre_vies.w, source_texture_nombre_vies.h};
+        SDL_Rect positionTextureVies = {570, 10, source_texture_nombre_vies.w, source_texture_nombre_vies.h};
         SDL_BlitSurface(textures_ascii,&source_texture_nombre_vies, surface_fenetre, &positionTextureVies);
     }
     else {
         Afficher_Game_Over();
-
     }
 
     // Touche le bas -> rouge
