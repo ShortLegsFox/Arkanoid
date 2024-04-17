@@ -99,9 +99,9 @@ void Initialise()
     pointeur_fenetre = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
     surface_fenetre = SDL_GetWindowSurface(pointeur_fenetre);
     textures_fenetre = SDL_LoadBMP("./assets/sprites.bmp");
-    textures_objets = SDL_LoadBMP("../assets/Arkanoid_sprites.bmp");
-    textures_ascii = SDL_LoadBMP("../assets/Arkanoid_ascii.bmp");
-    textures_gameover = SDL_LoadBMP("../assets/gameover.bmp");
+    textures_objets = SDL_LoadBMP("./assets/Arkanoid_sprites.bmp");
+    textures_ascii = SDL_LoadBMP("./assets/Arkanoid_ascii.bmp");
+    textures_gameover = SDL_LoadBMP("./assets/gameover.bmp");
     // Les parties de la textures qui sont noires deviennent transparentes
     SDL_SetColorKey(textures_fenetre, true, 0);
     SDL_SetColorKey(textures_ascii, true, 0);
