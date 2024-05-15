@@ -1,6 +1,10 @@
 #ifndef BONUS_H
 #define BONUS_H
 
+#include <stdbool.h>
+
+extern bool bonus_en_cours;
+
 struct Bonus {
     double pos_x;
     double pos_y;

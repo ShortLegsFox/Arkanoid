@@ -72,6 +72,11 @@ void Ajuster_Score() {
     }
 }
 
+void Incremente_Score() {
+    score_joueur_unite++;
+    Ajuster_Score();
+}
+
 void Aleatoire_Bonus() {
     srand(time(NULL));
     int r = rand() % 2;
@@ -86,25 +91,31 @@ void Aleatoire_Bonus() {
     }
 }
 
-//Casse les briques lors de la colision
+void Casse_La_Brique(int i, int j) {
+    briques[i][j].estBrique = false;    // Marque la brique comme cassée
+    coord_x_brique_cassee = i;
+    coord_y_brique_cassee = j;
+}
+
+void Verifie_si_brique(int i, int j) {
+    if (briques[i][j].estBrique) {
+        SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
+        SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
+        if (SDL_HasIntersection(&balleRect, &briqueRect)) {
+            stats_balle.vitesse_y *= -1;
+            Aleatoire_Bonus();
+            Casse_La_Brique(i,j);
+            Incremente_Score();
+            return;
+        }
+    }
+}
+
 void Collision_Balle_Brique() {
     bonus_s = false;
-    SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 100; j++) {
-            if (briques[i][j].estBrique) {
-                SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
-                if (SDL_HasIntersection(&balleRect, &briqueRect)) {
-                    stats_balle.vitesse_y *= -1;
-                    briques[i][j].estBrique = false;    // Marque la brique comme cassée
-                    coord_x_brique_cassee = i;
-                    coord_y_brique_cassee = j;
-                    Aleatoire_Bonus();
-                    score_joueur_unite++;
-                    Ajuster_Score();
-                    return;
-                }
-            }
+            Verifie_si_brique(i,j);
         }
     }
 }
