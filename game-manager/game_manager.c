@@ -88,6 +88,7 @@ void Aleatoire_Bonus() {
 
 //Casse les briques lors de la colision
 void Collision_Balle_Brique() {
+    bonus_s = false;
     SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 100; j++) {

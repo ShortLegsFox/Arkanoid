@@ -8,6 +8,7 @@
 #include "game-objects/ball.h"
 #include "game-objects/bricks.h"
 #include "game-objects/ship.h"
+#include "game-objects/bonus.h"
 
 
 const int FPS = 60;
@@ -133,13 +134,17 @@ void Dessine()
     curseur_texture.y = surface_fenetre->h - vaisseau.h;
     SDL_BlitSurface(textures_objets, &source_texture_vaisseau, surface_fenetre, &vaisseau);
 
+    // Spawn la brique
     if(bonus_s) {
+        SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
         int i = coord_x_brique_cassee;
         int j = coord_y_brique_cassee;
-        curseur_texture_briques.x = briques[i][j].pos_x;
-        curseur_texture_briques.y = briques[i][j].pos_y;
-        SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &curseur_texture_briques);
+        Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
+        SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
     }
+
+    // Glisse la brique vers le bas
+    Tomber_Bonus();
 }
 
 int main(int argc, char** argv)
