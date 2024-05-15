@@ -82,6 +82,7 @@ void Aleatoire_Bonus() {
     else {
         coord_x_brique_cassee = 0;
         coord_y_brique_cassee = 0;
+        bonus_s = false;
     }
 }
 
