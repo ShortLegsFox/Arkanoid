@@ -28,6 +28,7 @@ void Initialise()
     SDL_SetColorKey(textures_fenetre, true, 0);
     SDL_SetColorKey(textures_ascii, true, 0);
     SDL_SetColorKey(textures_gameover, true, 0);
+    SDL_SetColorKey(textures_objets, true, 0);
 
     // Init les briques
     Recupere_Niveau("../niveaux/niveau1.txt");
@@ -68,7 +69,7 @@ void Dessine()
     SDL_Rect balle = {stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h};
 
     // Afficher balle
-    SDL_BlitSurface(textures_fenetre, &source_texture_balle, surface_fenetre, &balle);
+    SDL_BlitSurface(textures_objets, &source_texture_balle, surface_fenetre, &balle);
 
     Deplace_Balle();
 
@@ -127,17 +128,10 @@ void Dessine()
         Afficher_Game_Over();
     }
 
-    // Touche le bas -> rouge
-    if (premiere_collision_vaisseau)
-        source_texture_balle.y = 64;
-    // Touche le bas -> vert
-    if (premiere_collision_vaisseau == false)
-        source_texture_balle.y = 96;
-
     // Afficher vaisseau
     curseur_texture.x = x_pos_vaisseau;
     curseur_texture.y = surface_fenetre->h - vaisseau.h;
-    SDL_BlitSurface(textures_fenetre, &source_texture_vaisseau, surface_fenetre, &curseur_texture);
+    SDL_BlitSurface(textures_objets, &source_texture_vaisseau, surface_fenetre, &vaisseau);
 }
 
 int main(int argc, char** argv)

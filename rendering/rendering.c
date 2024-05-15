@@ -10,8 +10,22 @@ SDL_Surface* textures_gameover = NULL; // Planche des textures game over
 
 // -- Découpage sur la planche de texture --
 SDL_Rect source_texture_fond = {0, 128, 96, 128 }; // Le point (0,0) est en haut a gauche
-SDL_Rect source_texture_balle = {0, 96, 24, 24 };
-SDL_Rect source_texture_vaisseau = {128, 0, 128, 32 };
+
+// -- Taille de la balle - Pourrait être automatisé ? --
+SDL_Rect source_texture_balle_xs = {0, 64, 16, 16 };
+SDL_Rect source_texture_balle_s = {16, 64, 16, 16 };
+SDL_Rect source_texture_balle_m = {32, 64, 16, 16 };
+SDL_Rect source_texture_balle_l = {48, 64, 16, 16 };
+SDL_Rect source_texture_balle_xl = {64, 64, 16, 16 };
+SDL_Rect source_texture_balle_2xl = {80, 64, 16, 16 };
+
+SDL_Rect source_texture_balle = {80, 64, 16, 16 };
+
+// -- Taille du vaisseau - idem que la balle ? --
+SDL_Rect source_texture_vaisseau_xl = {384, 240, 128, 16 };
+
+SDL_Rect source_texture_vaisseau = {384, 240, 128, 16 };
+
 SDL_Rect source_texture_brique = { 0, 0, 30, 14 };
 
 // -- Game over
