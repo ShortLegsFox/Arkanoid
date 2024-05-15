@@ -9,7 +9,14 @@ SDL_Surface* textures_ascii = NULL; // Planche des textures des ASCII (aplphabet
 SDL_Surface* textures_gameover = NULL; // Planche des textures game over
 
 // -- Découpage sur la planche de texture --
-SDL_Rect source_texture_fond = {0, 128, 96, 128 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+
+SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_mecanique_en_feu = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_rouge = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_ambiance_fossoyeuse = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_bleu = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_defaut = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
 
 // -- Taille de la balle - Pourrait être automatisé ? --
 SDL_Rect source_texture_balle_xs = {0, 64, 16, 16 };
@@ -26,7 +33,10 @@ SDL_Rect source_texture_vaisseau_xl = {384, 240, 128, 16 };
 
 SDL_Rect source_texture_vaisseau = {384, 240, 128, 16 };
 
-SDL_Rect source_texture_brique = { 0, 0, 30, 14 };
+SDL_Rect source_texture_brique = { 0, 0, 32, 16 };
+
+// -- Bonus S --
+SDL_Rect source_texture_brique_bonus_s = { 256, 0, 32, 16 };
 
 // -- Game over
 SDL_Rect source_texture_gameover = {0, 0, 558, 518};

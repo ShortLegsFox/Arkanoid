@@ -44,12 +44,12 @@ void Dessine()
 {
     // remplit le fond
     SDL_Rect curseur_texture = {0, 0, 0, 0 };
-    for (int j = 0; j < surface_fenetre->h; j+=128)
-        for (int i = 0; i < surface_fenetre->w; i += 96)
+    for (int j = 0; j < surface_fenetre->h; j+=64)
+        for (int i = 0; i < surface_fenetre->w; i += 64)
         {
             curseur_texture.x = i;
             curseur_texture.y = j;
-            SDL_BlitSurface(textures_fenetre, &source_texture_fond, surface_fenetre, &curseur_texture);
+            SDL_BlitSurface(textures_objets, &source_texture_fond, surface_fenetre, &curseur_texture);
         }
 
     // remplit les briques
@@ -132,6 +132,14 @@ void Dessine()
     curseur_texture.x = x_pos_vaisseau;
     curseur_texture.y = surface_fenetre->h - vaisseau.h;
     SDL_BlitSurface(textures_objets, &source_texture_vaisseau, surface_fenetre, &vaisseau);
+
+    if(bonus_s) {
+        int i = coord_x_brique_cassee;
+        int j = coord_y_brique_cassee;
+        curseur_texture_briques.x = briques[i][j].pos_x;
+        curseur_texture_briques.y = briques[i][j].pos_y;
+        SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &curseur_texture_briques);
+    }
 }
 
 int main(int argc, char** argv)

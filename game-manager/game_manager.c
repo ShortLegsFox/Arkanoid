@@ -1,3 +1,4 @@
+#include <time.h>
 #include "game_manager.h"
 #include "../game-objects/bricks.h"
 #include "../game-objects/ball.h"
@@ -10,6 +11,10 @@ int score_joueur_dizaine = 0;
 int score_joueur_centaine = 0;
 int score_joueur_milliers = 0;
 int score_joueur_dix_milliers = 0;
+
+int coord_x_brique_cassee;
+int coord_y_brique_cassee;
+bool bonus_s = false;
 
 void Recupere_Niveau(const char* nomFichier) {
     FILE *fichier = fopen(nomFichier, "r");
@@ -28,12 +33,13 @@ void Recupere_Niveau(const char* nomFichier) {
         nextLine = false;
         while(!nextLine) {
             if (ligne[x] == '#') {
-                briques[y][x].pos_x = x * 30;
-                briques[y][x].pos_y = y * 14;
+                briques[y][x].pos_x = x * 32;
+                briques[y][x].pos_y = y * 16;
                 briques[y][x].estBrique = true; // Brick
-            } else {
-                briques[y][x].pos_x = x * 30;
-                briques[y][x].pos_y = y * 14;
+            }
+            else {
+                briques[y][x].pos_x = x * 32;
+                briques[y][x].pos_y = y * 16;
                 briques[y][x].estBrique = false; // Empty
             }
 
@@ -66,6 +72,19 @@ void Ajuster_Score() {
     }
 }
 
+void Aleatoire_Bonus() {
+    srand(time(NULL));
+    int r = rand() % 2;
+
+    if(r == 1) {
+        bonus_s = true;
+    }
+    else {
+        coord_x_brique_cassee = 0;
+        coord_y_brique_cassee = 0;
+    }
+}
+
 //Casse les briques lors de la colision
 void Collision_Balle_Brique() {
     SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
@@ -76,6 +95,9 @@ void Collision_Balle_Brique() {
                 if (SDL_HasIntersection(&balleRect, &briqueRect)) {
                     stats_balle.vitesse_y *= -1;
                     briques[i][j].estBrique = false;    // Marque la brique comme cassée
+                    coord_x_brique_cassee = i;
+                    coord_y_brique_cassee = j;
+                    Aleatoire_Bonus();
                     score_joueur_unite++;
                     Ajuster_Score();
                     return;
