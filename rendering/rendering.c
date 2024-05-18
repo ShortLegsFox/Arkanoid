@@ -50,6 +50,24 @@ SDL_Rect source_texture_bordure_coin_droit = {73, 85, 15, 15};
 SDL_Rect source_texture_bordure_porte_verticale = {448, 133, 15, 47};
 SDL_Rect source_texture_bordure_porte_horizontale = {298, 127, 47, 18};
 
+void Initialise_Sprites() {
+    // Taille de la fenêtre
+    pointeur_fenetre = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 576, 640, SDL_WINDOW_SHOWN);
+    surface_fenetre = SDL_GetWindowSurface(pointeur_fenetre);
+
+    // Chargement des sprites
+    textures_fenetre = SDL_LoadBMP("./assets/sprites.bmp");
+    textures_objets = SDL_LoadBMP("./assets/sprites2.bmp");
+    textures_ascii = SDL_LoadBMP("./assets/Arkanoid_ascii.bmp");
+    textures_gameover = SDL_LoadBMP("./assets/gameover.bmp");
+
+    // Partie noire du sprite en transparence
+    SDL_SetColorKey(textures_fenetre, true, 0);
+    SDL_SetColorKey(textures_ascii, true, 0);
+    SDL_SetColorKey(textures_gameover, true, 0);
+    SDL_SetColorKey(textures_objets, true, 0);
+}
+
 void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
     // Assuming the sprite starts with a space character (ASCII 32)
     int asciiValue = (int)character;

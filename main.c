@@ -20,19 +20,7 @@ double delta_temps;  // Durée frame en ms
 
 void Initialise()
 {
-    pointeur_fenetre = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 576, 640, SDL_WINDOW_SHOWN);
-    surface_fenetre = SDL_GetWindowSurface(pointeur_fenetre);
-    textures_fenetre = SDL_LoadBMP("./assets/sprites.bmp");
-    //textures_objets = SDL_LoadBMP("./assets/Arkanoid_sprites.bmp");
-    textures_objets = SDL_LoadBMP("./assets/sprites2.bmp");
-    textures_ascii = SDL_LoadBMP("./assets/Arkanoid_ascii.bmp");
-    textures_gameover = SDL_LoadBMP("./assets/gameover.bmp");
-    // Les parties de la textures qui sont noires deviennent transparentes
-    SDL_SetColorKey(textures_fenetre, true, 0);
-    SDL_SetColorKey(textures_ascii, true, 0);
-    SDL_SetColorKey(textures_gameover, true, 0);
-    SDL_SetColorKey(textures_objets, true, 0);
-
+    Initialise_Sprites();
     // Init les briques
     Recupere_Niveau("../niveaux/niveau1.txt");
 
@@ -120,7 +108,7 @@ void Dessine()
         stats_balle.vitesse_x *= -1;
         premiere_collision_vaisseau = false;
     }
-    if ((stats_balle.pos_y < 1)) {
+    if ((stats_balle.pos_y < 15)) {
         stats_balle.vitesse_y *= -1;
         premiere_collision_vaisseau = false;
     }
