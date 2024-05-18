@@ -20,7 +20,7 @@ void Recupere_Niveau(const char* nomFichier) {
     }
 
     char ligne[256];
-    int largeurMax = 100;
+    int largeurMax = surface_fenetre->w;
     bool nextLine = false;
 
     int y = 0;
@@ -28,7 +28,7 @@ void Recupere_Niveau(const char* nomFichier) {
     while (fgets(ligne, sizeof(ligne), fichier)) {
         nextLine = false;
         while(!nextLine) {
-            if (ligne[x] == '#') {
+            if (ligne[x] == '#' && x * 32 < largeurMax - 32) {
                 briques[y][x].pos_x = x * 32;
                 briques[y][x].pos_y = y * 16;
                 briques[y][x].estBrique = true; // Brick

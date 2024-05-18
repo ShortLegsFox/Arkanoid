@@ -10,8 +10,8 @@ SDL_Surface* textures_ascii = NULL; // Planche des textures des ASCII (aplphabet
 SDL_Surface* textures_gameover = NULL; // Planche des textures game over
 
 // -- Découpage sur la planche de texture --
-SDL_Rect source_texture_fond = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
-SDL_Rect source_texture_fond_sombre = {320, 192, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond = {240, 128, 48, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_sombre = {240, 192, 48, 64 }; // Le point (0,0) est en haut a gauche
 
 SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
 SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_rouge = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
@@ -30,9 +30,7 @@ SDL_Rect source_texture_balle_2xl = {80, 64, 16, 16 };
 SDL_Rect source_texture_balle = {80, 64, 16, 16 };
 
 // -- Taille du vaisseau - idem que la balle ? --
-SDL_Rect source_texture_vaisseau_xl = {384, 240, 128, 16 };
-
-SDL_Rect source_texture_vaisseau = {384, 240, 128, 16 };
+SDL_Rect source_texture_vaisseau = {384, 303, 128, 16 };
 
 SDL_Rect source_texture_brique = { 0, 0, 32, 16 };
 
@@ -43,6 +41,14 @@ SDL_Rect source_texture_brique_bonus_c = { 256, 16, 32, 16 };
 
 // -- Game over
 SDL_Rect source_texture_gameover = {0, 0, 558, 518};
+
+// -- Bordure du jeu
+SDL_Rect source_texture_bordure_verticale = {41, 100, 15, 15};
+SDL_Rect source_texture_bordure_horizontale = {57, 85, 15, 15};
+SDL_Rect source_texture_bordure_coin_gauche = {41, 85, 15, 15};
+SDL_Rect source_texture_bordure_coin_droit = {73, 85, 15, 15};
+SDL_Rect source_texture_bordure_porte_verticale = {448, 133, 15, 47};
+SDL_Rect source_texture_bordure_porte_horizontale = {298, 127, 47, 18};
 
 void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
     // Assuming the sprite starts with a space character (ASCII 32)

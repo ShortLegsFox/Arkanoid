@@ -24,7 +24,7 @@ void Initialise()
     surface_fenetre = SDL_GetWindowSurface(pointeur_fenetre);
     textures_fenetre = SDL_LoadBMP("./assets/sprites.bmp");
     //textures_objets = SDL_LoadBMP("./assets/Arkanoid_sprites.bmp");
-    textures_objets = SDL_LoadBMP("./assets/sprites.bmp");
+    textures_objets = SDL_LoadBMP("./assets/sprites2.bmp");
     textures_ascii = SDL_LoadBMP("./assets/Arkanoid_ascii.bmp");
     textures_gameover = SDL_LoadBMP("./assets/gameover.bmp");
     // Les parties de la textures qui sont noires deviennent transparentes
@@ -49,8 +49,7 @@ void Dessine()
     SDL_Rect curseur_texture = {0, 0, 0, 0 };
     bool premiereLigne = true;
     for (int j = 0; j < surface_fenetre->h; j+=64) {
-        bool premiereCase = true;
-        for (int i = 0; i < surface_fenetre->w; i += 64) {
+        for (int i = 0; i < surface_fenetre->w; i += 48) {
             if(i == 0) {
                 curseur_texture.x = i;
                 curseur_texture.y = j;
@@ -73,12 +72,34 @@ void Dessine()
         }
     }
 
+    // Afficher la bordure
+    SDL_Rect curseur_bordure = {0, 0, 0, 0 };
+    curseur_bordure.x = 0;
+    curseur_bordure.y = 0;
+    SDL_BlitSurface(textures_objets, &source_texture_bordure_coin_gauche, surface_fenetre, &curseur_bordure);
+    for (int i = source_texture_bordure_coin_gauche.w; i < surface_fenetre->w - source_texture_bordure_coin_droit.w; i += source_texture_bordure_horizontale.w) {
+        curseur_bordure.x = i;
+        SDL_BlitSurface(textures_objets, &source_texture_bordure_horizontale, surface_fenetre, &curseur_bordure);
+    }
+    curseur_bordure.x += 6;
+    SDL_BlitSurface(textures_objets, &source_texture_bordure_coin_droit, surface_fenetre, &curseur_bordure);
+    premiereLigne = false;
+
+    int bordureFin = curseur_bordure.x;
+    for(int j = source_texture_bordure_coin_gauche.h; j < surface_fenetre->h; j += source_texture_bordure_verticale.h) {
+        curseur_bordure.y = j;
+        curseur_bordure.x = 0;
+        SDL_BlitSurface(textures_objets, &source_texture_bordure_verticale, surface_fenetre, &curseur_bordure);
+        curseur_bordure.x = bordureFin;
+        SDL_BlitSurface(textures_objets, &source_texture_bordure_verticale, surface_fenetre, &curseur_bordure);
+    }
+
     // remplit les briques
     SDL_Rect curseur_texture_briques = {0, 0, 0, 0 };
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 100; j++) {
             if (briques[i][j].estBrique) {
-                curseur_texture_briques.x = briques[i][j].pos_x;
+                curseur_texture_briques.x = briques[i][j].pos_x + 15;
                 curseur_texture_briques.y = briques[i][j].pos_y;
                 SDL_BlitSurface(textures_objets, &source_texture_brique, surface_fenetre, &curseur_texture_briques);
             }
@@ -95,7 +116,7 @@ void Dessine()
     Deplace_Balle();
 
     // Collision bord
-    if ((stats_balle.pos_x < 1) || (stats_balle.pos_x > (surface_fenetre->w - balle.w))) {
+    if ((stats_balle.pos_x < 15) || (stats_balle.pos_x > (surface_fenetre->w - balle.w - 15))) {
         stats_balle.vitesse_x *= -1;
         premiere_collision_vaisseau = false;
     }
