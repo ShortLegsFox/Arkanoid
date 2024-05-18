@@ -22,6 +22,7 @@ void Initialise()
     Initialise_Sprites();
     Charge_Niveau("../niveaux/niveau1.txt");
     Initialise_Balle();
+    Initialise_Vaisseau();
 
     maintenant = SDL_GetPerformanceCounter();
 }
@@ -31,25 +32,14 @@ void Dessine()
 {
     Dessine_Fond();
     Dessine_Bordure();
+    Dessine_Briques();
 
-    // remplit les briques
-    SDL_Rect curseur_texture_briques = {0, 0, 0, 0 };
-    for (int i = 0; i < 100; i++) {
-        for (int j = 0; j < 100; j++) {
-            if (briques[i][j].estBrique) {
-                curseur_texture_briques.x = briques[i][j].pos_x + 15;
-                curseur_texture_briques.y = briques[i][j].pos_y;
-                SDL_BlitSurface(textures_objets, &source_texture_brique, surface_fenetre, &curseur_texture_briques);
-            }
-        }
-    }
+    Dessine_Vaisseau(x_pos_vaisseau, y_pos_vaisseau);
+    Dessine_Balle(stats_balle.pos_x, stats_balle.pos_y);
 
     // Entitées dessinées
-    SDL_Rect vaisseau = {x_pos_vaisseau, surface_fenetre->h - 32, source_texture_vaisseau.w, source_texture_vaisseau.h};
+    SDL_Rect vaisseau = {x_pos_vaisseau, surface_fenetre->h - 40, source_texture_vaisseau.w, source_texture_vaisseau.h};
     SDL_Rect balle = {stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h};
-
-    // Afficher balle
-    SDL_BlitSurface(textures_objets, &source_texture_balle, surface_fenetre, &balle);
 
     Deplace_Balle();
 
@@ -92,12 +82,6 @@ void Dessine()
     AfficheRectangleTextSprite(t_vies,470, 10);
 
     if (vies < 0) Afficher_Game_Over();
-
-    // Afficher vaisseau
-    SDL_Rect curseur_texture = {0, 0, 0, 0 };
-    curseur_texture.x = x_pos_vaisseau;
-    curseur_texture.y = surface_fenetre->h - vaisseau.h;
-    SDL_BlitSurface(textures_objets, &source_texture_vaisseau, surface_fenetre, &vaisseau);
 
     // Spawn le bonus S
     if(bonus_s) {
@@ -163,7 +147,7 @@ int main(int argc, char** argv)
         precedent = maintenant;
         if (delta_temps > 0)
             SDL_Delay((Uint32)(delta_temps * 1000));
-        printf("dt = %lf\n", delta_temps * 1000);
+        //printf("dt = %lf\n", delta_temps * 1000);
         precedent = SDL_GetPerformanceCounter();
     }
 

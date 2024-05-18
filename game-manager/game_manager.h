@@ -8,10 +8,8 @@
 
 extern int vies;
 extern int score_joueur;
-extern int score_joueur_dizaine;
-extern int score_joueur_centaine;
-extern int score_joueur_milliers;
-extern int score_joueur_dix_milliers;
+extern int max_briques;
+
 extern bool bonus_s;
 extern int coord_x_brique_cassee;
 extern int coord_y_brique_cassee;

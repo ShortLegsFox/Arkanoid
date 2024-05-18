@@ -7,6 +7,7 @@
 
 int vies = 2;
 int score_joueur = 0;
+int max_briques = 100;
 
 int coord_x_brique_cassee;
 int coord_y_brique_cassee;
@@ -29,7 +30,7 @@ void Charge_Niveau(const char* nomFichier) {
         nextLine = false;
         while(!nextLine) {
             if (ligne[x] == '#' && x * 32 < largeurMax - 32) {
-                briques[y][x].pos_x = x * 32;
+                briques[y][x].pos_x = x * 32 + 15;
                 briques[y][x].pos_y = y * 16;
                 briques[y][x].estBrique = true; // Brick
             }

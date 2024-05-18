@@ -34,6 +34,10 @@ void Initialise_Sprites();
 
 void Dessine_Fond();
 void Dessine_Bordure();
+void Dessine_Briques();
+void Dessine_Vaisseau(int x, int y);
+void Dessine_Balle(int x, int y);
+
 void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine);
 void AfficheRectangleCaractereSprite(char character, int coord_x, int coord_y);
 void AfficheRectangleTextSprite(char text[], int coord_x, int coord_y);

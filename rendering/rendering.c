@@ -1,6 +1,7 @@
 #include "rendering.h"
 #include "../utils/utils.h"
 #include "../game-manager/game_manager.h"
+#include "../game-objects/bricks.h"
 
 SDL_Window* pointeur_fenetre = NULL; // Pointeur vers la fenetre SDL
 SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
@@ -44,11 +45,11 @@ SDL_Rect source_texture_gameover = {0, 0, 558, 518};
 
 // -- Bordure du jeu
 SDL_Rect src_bordure_verticale = {41, 100, 15, 15};
+SDL_Rect src_bordure_verticale_porte = {448, 120, 15, 75};
 SDL_Rect src_bordure_horizontale = {57, 85, 15, 15};
 SDL_Rect src_bordure_coin_gauche = {41, 85, 15, 15};
 SDL_Rect src_bordure_coin_droit = {73, 85, 15, 15};
-SDL_Rect source_texture_bordure_porte_verticale = {448, 133, 15, 47};
-SDL_Rect source_texture_bordure_porte_horizontale = {298, 127, 47, 18};
+SDL_Rect source_texture_bordure_porte_horizontale = {298, 127, 48, 18};
 
 void Initialise_Fenetre() {
     // Taille de la fenêtre
@@ -101,24 +102,45 @@ void Dessine_Bordure() {
         curseur_bordure.x = i;
         Dessine_Texture(src_bordure_horizontale, i, 0);
     }
-
     // Bord Coin Droit
     curseur_bordure.x = dernierAbscisse;
     SDL_BlitSurface(textures_objets, &src_bordure_coin_droit, surface_fenetre, &curseur_bordure);
 
     // Bord Cotes
     for(int j = src_bordure_coin_gauche.h; j < surface_fenetre->h; j += src_bordure_verticale.h) {
-        // Gauche
-        Dessine_Texture(src_bordure_verticale, 0, j);
-        // Droite
-        Dessine_Texture(src_bordure_verticale, dernierAbscisse, j);
+        if(j == 90 || j == 315 || j == 570) {
+            Dessine_Texture(src_bordure_verticale_porte, 0, j);
+            Dessine_Texture(src_bordure_verticale_porte, dernierAbscisse, j);
+            j += src_bordure_verticale_porte.h - src_bordure_verticale.h;
+        } else {
+            Dessine_Texture(src_bordure_verticale, 0, j);
+            Dessine_Texture(src_bordure_verticale, dernierAbscisse, j);
+        }
     }
+}
+
+void Dessine_Briques() {
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) {
+            if (briques[i][j].estBrique) {
+                Dessine_Texture(source_texture_brique, briques[i][j].pos_x, briques[i][j].pos_y);
+            }
+        }
+    }
+}
+
+void Dessine_Vaisseau(int x, int y) {
+    Dessine_Texture(source_texture_vaisseau, x, y);
+}
+
+void Dessine_Balle(int x, int y) {
+    Dessine_Texture(source_texture_balle, x, y);
 }
 
 void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
     int ajustementDepart = 32;
     int asciiValue = (int)character;
-    int charIndex = asciiValue - ajustementDepart; // Adjust for the starting character
+    int charIndex = asciiValue - ajustementDepart;
 
     int row = charIndex / charsPerLine;
     int col = charIndex % charsPerLine;
