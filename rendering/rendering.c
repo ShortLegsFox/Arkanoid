@@ -76,8 +76,8 @@ void Dessine_Texture(SDL_Rect texture, int x, int y) {
 
 void Dessine_Fond() {
     bool premiereLigne = true;
-    for (int j = 0; j < surface_fenetre->h; j+=64) {
-        for (int i = 0; i < surface_fenetre->w; i += 48) {
+    for (int j = 0; j < surface_fenetre->h; j += source_texture_fond.h) {
+        for (int i = 0; i < surface_fenetre->w; i += source_texture_fond.w) {
             if(i == 0 || premiereLigne) {
                 Dessine_Texture(source_texture_fond_sombre ,i, j);
             }
