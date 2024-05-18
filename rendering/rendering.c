@@ -116,9 +116,9 @@ void Dessine_Bordure() {
 }
 
 void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
-    // Assuming the sprite starts with a space character (ASCII 32)
+    int ajustementDepart = 32;
     int asciiValue = (int)character;
-    int charIndex = asciiValue - 32; // Adjust for the starting character
+    int charIndex = asciiValue - ajustementDepart; // Adjust for the starting character
 
     int row = charIndex / charsPerLine;
     int col = charIndex % charsPerLine;
