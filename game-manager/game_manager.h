@@ -16,7 +16,7 @@ extern bool bonus_s;
 extern int coord_x_brique_cassee;
 extern int coord_y_brique_cassee;
 
-void Recupere_Niveau(const char* nomFichier);
+void Charge_Niveau(const char* nomFichier);
 void Ajuster_Score();
 void Collision_Balle_Brique();
 bool Bonus_S();

@@ -50,11 +50,12 @@ SDL_Rect source_texture_bordure_coin_droit = {73, 85, 15, 15};
 SDL_Rect source_texture_bordure_porte_verticale = {448, 133, 15, 47};
 SDL_Rect source_texture_bordure_porte_horizontale = {298, 127, 47, 18};
 
-void Initialise_Sprites() {
+void Initialise_Fenetre() {
     // Taille de la fenêtre
     pointeur_fenetre = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 576, 640, SDL_WINDOW_SHOWN);
     surface_fenetre = SDL_GetWindowSurface(pointeur_fenetre);
-
+}
+void Initialise_Sprites() {
     // Chargement des sprites
     textures_fenetre = SDL_LoadBMP("./assets/sprites.bmp");
     textures_objets = SDL_LoadBMP("./assets/sprites2.bmp");
@@ -66,6 +67,35 @@ void Initialise_Sprites() {
     SDL_SetColorKey(textures_ascii, true, 0);
     SDL_SetColorKey(textures_gameover, true, 0);
     SDL_SetColorKey(textures_objets, true, 0);
+}
+
+void Dessine_Fond() {
+    // remplit le fond
+    SDL_Rect curseur_texture = {0, 0, 0, 0 };
+    bool premiereLigne = true;
+    for (int j = 0; j < surface_fenetre->h; j+=64) {
+        for (int i = 0; i < surface_fenetre->w; i += 48) {
+            if(i == 0) {
+                curseur_texture.x = i;
+                curseur_texture.y = j;
+                SDL_BlitSurface(textures_objets, &source_texture_fond_sombre, surface_fenetre, &curseur_texture);
+            }
+            else if(premiereLigne) {
+                curseur_texture.x = i;
+                curseur_texture.y = j;
+                SDL_BlitSurface(textures_objets, &source_texture_fond_sombre, surface_fenetre, &curseur_texture);
+            }
+            else {
+                curseur_texture.x = i;
+                curseur_texture.y = j;
+                SDL_BlitSurface(textures_objets, &source_texture_fond, surface_fenetre, &curseur_texture);
+            }
+
+        }
+        if(premiereLigne) {
+            premiereLigne = false;
+        }
+    }
 }
 
 void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {

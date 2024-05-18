@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
 #include "game-manager/game_manager.h"
 #include "rendering/rendering.h"
 #include "game-objects/ball.h"
@@ -14,17 +13,14 @@
 
 const int FPS = 60;
 const int RECTIF = 5;
-
 Uint64 precedent, maintenant; // Timers
 double delta_temps;  // Durée frame en ms
 
 void Initialise()
 {
+    Initialise_Fenetre();
     Initialise_Sprites();
-    // Init les briques
-    Recupere_Niveau("../niveaux/niveau1.txt");
-
-    // balle (avec struct)
+    Charge_Niveau("../niveaux/niveau1.txt");
     Initialise_Balle();
 
     maintenant = SDL_GetPerformanceCounter();
@@ -33,33 +29,7 @@ void Initialise()
 // fonction qui met à jour la surface de la fenetre "win_surf"
 void Dessine()
 {
-    // remplit le fond
-    SDL_Rect curseur_texture = {0, 0, 0, 0 };
-    bool premiereLigne = true;
-    for (int j = 0; j < surface_fenetre->h; j+=64) {
-        for (int i = 0; i < surface_fenetre->w; i += 48) {
-            if(i == 0) {
-                curseur_texture.x = i;
-                curseur_texture.y = j;
-                SDL_BlitSurface(textures_objets, &source_texture_fond_sombre, surface_fenetre, &curseur_texture);
-            }
-            else if(premiereLigne) {
-                curseur_texture.x = i;
-                curseur_texture.y = j;
-                SDL_BlitSurface(textures_objets, &source_texture_fond_sombre, surface_fenetre, &curseur_texture);
-            }
-            else {
-                curseur_texture.x = i;
-                curseur_texture.y = j;
-                SDL_BlitSurface(textures_objets, &source_texture_fond, surface_fenetre, &curseur_texture);
-            }
-
-        }
-        if(premiereLigne) {
-            premiereLigne = false;
-        }
-    }
-
+    Dessine_Fond();
     // Afficher la bordure
     SDL_Rect curseur_bordure = {0, 0, 0, 0 };
     curseur_bordure.x = 0;
@@ -71,7 +41,7 @@ void Dessine()
     }
     curseur_bordure.x += 6;
     SDL_BlitSurface(textures_objets, &source_texture_bordure_coin_droit, surface_fenetre, &curseur_bordure);
-    premiereLigne = false;
+    bool premiereLigne = false;
 
     int bordureFin = curseur_bordure.x;
     for(int j = source_texture_bordure_coin_gauche.h; j < surface_fenetre->h; j += source_texture_bordure_verticale.h) {
@@ -144,6 +114,7 @@ void Dessine()
     if (vies < 0) Afficher_Game_Over();
 
     // Afficher vaisseau
+    SDL_Rect curseur_texture = {0, 0, 0, 0 };
     curseur_texture.x = x_pos_vaisseau;
     curseur_texture.y = surface_fenetre->h - vaisseau.h;
     SDL_BlitSurface(textures_objets, &source_texture_vaisseau, surface_fenetre, &vaisseau);

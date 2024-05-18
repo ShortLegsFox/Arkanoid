@@ -12,7 +12,7 @@ int coord_x_brique_cassee;
 int coord_y_brique_cassee;
 bool bonus_s = false;
 
-void Recupere_Niveau(const char* nomFichier) {
+void Charge_Niveau(const char* nomFichier) {
     FILE *fichier = fopen(nomFichier, "r");
     if (!fichier) {
         perror("Erreur lors de l'ouverture du fichier niveau");
