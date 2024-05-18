@@ -30,27 +30,7 @@ void Initialise()
 void Dessine()
 {
     Dessine_Fond();
-    // Afficher la bordure
-    SDL_Rect curseur_bordure = {0, 0, 0, 0 };
-    curseur_bordure.x = 0;
-    curseur_bordure.y = 0;
-    SDL_BlitSurface(textures_objets, &source_texture_bordure_coin_gauche, surface_fenetre, &curseur_bordure);
-    for (int i = source_texture_bordure_coin_gauche.w; i < surface_fenetre->w - source_texture_bordure_coin_droit.w; i += source_texture_bordure_horizontale.w) {
-        curseur_bordure.x = i;
-        SDL_BlitSurface(textures_objets, &source_texture_bordure_horizontale, surface_fenetre, &curseur_bordure);
-    }
-    curseur_bordure.x += 6;
-    SDL_BlitSurface(textures_objets, &source_texture_bordure_coin_droit, surface_fenetre, &curseur_bordure);
-    bool premiereLigne = false;
-
-    int bordureFin = curseur_bordure.x;
-    for(int j = source_texture_bordure_coin_gauche.h; j < surface_fenetre->h; j += source_texture_bordure_verticale.h) {
-        curseur_bordure.y = j;
-        curseur_bordure.x = 0;
-        SDL_BlitSurface(textures_objets, &source_texture_bordure_verticale, surface_fenetre, &curseur_bordure);
-        curseur_bordure.x = bordureFin;
-        SDL_BlitSurface(textures_objets, &source_texture_bordure_verticale, surface_fenetre, &curseur_bordure);
-    }
+    Dessine_Bordure();
 
     // remplit les briques
     SDL_Rect curseur_texture_briques = {0, 0, 0, 0 };
