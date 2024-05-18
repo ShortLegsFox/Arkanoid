@@ -20,10 +20,11 @@ double delta_temps;  // Durée frame en ms
 
 void Initialise()
 {
-    pointeur_fenetre = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600, 600, SDL_WINDOW_SHOWN);
+    pointeur_fenetre = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 576, 640, SDL_WINDOW_SHOWN);
     surface_fenetre = SDL_GetWindowSurface(pointeur_fenetre);
     textures_fenetre = SDL_LoadBMP("./assets/sprites.bmp");
-    textures_objets = SDL_LoadBMP("./assets/Arkanoid_sprites.bmp");
+    //textures_objets = SDL_LoadBMP("./assets/Arkanoid_sprites.bmp");
+    textures_objets = SDL_LoadBMP("./assets/sprites.bmp");
     textures_ascii = SDL_LoadBMP("./assets/Arkanoid_ascii.bmp");
     textures_gameover = SDL_LoadBMP("./assets/gameover.bmp");
     // Les parties de la textures qui sont noires deviennent transparentes
@@ -46,13 +47,31 @@ void Dessine()
 {
     // remplit le fond
     SDL_Rect curseur_texture = {0, 0, 0, 0 };
-    for (int j = 0; j < surface_fenetre->h; j+=64)
-        for (int i = 0; i < surface_fenetre->w; i += 64)
-        {
-            curseur_texture.x = i;
-            curseur_texture.y = j;
-            SDL_BlitSurface(textures_objets, &source_texture_fond, surface_fenetre, &curseur_texture);
+    bool premiereLigne = true;
+    for (int j = 0; j < surface_fenetre->h; j+=64) {
+        bool premiereCase = true;
+        for (int i = 0; i < surface_fenetre->w; i += 64) {
+            if(i == 0) {
+                curseur_texture.x = i;
+                curseur_texture.y = j;
+                SDL_BlitSurface(textures_objets, &source_texture_fond_sombre, surface_fenetre, &curseur_texture);
+            }
+            else if(premiereLigne) {
+                curseur_texture.x = i;
+                curseur_texture.y = j;
+                SDL_BlitSurface(textures_objets, &source_texture_fond_sombre, surface_fenetre, &curseur_texture);
+            }
+            else {
+                curseur_texture.x = i;
+                curseur_texture.y = j;
+                SDL_BlitSurface(textures_objets, &source_texture_fond, surface_fenetre, &curseur_texture);
+            }
+
         }
+        if(premiereLigne) {
+            premiereLigne = false;
+        }
+    }
 
     // remplit les briques
     SDL_Rect curseur_texture_briques = {0, 0, 0, 0 };
@@ -110,8 +129,8 @@ void Dessine()
     char* t_score = Entier_vers_Tableau(score_joueur);
     char* t_vies = Entier_vers_Tableau(vies);
     AfficheRectangleTextSprite(t_score, 130, 10);
-    AfficheRectangleTextSprite("Vie", 500, 10);
-    AfficheRectangleTextSprite(t_vies,570, 10);
+    AfficheRectangleTextSprite("Vie", 400, 10);
+    AfficheRectangleTextSprite(t_vies,470, 10);
 
     if (vies < 0) Afficher_Game_Over();
 
@@ -128,17 +147,6 @@ void Dessine()
         Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
         SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
     }
-    // Spawn le bonus C
-    /*
-    if(bonus_c) {
-        SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
-        int i = coord_x_brique_cassee;
-        int j = coord_y_brique_cassee;
-        Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
-        SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_c, surface_fenetre, &bonus);
-    }
-    */
-    // Glisse la brique vers le bas
     Tomber_Bonus();
 }
 

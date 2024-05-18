@@ -11,9 +11,9 @@ SDL_Surface* textures_gameover = NULL; // Planche des textures game over
 
 // -- Découpage sur la planche de texture --
 SDL_Rect source_texture_fond = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_sombre = {320, 192, 64, 64 }; // Le point (0,0) est en haut a gauche
 
 SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
-SDL_Rect source_texture_fond_mecanique_en_feu = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
 SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_rouge = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
 SDL_Rect source_texture_fond_ambiance_fossoyeuse = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
 SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_bleu = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche

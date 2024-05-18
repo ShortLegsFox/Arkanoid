@@ -12,6 +12,7 @@ extern SDL_Surface* textures_gameover; // Planche des textures game over
 
 // -- Découpage sur la planche de texture --
 extern SDL_Rect source_texture_fond; // Le point (0,0) est en haut a gauche
+extern SDL_Rect source_texture_fond_sombre;
 extern SDL_Rect source_texture_balle;
 extern SDL_Rect source_texture_vaisseau;
 extern SDL_Rect source_texture_brique;
