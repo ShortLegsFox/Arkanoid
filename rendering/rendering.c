@@ -43,10 +43,10 @@ SDL_Rect source_texture_brique_bonus_c = { 256, 16, 32, 16 };
 SDL_Rect source_texture_gameover = {0, 0, 558, 518};
 
 // -- Bordure du jeu
-SDL_Rect source_texture_bordure_verticale = {41, 100, 15, 15};
-SDL_Rect source_texture_bordure_horizontale = {57, 85, 15, 15};
-SDL_Rect source_texture_bordure_coin_gauche = {41, 85, 15, 15};
-SDL_Rect source_texture_bordure_coin_droit = {73, 85, 15, 15};
+SDL_Rect src_bordure_verticale = {41, 100, 15, 15};
+SDL_Rect src_bordure_horizontale = {57, 85, 15, 15};
+SDL_Rect src_bordure_coin_gauche = {41, 85, 15, 15};
+SDL_Rect src_bordure_coin_droit = {73, 85, 15, 15};
 SDL_Rect source_texture_bordure_porte_verticale = {448, 133, 15, 47};
 SDL_Rect source_texture_bordure_porte_horizontale = {298, 127, 47, 18};
 
@@ -69,56 +69,49 @@ void Initialise_Sprites() {
     SDL_SetColorKey(textures_objets, true, 0);
 }
 
+void Dessine_Texture(SDL_Rect texture, int x, int y) {
+    SDL_Rect curseur_texture = {x, y, 0, 0 };
+    SDL_BlitSurface(textures_objets, &texture, surface_fenetre, &curseur_texture);
+}
+
 void Dessine_Fond() {
-    // remplit le fond
-    SDL_Rect curseur_texture = {0, 0, 0, 0 };
     bool premiereLigne = true;
     for (int j = 0; j < surface_fenetre->h; j+=64) {
         for (int i = 0; i < surface_fenetre->w; i += 48) {
-            if(i == 0) {
-                curseur_texture.x = i;
-                curseur_texture.y = j;
-                SDL_BlitSurface(textures_objets, &source_texture_fond_sombre, surface_fenetre, &curseur_texture);
-            }
-            else if(premiereLigne) {
-                curseur_texture.x = i;
-                curseur_texture.y = j;
-                SDL_BlitSurface(textures_objets, &source_texture_fond_sombre, surface_fenetre, &curseur_texture);
+            if(i == 0 || premiereLigne) {
+                Dessine_Texture(source_texture_fond_sombre ,i, j);
             }
             else {
-                curseur_texture.x = i;
-                curseur_texture.y = j;
-                SDL_BlitSurface(textures_objets, &source_texture_fond, surface_fenetre, &curseur_texture);
+                Dessine_Texture(source_texture_fond, i, j);
             }
-
         }
-        if(premiereLigne) {
-            premiereLigne = false;
-        }
+        if (premiereLigne) premiereLigne = false;
     }
 }
 
 void Dessine_Bordure() {
-    // Afficher la bordure
-    SDL_Rect curseur_bordure = {0, 0, 0, 0 };
-    curseur_bordure.x = 0;
-    curseur_bordure.y = 0;
-    SDL_BlitSurface(textures_objets, &source_texture_bordure_coin_gauche, surface_fenetre, &curseur_bordure);
-    for (int i = source_texture_bordure_coin_gauche.w; i < surface_fenetre->w - source_texture_bordure_coin_droit.w; i += source_texture_bordure_horizontale.w) {
-        curseur_bordure.x = i;
-        SDL_BlitSurface(textures_objets, &source_texture_bordure_horizontale, surface_fenetre, &curseur_bordure);
-    }
-    curseur_bordure.x += 6;
-    SDL_BlitSurface(textures_objets, &source_texture_bordure_coin_droit, surface_fenetre, &curseur_bordure);
-    bool premiereLigne = false;
+    int dernierAbscisse = surface_fenetre->w - src_bordure_coin_droit.w;
 
-    int bordureFin = curseur_bordure.x;
-    for(int j = source_texture_bordure_coin_gauche.h; j < surface_fenetre->h; j += source_texture_bordure_verticale.h) {
-        curseur_bordure.y = j;
-        curseur_bordure.x = 0;
-        SDL_BlitSurface(textures_objets, &source_texture_bordure_verticale, surface_fenetre, &curseur_bordure);
-        curseur_bordure.x = bordureFin;
-        SDL_BlitSurface(textures_objets, &source_texture_bordure_verticale, surface_fenetre, &curseur_bordure);
+    // Bord Coin Gauche
+    Dessine_Texture(src_bordure_coin_gauche, 0, 0);
+    SDL_Rect curseur_bordure = {0, 0, 0, 0 };
+
+    // Bord Haut
+    for (int i = src_bordure_coin_gauche.w; i < surface_fenetre->w - src_bordure_coin_droit.w; i += src_bordure_horizontale.w) {
+        curseur_bordure.x = i;
+        Dessine_Texture(src_bordure_horizontale, i, 0);
+    }
+
+    // Bord Coin Droit
+    curseur_bordure.x = dernierAbscisse;
+    SDL_BlitSurface(textures_objets, &src_bordure_coin_droit, surface_fenetre, &curseur_bordure);
+
+    // Bord Cotes
+    for(int j = src_bordure_coin_gauche.h; j < surface_fenetre->h; j += src_bordure_verticale.h) {
+        // Gauche
+        Dessine_Texture(src_bordure_verticale, 0, j);
+        // Droite
+        Dessine_Texture(src_bordure_verticale, dernierAbscisse, j);
     }
 }
 

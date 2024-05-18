@@ -16,10 +16,10 @@ extern SDL_Rect source_texture_fond_sombre;
 extern SDL_Rect source_texture_balle;
 extern SDL_Rect source_texture_vaisseau;
 extern SDL_Rect source_texture_brique;
-extern SDL_Rect source_texture_bordure_verticale;
-extern SDL_Rect source_texture_bordure_horizontale;
-extern SDL_Rect source_texture_bordure_coin_gauche;
-extern SDL_Rect source_texture_bordure_coin_droit;
+extern SDL_Rect src_bordure_verticale;
+extern SDL_Rect src_bordure_horizontale;
+extern SDL_Rect src_bordure_coin_gauche;
+extern SDL_Rect src_bordure_coin_droit;
 extern SDL_Rect source_texture_bordure_porte_verticale;
 extern SDL_Rect source_texture_bordure_porte_horizontale;
 
