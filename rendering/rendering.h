@@ -24,6 +24,7 @@ extern SDL_Rect source_texture_brique_bonus_s;
 
 void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine);
 void AfficheRectangleCaractereSprite(char character, int coord_x, int coord_y);
+void AfficheRectangleTextSprite(char text[], int coord_x, int coord_y);
 void Afficher_Game_Over();
 
 #endif

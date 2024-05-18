@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 extern int vies;
-extern int score_joueur_unite;
+extern int score_joueur;
 extern int score_joueur_dizaine;
 extern int score_joueur_centaine;
 extern int score_joueur_milliers;

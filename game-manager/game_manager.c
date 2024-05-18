@@ -6,11 +6,7 @@
 
 
 int vies = 2;
-int score_joueur_unite = 0;
-int score_joueur_dizaine = 0;
-int score_joueur_centaine = 0;
-int score_joueur_milliers = 0;
-int score_joueur_dix_milliers = 0;
+int score_joueur = 0;
 
 int coord_x_brique_cassee;
 int coord_y_brique_cassee;
@@ -53,28 +49,8 @@ void Recupere_Niveau(const char* nomFichier) {
     }
 }
 
-void Ajuster_Score() {
-    if (score_joueur_unite > 9) {
-        score_joueur_unite = 0;
-        score_joueur_dizaine ++;
-    }
-    if (score_joueur_dizaine > 9) {
-        score_joueur_dizaine= 0;
-        score_joueur_centaine ++;
-    }
-    if (score_joueur_centaine > 9) {
-        score_joueur_centaine = 0;
-        score_joueur_milliers ++;
-    }
-    if (score_joueur_milliers > 9) {
-        score_joueur_milliers = 0;
-        score_joueur_dix_milliers ++;
-    }
-}
-
 void Incremente_Score() {
-    score_joueur_unite++;
-    Ajuster_Score();
+    score_joueur++;
 }
 
 void Aleatoire_Bonus() {

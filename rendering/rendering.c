@@ -1,4 +1,5 @@
 #include "rendering.h"
+#include "../utils/utils.h"
 #include "../game-manager/game_manager.h"
 
 SDL_Window* pointeur_fenetre = NULL; // Pointeur vers la fenetre SDL
@@ -37,6 +38,8 @@ SDL_Rect source_texture_brique = { 0, 0, 32, 16 };
 
 // -- Bonus S --
 SDL_Rect source_texture_brique_bonus_s = { 256, 0, 32, 16 };
+// -- Bonus C --
+SDL_Rect source_texture_brique_bonus_c = { 256, 16, 32, 16 };
 
 // -- Game over
 SDL_Rect source_texture_gameover = {0, 0, 558, 518};
@@ -62,6 +65,17 @@ void AfficheRectangleCaractereSprite(char character, int coord_x, int coord_y) {
     SDL_BlitSurface(textures_ascii,&source_rect, surface_fenetre, &position_rect);
 }
 
+void AfficheRectangleTextSprite(char text[], int coord_x, int coord_y) {
+    int text_length = strlen(text);
+    int x = coord_x;
+    int y = coord_y;
+
+    for(int i = 0; i < text_length; i++) {
+        AfficheRectangleCaractereSprite(text[i], x, y);
+        x += 20;
+    }
+}
+
 void Afficher_Game_Over()
 {
     // Fond noir
@@ -71,16 +85,9 @@ void Afficher_Game_Over()
     SDL_Rect gameover = {0, 0, source_texture_gameover.w, source_texture_gameover.h};
     SDL_BlitSurface(textures_gameover, &source_texture_gameover, surface_fenetre, &gameover);
 
-    AfficheRectangleCaractereSprite('S', 190, 10);
-    AfficheRectangleCaractereSprite('c', 210, 10);
-    AfficheRectangleCaractereSprite('o', 230, 10);
-    AfficheRectangleCaractereSprite('r', 250, 10);
-    AfficheRectangleCaractereSprite('e', 270, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_dix_milliers, 300, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_milliers, 320, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_centaine, 340, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_dizaine, 360, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_unite, 380, 10);
+    char* t_score = Entier_vers_Tableau(score_joueur);
+    AfficheRectangleTextSprite("Score", 190, 10);
+    AfficheRectangleTextSprite(t_score, 320, 10);
 
     SDL_UpdateWindowSurface(pointeur_fenetre);
 

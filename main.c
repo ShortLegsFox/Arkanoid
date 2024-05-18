@@ -9,6 +9,7 @@
 #include "game-objects/bricks.h"
 #include "game-objects/ship.h"
 #include "game-objects/bonus.h"
+#include "utils/utils.h"
 
 
 const int FPS = 60;
@@ -104,37 +105,22 @@ void Dessine()
         Initialise_Balle();
     }
 
-    AfficheRectangleCaractereSprite('S', 10, 10);
-    AfficheRectangleCaractereSprite('c', 30, 10);
-    AfficheRectangleCaractereSprite('o', 50, 10);
-    AfficheRectangleCaractereSprite('r', 70, 10);
-    AfficheRectangleCaractereSprite('e', 90, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_dix_milliers, 130, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_milliers, 150, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_centaine, 170, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_dizaine, 190, 10);
-    AfficheRectangleCaractereSprite('0'+score_joueur_unite, 210, 10);
+    AfficheRectangleTextSprite("Score",10, 10);
 
-    AfficheRectangleCaractereSprite('V', 500, 10);
-    AfficheRectangleCaractereSprite('i', 520, 10);
-    AfficheRectangleCaractereSprite('e', 540, 10);
+    char* t_score = Entier_vers_Tableau(score_joueur);
+    char* t_vies = Entier_vers_Tableau(vies);
+    AfficheRectangleTextSprite(t_score, 130, 10);
+    AfficheRectangleTextSprite("Vie", 500, 10);
+    AfficheRectangleTextSprite(t_vies,570, 10);
 
-    if (vies >= 0){
-        SDL_Rect source_texture_nombre_vies = {};
-        CalculRectangleCaractereSprite('0' + vies, &source_texture_nombre_vies, 32, 32, 16);
-        SDL_Rect positionTextureVies = {570, 10, source_texture_nombre_vies.w, source_texture_nombre_vies.h};
-        SDL_BlitSurface(textures_ascii,&source_texture_nombre_vies, surface_fenetre, &positionTextureVies);
-    }
-    else {
-        Afficher_Game_Over();
-    }
+    if (vies < 0) Afficher_Game_Over();
 
     // Afficher vaisseau
     curseur_texture.x = x_pos_vaisseau;
     curseur_texture.y = surface_fenetre->h - vaisseau.h;
     SDL_BlitSurface(textures_objets, &source_texture_vaisseau, surface_fenetre, &vaisseau);
 
-    // Spawn la brique
+    // Spawn le bonus S
     if(bonus_s) {
         SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
         int i = coord_x_brique_cassee;
@@ -142,7 +128,16 @@ void Dessine()
         Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
         SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
     }
-
+    // Spawn le bonus C
+    /*
+    if(bonus_c) {
+        SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
+        int i = coord_x_brique_cassee;
+        int j = coord_y_brique_cassee;
+        Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
+        SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_c, surface_fenetre, &bonus);
+    }
+    */
     // Glisse la brique vers le bas
     Tomber_Bonus();
 }
