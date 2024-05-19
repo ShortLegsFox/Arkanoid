@@ -5,7 +5,7 @@
 
 SDL_Window* pointeur_fenetre = NULL; // Pointeur vers la fenetre SDL
 SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
-SDL_Surface* textures_fenetre = NULL; // Planche de la texture de la fenetre
+SDL_Surface* texture_noir = NULL; // Planche de la texture de la fenetre
 SDL_Surface* textures_objets = NULL; // Planche des textures des objets (briques)
 SDL_Surface* textures_ascii = NULL; // Planche des textures des ASCII (aplphabet et chiffres)
 SDL_Surface* textures_gameover = NULL; // Planche des textures game over
@@ -13,6 +13,9 @@ SDL_Surface* textures_gameover = NULL; // Planche des textures game over
 // -- Découpage sur la planche de texture --
 SDL_Rect source_texture_fond = {240, 128, 48, 64 }; // Le point (0,0) est en haut a gauche
 SDL_Rect source_texture_fond_sombre = {240, 192, 48, 64 }; // Le point (0,0) est en haut a gauche
+
+// -- Texture de fond noir --
+SDL_Rect source_texture_noir = {96, 128, 48, 64};
 
 SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
 SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_rouge = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
@@ -51,20 +54,21 @@ SDL_Rect src_bordure_coin_gauche = {41, 85, 15, 15};
 SDL_Rect src_bordure_coin_droit = {73, 85, 15, 15};
 SDL_Rect source_texture_bordure_porte_horizontale = {298, 127, 48, 18};
 
+int topMargin = 100;
+
 void Initialise_Fenetre() {
     // Taille de la fenêtre
-    pointeur_fenetre = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 576, 640, SDL_WINDOW_SHOWN);
+    pointeur_fenetre = SDL_CreateWindow("Arknoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 576, 740, SDL_WINDOW_SHOWN);
     surface_fenetre = SDL_GetWindowSurface(pointeur_fenetre);
 }
 void Initialise_Sprites() {
     // Chargement des sprites
-    textures_fenetre = SDL_LoadBMP("./assets/sprites.bmp");
+    texture_noir = SDL_LoadBMP("./assets/sprites.bmp");
     textures_objets = SDL_LoadBMP("./assets/sprites2.bmp");
     textures_ascii = SDL_LoadBMP("./assets/Arkanoid_ascii.bmp");
     textures_gameover = SDL_LoadBMP("./assets/gameover.bmp");
 
-    // Partie noire du sprite en transparence
-    SDL_SetColorKey(textures_fenetre, true, 0);
+    // Partie noire du sprite en transparence, sauf pour celui où l'on veut recuperer le noir
     SDL_SetColorKey(textures_ascii, true, 0);
     SDL_SetColorKey(textures_gameover, true, 0);
     SDL_SetColorKey(textures_objets, true, 0);
@@ -75,9 +79,22 @@ void Dessine_Texture(SDL_Rect texture, int x, int y) {
     SDL_BlitSurface(textures_objets, &texture, surface_fenetre, &curseur_texture);
 }
 
+void Dessine_Noir(int x, int y) {
+    SDL_Rect curseur_texture = {x, y, 0, 0 };
+    SDL_BlitSurface(texture_noir, &source_texture_noir, surface_fenetre, &curseur_texture);
+}
+
 void Dessine_Fond() {
+    // Partie noir en haut
+    for (int j = 0; j < topMargin; j += source_texture_fond.h) {
+        for (int i = 0; i < surface_fenetre->w; i += source_texture_fond.w) {
+            Dessine_Noir(i,j);
+        }
+    }
+
+    // Partie jeu
     bool premiereLigne = true;
-    for (int j = 0; j < surface_fenetre->h; j += source_texture_fond.h) {
+    for (int j = topMargin; j < surface_fenetre->h; j += source_texture_fond.h) {
         for (int i = 0; i < surface_fenetre->w; i += source_texture_fond.w) {
             if(i == 0 || premiereLigne) {
                 Dessine_Texture(source_texture_fond_sombre ,i, j);
@@ -94,20 +111,21 @@ void Dessine_Bordure() {
     int dernierAbscisse = surface_fenetre->w - src_bordure_coin_droit.w;
 
     // Bord Coin Gauche
-    Dessine_Texture(src_bordure_coin_gauche, 0, 0);
-    SDL_Rect curseur_bordure = {0, 0, 0, 0 };
+    Dessine_Texture(src_bordure_coin_gauche, 0, topMargin);
+    SDL_Rect curseur_bordure = {0, topMargin, 0, 0 };
 
     // Bord Haut
     for (int i = src_bordure_coin_gauche.w; i < surface_fenetre->w - src_bordure_coin_droit.w; i += src_bordure_horizontale.w) {
         curseur_bordure.x = i;
-        Dessine_Texture(src_bordure_horizontale, i, 0);
+        Dessine_Texture(src_bordure_horizontale, i, topMargin);
     }
+
     // Bord Coin Droit
     curseur_bordure.x = dernierAbscisse;
     SDL_BlitSurface(textures_objets, &src_bordure_coin_droit, surface_fenetre, &curseur_bordure);
 
     // Bord Cotes
-    for(int j = src_bordure_coin_gauche.h; j < surface_fenetre->h; j += src_bordure_verticale.h) {
+    for(int j = src_bordure_coin_gauche.h + topMargin; j < surface_fenetre->h; j += src_bordure_verticale.h) {
         if(j == 90 || j == 315 || j == 570) {
             Dessine_Texture(src_bordure_verticale_porte, 0, j);
             Dessine_Texture(src_bordure_verticale_porte, dernierAbscisse, j);
@@ -165,7 +183,7 @@ void AfficheRectangleTextSprite(char text[], int coord_x, int coord_y) {
 
     for(int i = 0; i < text_length; i++) {
         AfficheRectangleCaractereSprite(text[i], x, y);
-        x += 20;
+        x += 17;
     }
 }
 

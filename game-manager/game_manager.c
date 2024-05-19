@@ -31,12 +31,12 @@ void Charge_Niveau(const char* nomFichier) {
         while(!nextLine) {
             if (ligne[x] == '#' && x * 32 < largeurMax - 32) {
                 briques[y][x].pos_x = x * 32 + 15;
-                briques[y][x].pos_y = y * 16;
+                briques[y][x].pos_y = y * 16 + topMargin;
                 briques[y][x].estBrique = true; // Brick
             }
             else {
                 briques[y][x].pos_x = x * 32;
-                briques[y][x].pos_y = y * 16;
+                briques[y][x].pos_y = y * 16 + topMargin;
                 briques[y][x].estBrique = false; // Empty
             }
 

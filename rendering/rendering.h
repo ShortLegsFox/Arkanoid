@@ -5,7 +5,7 @@
 
 extern SDL_Window* pointeur_fenetre; // Pointeur vers la fenetre SDL
 extern SDL_Surface* surface_fenetre; // Surface de la fenetre
-extern SDL_Surface* textures_fenetre; // Planche de la texture de la fenetre
+extern SDL_Surface* texture_noir; // Planche de la texture de la fenetre
 extern SDL_Surface* textures_objets; // Planche des textures des objets (briques)
 extern SDL_Surface* textures_ascii; // Planche des textures des ASCII (aplphabet et chiffres)
 extern SDL_Surface* textures_gameover; // Planche des textures game over
@@ -28,6 +28,8 @@ extern SDL_Rect source_texture_gameover;
 
 // -- Bonus
 extern SDL_Rect source_texture_brique_bonus_s;
+
+extern int topMargin;
 
 void Initialise_Fenetre();
 void Initialise_Sprites();

@@ -48,7 +48,7 @@ void Dessine()
         stats_balle.vitesse_x *= -1;
         premiere_collision_vaisseau = false;
     }
-    if ((stats_balle.pos_y < 15)) {
+    if ((stats_balle.pos_y < 15 + topMargin)) {
         stats_balle.vitesse_y *= -1;
         premiere_collision_vaisseau = false;
     }
@@ -73,13 +73,12 @@ void Dessine()
         Initialise_Balle();
     }
 
-    AfficheRectangleTextSprite("Score",10, 10);
-
     char* t_score = Entier_vers_Tableau(score_joueur);
     char* t_vies = Entier_vers_Tableau(vies);
-    AfficheRectangleTextSprite(t_score, 130, 10);
-    AfficheRectangleTextSprite("Vie", 400, 10);
-    AfficheRectangleTextSprite(t_vies,470, 10);
+    AfficheRectangleTextSprite("Score",10, 10);
+    AfficheRectangleTextSprite(t_score, 10, 45);
+    AfficheRectangleTextSprite("Vie", surface_fenetre->w - 65, 10);
+    AfficheRectangleTextSprite(t_vies,surface_fenetre->w - 65, 45);
 
     if (vies < 0) Afficher_Game_Over();
 
