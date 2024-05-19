@@ -29,20 +29,20 @@ void Charge_Niveau(const char* nomFichier) {
     while (fgets(ligne, sizeof(ligne), fichier)) {
         nextLine = false;
         while(!nextLine) {
-            if (ligne[x] == '#' && x * 32 < largeurMax - 32) {
-                briques[y][x].pos_x = x * 32 + 15;
-                briques[y][x].pos_y = y * 16 + topMargin;
-                briques[y][x].estBrique = true; // Brick
-            }
-            else {
-                briques[y][x].pos_x = x * 32;
-                briques[y][x].pos_y = y * 16 + topMargin;
-                briques[y][x].estBrique = false; // Empty
-            }
-
             if(ligne[x] == 'F') {
                 y++;
                 nextLine = true;
+            }
+            else if (ligne[x] == '#' && x * 32 < largeurMax - 32) {
+                briques[y][x].pos_x = x * 32;
+                briques[y][x].pos_y = y * 16 + topMargin;
+                briques[y][x].estBrique = false;  // Vide
+            }
+            else if(x * 32 < largeurMax - 32) {
+                briques[y][x].pos_x = x * 32 + 15;
+                briques[y][x].pos_y = y * 16 + topMargin;
+                briques[y][x].estBrique = true;
+                briques[y][x].code_couleur = ligne[x] - '0'; // Blanche
             }
             x++;
         }

@@ -141,10 +141,20 @@ void Dessine_Bordure() {
     }
 }
 
+int Trouve_Index_Y_Brique(int code_couleur) {
+    if(code_couleur > 6) {
+        return 1;
+    }
+    return 0;
+}
+
 void Dessine_Briques() {
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 100; j++) {
             if (briques[i][j].estBrique) {
+                int valeur_index_y_brique = Trouve_Index_Y_Brique(briques[i][j].code_couleur);
+                source_texture_brique.x = source_texture_brique.w * (briques[i][j].code_couleur % 6);
+                source_texture_brique.y = source_texture_brique.h * valeur_index_y_brique;
                 Dessine_Texture(source_texture_brique, briques[i][j].pos_x, briques[i][j].pos_y);
             }
         }
