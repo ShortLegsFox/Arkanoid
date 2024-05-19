@@ -124,15 +124,18 @@ void Dessine_Bordure() {
     curseur_bordure.x = dernierAbscisse;
     SDL_BlitSurface(textures_objets, &src_bordure_coin_droit, surface_fenetre, &curseur_bordure);
 
-    // Bord Cotes
+    // Bord Cotes Porte
+    int occurence = 1; // Ajustement pour que la porte soit au niveau du vaisseau, cela rajoute juste un petit mur vertical en plus après les coins supérieurs
+    int compteur = 0;
     for(int j = src_bordure_coin_gauche.h + topMargin; j < surface_fenetre->h; j += src_bordure_verticale.h) {
-        if(j == 90 || j == 315 || j == 570) {
+        if (compteur > occurence) {
             Dessine_Texture(src_bordure_verticale_porte, 0, j);
             Dessine_Texture(src_bordure_verticale_porte, dernierAbscisse, j);
             j += src_bordure_verticale_porte.h - src_bordure_verticale.h;
         } else {
             Dessine_Texture(src_bordure_verticale, 0, j);
             Dessine_Texture(src_bordure_verticale, dernierAbscisse, j);
+            compteur++;
         }
     }
 }
