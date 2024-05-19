@@ -8,6 +8,7 @@ typedef struct {
     int pos_y;
     int code_couleur;
     int pv_brique;
+    int score;
     bool estBrique;
     bool estSolide;
 } stats_brique;

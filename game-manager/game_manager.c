@@ -52,8 +52,8 @@ void Charge_Niveau(const char* nomFichier) {
     }
 }
 
-void Incremente_Score() {
-    score_joueur++;
+void Incremente_Score(int x, int y) {
+    score_joueur += briques[x][y].score;
 }
 
 void Aleatoire_Bonus() {
@@ -85,7 +85,7 @@ void Verifie_si_brique(int i, int j) {
             if(briques[i][j].pv_brique <= 1) {
                 Aleatoire_Bonus();
                 Casse_La_Brique(i, j);
-                Incremente_Score();
+                Incremente_Score(i, j);
             } else {
                 briques[i][j].pv_brique -= 1;
             }
