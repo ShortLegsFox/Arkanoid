@@ -225,11 +225,9 @@ void Afficher_Game_Over()
 }
 
 void Afficher_Bonus_S() {
-    if(bonus_s) {
-        SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
-        int i = coord_x_brique_cassee;
-        int j = coord_y_brique_cassee;
-        Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
-        SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
-    }
+    SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
+    int i = coord_x_brique_cassee;
+    int j = coord_y_brique_cassee;
+    Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
+    SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
 }

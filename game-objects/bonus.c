@@ -13,7 +13,7 @@ void Initialise_Bonus(int coord_x, int coord_y) {
     bonus_en_cours = true;
 }
 
-void Tomber_Bonus() {
+void Met_A_Jour_Position_Bonus() {
     if(bonus_en_cours) {
         stats_bonus.pos_y += stats_bonus.vitesse_y;// / delta_t;
         SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w,

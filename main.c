@@ -28,28 +28,22 @@ void Initialise()
     maintenant = SDL_GetPerformanceCounter();
 }
 
-// fonction qui met à jour la surface de la fenetre "win_surf"
 void Dessine()
 {
-    // Dessin des entités statiques
     Dessine_Fond();
     Dessine_Bordure();
     Dessine_Briques();
 
-    // Dessin des entités dynamiques
     Dessine_Vaisseau(x_pos_vaisseau, y_pos_vaisseau);
     Dessine_Balle(stats_balle.pos_x, stats_balle.pos_y);
 
-    // Mouvement de la balle
-    Deplace_Balle();
+    Met_A_Jour_Position_Balle();
 
-    // Collisions possibles
     Gestion_Collision_Balle_Bord();
     Gestion_Collision_Balle_Haut();
     Gestion_Collision_Balle_Vaisseau();
     Gestion_Collision_Balle_Sortie_Bas();
 
-    // Affichage et mise à jour du texte
     char* t_score = Entier_vers_Tableau(score_joueur);
     char* t_vies = Entier_vers_Tableau(vies);
     AfficheRectangleTextSprite("Score",10, 10);
@@ -59,9 +53,10 @@ void Dessine()
 
     if (vies < 0) Afficher_Game_Over();
 
-    // Spawn le bonus S
-    Afficher_Bonus_S();
-    Tomber_Bonus();
+    if(bonus_s) {
+        Afficher_Bonus_S();
+    }
+    Met_A_Jour_Position_Bonus();
 }
 
 int main(int argc, char** argv)

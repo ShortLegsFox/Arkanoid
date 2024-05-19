@@ -11,6 +11,6 @@ struct Balle {
 extern struct Balle stats_balle;
 
 void Initialise_Balle();
-void Deplace_Balle();
+void Met_A_Jour_Position_Balle();
 
 #endif

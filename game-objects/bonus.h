@@ -14,6 +14,6 @@ struct Bonus {
 
 extern struct Bonus stats_bonus;
 void Initialise_Bonus(int coord_x, int coord_y);
-void Tomber_Bonus();
+void Met_A_Jour_Position_Bonus();
 
 #endif

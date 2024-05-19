@@ -10,7 +10,7 @@ void Initialise_Balle() {
     stats_balle.vitesse_y = 2.4;
 }
 
-void Deplace_Balle(){
+void Met_A_Jour_Position_Balle(){
     stats_balle.pos_x += stats_balle.vitesse_x;// / delta_t;
     stats_balle.pos_y += stats_balle.vitesse_y;// / delta_t;
 }
