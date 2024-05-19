@@ -9,6 +9,7 @@
 #include "game-objects/ship.h"
 #include "game-objects/bonus.h"
 #include "utils/utils.h"
+#include "game-manager/collider.h"
 
 
 const int FPS = 60;
@@ -30,49 +31,25 @@ void Initialise()
 // fonction qui met à jour la surface de la fenetre "win_surf"
 void Dessine()
 {
+    // Dessin des entités statiques
     Dessine_Fond();
     Dessine_Bordure();
     Dessine_Briques();
 
+    // Dessin des entités dynamiques
     Dessine_Vaisseau(x_pos_vaisseau, y_pos_vaisseau);
     Dessine_Balle(stats_balle.pos_x, stats_balle.pos_y);
 
-    // Entitées dessinées
-    SDL_Rect vaisseau = {x_pos_vaisseau, surface_fenetre->h - 40, source_texture_vaisseau.w, source_texture_vaisseau.h};
-    SDL_Rect balle = {stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h};
-
+    // Mouvement de la balle
     Deplace_Balle();
 
-    // Collision bord
-    if ((stats_balle.pos_x < 15) || (stats_balle.pos_x > (surface_fenetre->w - balle.w - 15))) {
-        stats_balle.vitesse_x *= -1;
-        premiere_collision_vaisseau = false;
-    }
-    if ((stats_balle.pos_y < 15 + topMargin)) {
-        stats_balle.vitesse_y *= -1;
-        premiere_collision_vaisseau = false;
-    }
+    // Collisions possibles
+    Gestion_Collision_Balle_Bord();
+    Gestion_Collision_Balle_Haut();
+    Gestion_Collision_Balle_Vaisseau();
+    Gestion_Collision_Balle_Sortie_Bas();
 
-    // Collision vaisseau
-    if ((SDL_HasIntersection(&balle, &vaisseau)) && premiere_collision_vaisseau == false){
-        int collisionX = balle.x + balle.w / 2; // Position x de la collision
-        int vaisseauX = vaisseau.x + vaisseau.w / 2; // Position x du centre du vaisseau
-
-        if (collisionX < vaisseauX) {
-            stats_balle.vitesse_x = -abs(stats_balle.vitesse_x);
-        } else {
-            stats_balle.vitesse_x = abs(stats_balle.vitesse_x);
-        }
-        stats_balle.vitesse_y *= -1;
-        premiere_collision_vaisseau = true;
-    }
-
-    // Sortie par le bas
-    if (stats_balle.pos_y > (surface_fenetre->h - balle.h)) {
-        vies--;
-        Initialise_Balle();
-    }
-
+    // Affichage et mise à jour du texte
     char* t_score = Entier_vers_Tableau(score_joueur);
     char* t_vies = Entier_vers_Tableau(vies);
     AfficheRectangleTextSprite("Score",10, 10);
@@ -83,13 +60,7 @@ void Dessine()
     if (vies < 0) Afficher_Game_Over();
 
     // Spawn le bonus S
-    if(bonus_s) {
-        SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
-        int i = coord_x_brique_cassee;
-        int j = coord_y_brique_cassee;
-        Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
-        SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
-    }
+    Afficher_Bonus_S();
     Tomber_Bonus();
 }
 

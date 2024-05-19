@@ -44,5 +44,6 @@ void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int sp
 void AfficheRectangleCaractereSprite(char character, int coord_x, int coord_y);
 void AfficheRectangleTextSprite(char text[], int coord_x, int coord_y);
 void Afficher_Game_Over();
+void Afficher_Bonus_S();
 
 #endif

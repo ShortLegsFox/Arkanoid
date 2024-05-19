@@ -2,6 +2,7 @@
 #include "../utils/utils.h"
 #include "../game-manager/game_manager.h"
 #include "../game-objects/bricks.h"
+#include "../game-objects/bonus.h"
 
 SDL_Window* pointeur_fenetre = NULL; // Pointeur vers la fenetre SDL
 SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
@@ -221,4 +222,14 @@ void Afficher_Game_Over()
 
     SDL_Quit();
     exit(0);
+}
+
+void Afficher_Bonus_S() {
+    if(bonus_s) {
+        SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
+        int i = coord_x_brique_cassee;
+        int j = coord_y_brique_cassee;
+        Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
+        SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
+    }
 }
