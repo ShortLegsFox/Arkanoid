@@ -38,15 +38,13 @@ void Charge_Niveau(const char* nomFichier) {
                 nextLine = true;
             }
             else if (ligne[x] == '#' && Briques_Depassent_Limite_X(x, source_texture_brique.w, largeurMax)) {
-                briques[y][x].pos_x = x * source_texture_brique.w;
-                briques[y][x].pos_y = y * source_texture_brique.h + topMargin;
-                briques[y][x].estBrique = false;  // Vide
+                Initialise_Position_Vide(x, y);
+            }
+            else if (ligne[x] == 'S' && Briques_Depassent_Limite_X(x, source_texture_brique.w, largeurMax)) {
+                Initialise_Brique_Solide(x, y, 12);
             }
             else if(Briques_Depassent_Limite_X(x, source_texture_brique.w, largeurMax)) {
-                briques[y][x].pos_x = x * source_texture_brique.w + src_bordure_verticale.w;
-                briques[y][x].pos_y = y * source_texture_brique.h + topMargin;
-                briques[y][x].estBrique = true;
-                briques[y][x].code_couleur = ligne[x] - '0'; // Blanche
+                Initialise_Brique(x, y, ligne[x] - '0');
             }
             x++;
         }

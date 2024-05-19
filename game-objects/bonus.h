@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-extern bool bonus_en_cours;
+extern bool animation;
 
 struct Bonus {
     double pos_x;

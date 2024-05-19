@@ -56,7 +56,8 @@ void Dessine()
     if(bonus_s) {
         Afficher_Bonus_S();
     }
-    Met_A_Jour_Position_Bonus();
+
+    Animation();
 }
 
 int main(int argc, char** argv)

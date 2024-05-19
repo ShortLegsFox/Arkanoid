@@ -142,10 +142,7 @@ void Dessine_Bordure() {
 }
 
 int Trouve_Index_Y_Brique(int code_couleur) {
-    if(code_couleur > 6) {
-        return 1;
-    }
-    return 0;
+    return code_couleur / 6;
 }
 
 void Dessine_Briques() {
@@ -240,4 +237,12 @@ void Afficher_Bonus_S() {
     int j = coord_y_brique_cassee;
     Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
     SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
+}
+
+void Animation() {
+    // Animation du bonus
+    Met_A_Jour_Position_Bonus();
+
+    // Animation brique solide
+
 }
