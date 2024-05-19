@@ -13,6 +13,10 @@ int coord_x_brique_cassee;
 int coord_y_brique_cassee;
 bool bonus_s = false;
 
+bool Briques_Depassent_Limite_X(int index, int largeur_brique, int largeur_max){
+    return index * largeur_brique < largeur_max - largeur_brique;
+}
+
 void Charge_Niveau(const char* nomFichier) {
     FILE *fichier = fopen(nomFichier, "r");
     if (!fichier) {
@@ -33,14 +37,14 @@ void Charge_Niveau(const char* nomFichier) {
                 y++;
                 nextLine = true;
             }
-            else if (ligne[x] == '#' && x * 32 < largeurMax - 32) {
-                briques[y][x].pos_x = x * 32;
-                briques[y][x].pos_y = y * 16 + topMargin;
+            else if (ligne[x] == '#' && Briques_Depassent_Limite_X(x, source_texture_brique.w, largeurMax)) {
+                briques[y][x].pos_x = x * source_texture_brique.w;
+                briques[y][x].pos_y = y * source_texture_brique.h + topMargin;
                 briques[y][x].estBrique = false;  // Vide
             }
-            else if(x * 32 < largeurMax - 32) {
-                briques[y][x].pos_x = x * 32 + 15;
-                briques[y][x].pos_y = y * 16 + topMargin;
+            else if(Briques_Depassent_Limite_X(x, source_texture_brique.w, largeurMax)) {
+                briques[y][x].pos_x = x * source_texture_brique.w + src_bordure_verticale.w;
+                briques[y][x].pos_y = y * source_texture_brique.h + topMargin;
                 briques[y][x].estBrique = true;
                 briques[y][x].code_couleur = ligne[x] - '0'; // Blanche
             }
