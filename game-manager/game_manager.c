@@ -47,6 +47,9 @@ void Charge_Niveau(const char* nomFichier) {
             else if (ligne[x] == 'S' && Briques_Depassent_Limite_X(x, source_texture_brique.w, largeurMax)) {
                 Initialise_Brique_Solide(x, y, 12);
             }
+            else if (ligne[x] == 'G' && Briques_Depassent_Limite_X(x, source_texture_brique.w, largeurMax)) {
+                Initialise_Brique_Solide(x, y, 18);
+            }
             else if(Briques_Depassent_Limite_X(x, source_texture_brique.w, largeurMax)) {
                 Initialise_Brique(x, y, ligne[x] - '0');
             }

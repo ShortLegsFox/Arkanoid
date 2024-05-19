@@ -244,5 +244,5 @@ void Animation() {
     Met_A_Jour_Position_Bonus();
 
     // Animation brique solide
-    Animation_Brique_Solide(coord_x_brique_cassee, coord_y_brique_cassee);
+    Animation_Brique_Solide();
 }
