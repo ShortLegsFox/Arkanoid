@@ -82,9 +82,13 @@ void Verifie_si_brique(int i, int j) {
         SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
         if (SDL_HasIntersection(&balleRect, &briqueRect)) {
             stats_balle.vitesse_y *= -1;
-            Aleatoire_Bonus();
-            Casse_La_Brique(i,j);
-            Incremente_Score();
+            if(briques[i][j].pv_brique <= 1) {
+                Aleatoire_Bonus();
+                Casse_La_Brique(i, j);
+                Incremente_Score();
+            } else {
+                briques[i][j].pv_brique -= 1;
+            }
             return;
         }
     }

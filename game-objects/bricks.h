@@ -7,6 +7,7 @@ typedef struct {
     int pos_x;
     int pos_y;
     int code_couleur;
+    int pv_brique;
     bool estBrique;
     bool estSolide;
 } stats_brique;
