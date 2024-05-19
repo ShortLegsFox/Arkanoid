@@ -11,6 +11,10 @@ int max_briques = 100;
 
 int coord_x_brique_cassee;
 int coord_y_brique_cassee;
+
+int coord_x_brique_solide_touchee;
+int coord_y_brique_solide_touchee;
+
 bool bonus_s = false;
 
 bool Briques_Depassent_Limite_X(int index, int largeur_brique, int largeur_max){
@@ -88,6 +92,8 @@ void Verifie_si_brique(int i, int j) {
                 Incremente_Score(i, j);
             } else {
                 briques[i][j].pv_brique -= 1;
+                briques[i][j].animation = true;
+                briques[i][j].timer_animation = 0;
             }
             return;
         }
