@@ -1,7 +1,7 @@
 #ifndef RENDERING_H
 #define RENDERING_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 extern SDL_Window* pointeur_fenetre; // Pointeur vers la fenetre SDL
 extern SDL_Surface* surface_fenetre; // Surface de la fenetre

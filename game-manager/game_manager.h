@@ -1,7 +1,7 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
