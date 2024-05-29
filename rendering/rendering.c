@@ -1,4 +1,7 @@
 #include "rendering.h"
+
+#include <time.h>
+
 #include "../utils/utils.h"
 #include "../game-manager/game_manager.h"
 #include "../game-objects/bricks.h"
@@ -53,9 +56,13 @@ SDL_Rect src_bordure_verticale_porte = {448, 120, 15, 75};
 SDL_Rect src_bordure_horizontale = {57, 85, 15, 15};
 SDL_Rect src_bordure_coin_gauche = {41, 85, 15, 15};
 SDL_Rect src_bordure_coin_droit = {73, 85, 15, 15};
-SDL_Rect source_texture_bordure_porte_horizontale = {298, 127, 48, 18};
+SDL_Rect source_texture_bordure_porte_horizontale = {290, 128, 61, 16};
 
 int topMargin = 100;
+int timer_porte = 0;
+int reverse = 1;
+int premiere_porte_x;
+int seconde_porte_x;
 
 void Initialise_Fenetre() {
     // Taille de la fenêtre
@@ -116,9 +123,20 @@ void Dessine_Bordure() {
     SDL_Rect curseur_bordure = {0, topMargin, 0, 0 };
 
     // Bord Haut
+    int counter = 0;
     for (int i = src_bordure_coin_gauche.w; i < surface_fenetre->w - src_bordure_coin_droit.w; i += src_bordure_horizontale.w) {
-        curseur_bordure.x = i;
-        Dessine_Texture(src_bordure_horizontale, i, topMargin);
+        if (counter == 7) {
+            Dessine_Texture(source_texture_bordure_porte_horizontale, i, topMargin-1);
+            premiere_porte_x = i;
+            i += source_texture_bordure_porte_horizontale.w - src_bordure_horizontale.w;
+        } else if (counter == 22){
+            Dessine_Texture(source_texture_bordure_porte_horizontale, i, topMargin-1);
+            seconde_porte_x = i;
+            i += source_texture_bordure_porte_horizontale.w - src_bordure_horizontale.w;
+        } else {
+            Dessine_Texture(src_bordure_horizontale, i, topMargin);
+        }
+        counter++;
     }
 
     // Bord Coin Droit
@@ -239,10 +257,31 @@ void Afficher_Bonus_S() {
     SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
 }
 
+void Animation_Porte_Haut() {
+    Dessine_Texture(source_texture_bordure_porte_horizontale, premiere_porte_x, topMargin-1);
+    Dessine_Texture(source_texture_bordure_porte_horizontale, seconde_porte_x, topMargin-1);
+
+    if (timer_porte % 5 == 0) {
+        source_texture_bordure_porte_horizontale.y += (source_texture_bordure_porte_horizontale.h * reverse);
+        if (source_texture_bordure_porte_horizontale.y == 208 || source_texture_bordure_porte_horizontale.y == 128) {
+            reverse *= -1;
+        }
+    }
+
+    if (timer_porte >= 100) {
+        timer_porte = 0;
+    }
+
+    timer_porte++;
+}
+
 void Animation() {
     // Animation du bonus
     Met_A_Jour_Position_Bonus();
 
     // Animation brique solide
     Animation_Brique_Solide();
+
+    // Animation ouverture potes
+    Animation_Porte_Haut();
 }
