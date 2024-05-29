@@ -9,7 +9,13 @@
 #define BALL_SPEED 5 // Adjust as necessary
 
 void Gestion_Collision_Balle_Bord() {
-    if ((stats_balle.pos_x < 15) || (stats_balle.pos_x > (surface_fenetre->w - source_texture_balle.w - 15))) {
+    if (stats_balle.pos_x < 15) {
+        stats_balle.pos_x = 15; // Move ball away from the wall
+        stats_balle.vitesse_x *= -1;
+        premiere_collision_vaisseau = false;
+    }
+    else if (stats_balle.pos_x > (surface_fenetre->w - source_texture_balle.w - 15)) {
+        stats_balle.pos_x = surface_fenetre->w - source_texture_balle.w - 15; // Move ball away from the wall
         stats_balle.vitesse_x *= -1;
         premiere_collision_vaisseau = false;
     }
@@ -35,8 +41,6 @@ void Gestion_Collision_Balle_Vaisseau() {
         // Adjust ball velocity based on hit position
         stats_balle.vitesse_x = BALL_SPEED * hitPos;
         stats_balle.vitesse_y *= -1; // Ensure the ball always bounces upwards
-
-        printf("%f",stats_balle.vitesse_x);
 
         premiere_collision_vaisseau = true;
     } else if (!SDL_HasIntersection(&balle, &vaisseau)) {

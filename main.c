@@ -22,8 +22,8 @@ void Initialise()
     Initialise_Fenetre();
     Initialise_Sprites();
     Charge_Niveau("../niveaux/niveau1.txt");
-    Initialise_Balle();
     Initialise_Vaisseau();
+    Initialise_Balle();
 
     maintenant = SDL_GetPerformanceCounter();
 }
@@ -106,6 +106,9 @@ int main(int argc, char** argv)
         }
         if (keys[SDL_SCANCODE_ESCAPE])
             quitter=true;
+
+        if (keys[SDL_SCANCODE_SPACE])
+            Tirer_Balle();
 
         Collision_Balle_Brique();
         Dessine();

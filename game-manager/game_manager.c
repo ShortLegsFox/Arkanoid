@@ -68,7 +68,7 @@ void Incremente_Score(int x, int y) {
 
 void Aleatoire_Bonus() {
     srand(time(NULL));
-    int r = rand() % 2;
+    int r = rand() % 20;
 
     if(r == 1) {
         bonus_s = true;
@@ -91,6 +91,8 @@ void Casse_La_Brique(int i, int j) {
     }
 }
 
+#define COOLDOWN_PERIOD 1 // Adjust this value as needed
+
 void Verifie_si_brique(int i, int j) {
     if (briques[i][j].estBrique) {
         SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
@@ -112,10 +114,25 @@ void Verifie_si_brique(int i, int j) {
             if (absDx > absDy) {
                 // Horizontal collision
                 stats_balle.vitesse_x *= -1;
+                // Move the ball out of the brick
+                if (dx > 0) {
+                    stats_balle.pos_x = briques[i][j].pos_x + source_texture_brique.w;
+                } else {
+                    stats_balle.pos_x = briques[i][j].pos_x - source_texture_balle.w;
+                }
             } else {
                 // Vertical collision
                 stats_balle.vitesse_y *= -1;
+                // Move the ball out of the brick
+                if (dy > 0) {
+                    stats_balle.pos_y = briques[i][j].pos_y + source_texture_brique.h;
+                } else {
+                    stats_balle.pos_y = briques[i][j].pos_y - source_texture_balle.h;
+                }
             }
+
+            // Always process ball movement, regardless of cooldown
+            printf("Brick hit at (%d, %d): pv_brique = %d\n", i, j, briques[i][j].pv_brique);
 
             if (briques[i][j].pv_brique <= 1) {
                 Aleatoire_Bonus();
@@ -126,33 +143,9 @@ void Verifie_si_brique(int i, int j) {
                 briques[i][j].animation = true;
                 briques[i][j].timer_animation = 0;
             }
-            return;
         }
     }
 }
-
-
-/*
-void Verifie_si_brique(int i, int j) {
-    if (briques[i][j].estBrique) {
-        SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
-        SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
-        if (SDL_HasIntersection(&balleRect, &briqueRect)) {
-            stats_balle.vitesse_y *= -1;
-            if(briques[i][j].pv_brique <= 1) {
-                Aleatoire_Bonus();
-                Casse_La_Brique(i, j);
-                Incremente_Score(i, j);
-            } else {
-                briques[i][j].pv_brique -= 1;
-                briques[i][j].animation = true;
-                briques[i][j].timer_animation = 0;
-            }
-            return;
-        }
-    }
-}
-*/
 
 void Collision_Balle_Brique() {
     bonus_s = false;

@@ -12,5 +12,6 @@ extern struct Balle stats_balle;
 
 void Initialise_Balle();
 void Met_A_Jour_Position_Balle();
+void Tirer_Balle();
 
 #endif
