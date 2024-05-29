@@ -95,6 +95,48 @@ void Verifie_si_brique(int i, int j) {
     if (briques[i][j].estBrique) {
         SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
         SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
+
+        if (SDL_HasIntersection(&balleRect, &briqueRect)) {
+            // Determine the side of the collision
+            float ballCenterX = stats_balle.pos_x + source_texture_balle.w / 2.0;
+            float ballCenterY = stats_balle.pos_y + source_texture_balle.h / 2.0;
+            float brickCenterX = briques[i][j].pos_x + source_texture_brique.w / 2.0;
+            float brickCenterY = briques[i][j].pos_y + source_texture_brique.h / 2.0;
+
+            float dx = ballCenterX - brickCenterX;
+            float dy = ballCenterY - brickCenterY;
+
+            float absDx = fabs(dx);
+            float absDy = fabs(dy);
+
+            if (absDx > absDy) {
+                // Horizontal collision
+                stats_balle.vitesse_x *= -1;
+            } else {
+                // Vertical collision
+                stats_balle.vitesse_y *= -1;
+            }
+
+            if (briques[i][j].pv_brique <= 1) {
+                Aleatoire_Bonus();
+                Casse_La_Brique(i, j);
+                Incremente_Score(i, j);
+            } else {
+                briques[i][j].pv_brique -= 1;
+                briques[i][j].animation = true;
+                briques[i][j].timer_animation = 0;
+            }
+            return;
+        }
+    }
+}
+
+
+/*
+void Verifie_si_brique(int i, int j) {
+    if (briques[i][j].estBrique) {
+        SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
+        SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
         if (SDL_HasIntersection(&balleRect, &briqueRect)) {
             stats_balle.vitesse_y *= -1;
             if(briques[i][j].pv_brique <= 1) {
@@ -110,6 +152,7 @@ void Verifie_si_brique(int i, int j) {
         }
     }
 }
+*/
 
 void Collision_Balle_Brique() {
     bonus_s = false;

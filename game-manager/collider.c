@@ -60,8 +60,6 @@ void Gestion_Collision_Bonus_Vaisseau() {
         animationBonus = false;
         char type = stats_bonus.type;
         Quel_Bonus(type);
-        //Bonus_Slow_Down();
-        // C'est moche, mais ça marche
         stats_bonus.pos_y += 1000;
         score_joueur += 1000;
     }
