@@ -51,7 +51,9 @@ void Gestion_Collision_Bonus_Vaisseau() {
 
     if(SDL_HasIntersection(&vaisseau, &bonus)) {
         animationBonus = false;
-
+        // C'est moche, mais ça marche
+        stats_bonus.pos_y += 1000;
+        score_joueur += 1000;
     }
 }
 
