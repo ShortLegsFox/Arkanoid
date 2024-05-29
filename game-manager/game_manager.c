@@ -2,12 +2,14 @@
 #include "game_manager.h"
 #include "../game-objects/bricks.h"
 #include "../game-objects/ball.h"
+#include "../game-objects/bonus.h"
 #include "../rendering/rendering.h"
 
 
 int vies = 2;
 int score_joueur = 0;
 int max_briques = 100;
+int count_speed_up = 0;
 
 int coord_x_brique_cassee;
 int coord_y_brique_cassee;
@@ -81,6 +83,12 @@ void Casse_La_Brique(int i, int j) {
     briques[i][j].estBrique = false;    // Marque la brique comme cassée
     coord_x_brique_cassee = i;
     coord_y_brique_cassee = j;
+    count_speed_up++;
+    if(count_speed_up == 10) {
+        count_speed_up = 0;
+        stats_balle.vitesse_y *= 1.05;
+        stats_balle.vitesse_x *= 1.05;
+    }
 }
 
 void Verifie_si_brique(int i, int j) {

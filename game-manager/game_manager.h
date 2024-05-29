@@ -9,6 +9,7 @@
 extern int vies;
 extern int score_joueur;
 extern int max_briques;
+extern int count_speed_up;
 
 extern bool bonus_s;
 extern int coord_x_brique_cassee;
