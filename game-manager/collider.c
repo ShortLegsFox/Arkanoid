@@ -4,6 +4,7 @@
 #include "../game-objects/ship.h"
 #include "../game-objects/ball.h"
 #include "game_manager.h"
+#include "../game-objects/bonus.h"
 
 void Gestion_Collision_Balle_Bord() {
     if ((stats_balle.pos_x < 15) || (stats_balle.pos_x > (surface_fenetre->w - source_texture_balle.w - 15))) {
@@ -41,5 +42,21 @@ void Gestion_Collision_Balle_Sortie_Bas() {
     if (stats_balle.pos_y > (surface_fenetre->h - source_texture_balle.h)) {
         vies--;
         Initialise_Balle();
+    }
+}
+
+void Gestion_Collision_Bonus_Vaisseau() {
+    SDL_Rect vaisseau = {x_pos_vaisseau, surface_fenetre->h - 40, source_texture_vaisseau.w, source_texture_vaisseau.h};
+    SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
+
+    if(SDL_HasIntersection(&vaisseau, &bonus)) {
+        animationBonus = false;
+
+    }
+}
+
+void Gestion_Collision_Bonus_Sortie_Bas() {
+    if (stats_bonus.pos_y > (surface_fenetre->h - source_texture_brique_bonus_s.h)) {
+        animationBonus = false;
     }
 }

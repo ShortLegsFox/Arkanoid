@@ -2,7 +2,7 @@
 #include "../rendering/rendering.h"
 
 struct Bonus stats_bonus;
-bool animation;
+bool animationBonus;
 int timer = 0;
 
 void Initialise_Bonus(int coord_x, int coord_y) {
@@ -10,11 +10,11 @@ void Initialise_Bonus(int coord_x, int coord_y) {
     stats_bonus.pos_y = coord_y;
     stats_bonus.vitesse_x = 2.0;
     stats_bonus.vitesse_y = 2.4;
-    animation = true;
+    animationBonus = true;
 }
 
 void Met_A_Jour_Position_Bonus() {
-    if(animation) {
+    if(animationBonus) {
         stats_bonus.pos_y += stats_bonus.vitesse_y;// / delta_t;
         SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w,
                           source_texture_brique_bonus_s.h};

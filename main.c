@@ -43,6 +43,8 @@ void Dessine()
     Gestion_Collision_Balle_Haut();
     Gestion_Collision_Balle_Vaisseau();
     Gestion_Collision_Balle_Sortie_Bas();
+    Gestion_Collision_Bonus_Vaisseau();
+    Gestion_Collision_Bonus_Sortie_Bas();
 
     char* t_score = Entier_vers_Tableau(score_joueur);
     char* t_vies = Entier_vers_Tableau(vies);
