@@ -261,18 +261,16 @@ void Animation_Porte_Haut() {
     Dessine_Texture(source_texture_bordure_porte_horizontale, premiere_porte_x, topMargin-1);
     Dessine_Texture(source_texture_bordure_porte_horizontale, seconde_porte_x, topMargin-1);
 
-    if (timer_porte % 5 == 0) {
+    if (timer_porte % 5 == 0 && timer_porte < 50) {
         source_texture_bordure_porte_horizontale.y += (source_texture_bordure_porte_horizontale.h * reverse);
         if (source_texture_bordure_porte_horizontale.y == 208 || source_texture_bordure_porte_horizontale.y == 128) {
             reverse *= -1;
         }
     }
 
-    if (timer_porte >= 100) {
-        timer_porte = 0;
+    if (timer_porte < 50) {
+        timer_porte++;
     }
-
-    timer_porte++;
 }
 
 void Animation() {
