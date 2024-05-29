@@ -110,6 +110,8 @@ int main(int argc, char** argv)
         Collision_Balle_Brique();
         Dessine();
 
+        Niveau_Suivant();
+
         SDL_UpdateWindowSurface(pointeur_fenetre);
         maintenant = SDL_GetPerformanceCounter();
         delta_temps = 1.0 / FPS - (double)(maintenant - precedent) / (double)SDL_GetPerformanceFrequency();
@@ -123,4 +125,3 @@ int main(int argc, char** argv)
     SDL_Quit();
     return 0;
 }
-

@@ -22,5 +22,7 @@ void Charge_Niveau(const char* nomFichier);
 void Ajuster_Score();
 void Collision_Balle_Brique();
 bool Bonus_S();
+bool Niveau_Complet();
+void Niveau_Suivant();
 
 #endif // GAME_MANAGER_H
