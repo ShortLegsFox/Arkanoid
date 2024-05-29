@@ -34,7 +34,9 @@ void Gestion_Collision_Balle_Vaisseau() {
 
         // Adjust ball velocity based on hit position
         stats_balle.vitesse_x = BALL_SPEED * hitPos;
-        stats_balle.vitesse_y = -BALL_SPEED; // Ensure the ball always bounces upwards
+        stats_balle.vitesse_y *= -1; // Ensure the ball always bounces upwards
+
+        printf("%f",stats_balle.vitesse_x);
 
         premiere_collision_vaisseau = true;
     } else if (!SDL_HasIntersection(&balle, &vaisseau)) {
@@ -56,6 +58,9 @@ void Gestion_Collision_Bonus_Vaisseau() {
 
     if(SDL_HasIntersection(&vaisseau, &bonus)) {
         animationBonus = false;
+        char type = stats_bonus.type;
+        Quel_Bonus(type);
+        //Bonus_Slow_Down();
         // C'est moche, mais ça marche
         stats_bonus.pos_y += 1000;
         score_joueur += 1000;

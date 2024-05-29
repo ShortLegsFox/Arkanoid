@@ -87,8 +87,7 @@ void Casse_La_Brique(int i, int j) {
     count_speed_up++;
     if(count_speed_up == 10) {
         count_speed_up = 0;
-        stats_balle.vitesse_y *= 1.05;
-        stats_balle.vitesse_x *= 1.05;
+        stats_balle.vitesse_y *= 1.1;
     }
 }
 

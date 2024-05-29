@@ -235,7 +235,7 @@ void Afficher_Bonus_S() {
     SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
     int i = coord_x_brique_cassee;
     int j = coord_y_brique_cassee;
-    Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y);
+    Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y, 'S');
     SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
 }
 

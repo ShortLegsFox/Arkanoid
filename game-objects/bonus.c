@@ -1,15 +1,18 @@
 #include "bonus.h"
+
+#include "ball.h"
 #include "../rendering/rendering.h"
 
 struct Bonus stats_bonus;
 bool animationBonus;
 int timer = 0;
 
-void Initialise_Bonus(int coord_x, int coord_y) {
+void Initialise_Bonus(int coord_x, int coord_y, char type_bonus) {
     stats_bonus.pos_x = coord_x;
     stats_bonus.pos_y = coord_y;
     stats_bonus.vitesse_x = 2.0;
     stats_bonus.vitesse_y = 2.4;
+    stats_bonus.type = type_bonus;
     animationBonus = true;
 }
 
@@ -33,5 +36,22 @@ void Met_A_Jour_Position_Bonus() {
         }
 
         timer++;
+    }
+}
+
+void Quel_Bonus(char type_bonus) {
+    switch (type_bonus) {
+        case('S'):
+            Bonus_Slow_Down();
+        default:
+            printf("AAAAA");
+    }
+}
+
+void Bonus_Slow_Down() {
+    if(stats_balle.vitesse_y < 0) {
+        stats_balle.vitesse_y = -2;
+    } else {
+        stats_balle.vitesse_y = 2;
     }
 }
