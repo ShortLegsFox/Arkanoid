@@ -93,13 +93,13 @@ int main(int argc, char** argv)
         int max_x = surface_fenetre->w - 128;
 
         if (keys[SDL_SCANCODE_LEFT]) {
-            x_pos_vaisseau -= 10;
+            x_pos_vaisseau -= 15;
             if(x_pos_vaisseau < min_x) {
                 x_pos_vaisseau = min_x;
             }
         }
         if (keys[SDL_SCANCODE_RIGHT]) {
-            x_pos_vaisseau += 10;
+            x_pos_vaisseau += 15;
             if(x_pos_vaisseau > max_x) {
                 x_pos_vaisseau = max_x;
             }
