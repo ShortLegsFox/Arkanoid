@@ -3,6 +3,7 @@
 #include "../game-objects/bricks.h"
 #include "../game-objects/ball.h"
 #include "../rendering/rendering.h"
+#include "../game-objects/ship.h"
 
 
 int vies = 2;
@@ -108,6 +109,35 @@ void Collision_Balle_Brique() {
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 100; j++) {
             Verifie_si_brique(i,j);
+        }
+    }
+}
+
+bool Niveau_Complet() {
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) {
+            if (briques[i][j].estBrique) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void Niveau_Suivant() {
+    static int niveau_actuel = 1;
+    if (Niveau_Complet()) {
+        if (niveau_actuel < 5) { // Suppose qu'il y a 5 niveaux
+            niveau_actuel++;
+            char nomFichier[64];
+            sprintf(nomFichier, "../niveaux/niveau%d.txt", niveau_actuel);
+            Charge_Niveau(nomFichier);
+            Initialise_Balle();
+            Initialise_Vaisseau();
+            printf("Niveau %d chargé. Bonne chance!\n", niveau_actuel);
+        } else {
+            printf("Félicitations! Vous avez terminé tous les niveaux!\n");
+            // Ajouter du code ici pour gérer la fin du jeu.
         }
     }
 }
