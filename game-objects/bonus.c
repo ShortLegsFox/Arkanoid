@@ -50,8 +50,8 @@ void Quel_Bonus(char type_bonus) {
 
 void Bonus_Slow_Down() {
     if(stats_balle.vitesse_y < 0) {
-        stats_balle.vitesse_y = -2;
+        stats_balle.vitesse_y = -4;
     } else {
-        stats_balle.vitesse_y = 2;
+        stats_balle.vitesse_y = 4;
     }
 }
