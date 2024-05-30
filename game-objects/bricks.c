@@ -13,6 +13,7 @@ void Initialise_Brique(int x, int y, int code_couleur) {
     briques[y][x].score = 50;
     briques[y][x].estBrique = true;
     briques[y][x].estSolide = false;
+    briques[y][x].estIndestructible = false;
 }
 
 void Initialise_Brique_Solide(int x, int y, int code_couleur) {
@@ -25,6 +26,20 @@ void Initialise_Brique_Solide(int x, int y, int code_couleur) {
     briques[y][x].animation = false;
     briques[y][x].estBrique = true;
     briques[y][x].estSolide = true;
+    briques[y][x].estIndestructible = false;
+}
+
+void Initialise_Brique_Indestructible(int x, int y, int code_couleur) {
+    briques[y][x].pos_x = x * source_texture_brique.w + src_bordure_verticale.w;
+    briques[y][x].pos_y = y * source_texture_brique.h + topMargin;
+    briques[y][x].code_couleur = code_couleur;
+    briques[y][x].pv_brique = -1;
+    briques[y][x].score = 9999999999;
+    briques[y][x].timer_animation = 0;
+    briques[y][x].animation = false;
+    briques[y][x].estBrique = true;
+    briques[y][x].estSolide = true;
+    briques[y][x].estIndestructible = true;
 }
 
 void Initialise_Position_Vide(int x, int y) {

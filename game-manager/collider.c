@@ -119,7 +119,7 @@ void Collision_Balle_Briques(int i, int j) {
         // Always process ball movement, regardless of cooldown
         printf("Brick hit at (%d, %d): pv_brique = %d\n", i, j, briques[i][j].pv_brique);
 
-        if (briques[i][j].pv_brique <= 1) {
+        if (briques[i][j].pv_brique == 1) {
             Aleatoire_Bonus();
             Casse_La_Brique(i, j);
             Incremente_Score(i, j);

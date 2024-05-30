@@ -54,7 +54,7 @@ void Charge_Niveau(const char* nomFichier) {
                 Initialise_Brique_Solide(x, y, 12);
             }
             else if (ligne[x] == 'G' && Briques_Depassent_Limite_X(x, source_texture_brique.w, largeurMax)) {
-                Initialise_Brique_Solide(x, y, 18);
+                Initialise_Brique_Indestructible(x, y, 18);
             }
             else if(Briques_Depassent_Limite_X(x, source_texture_brique.w, largeurMax)) {
                 Initialise_Brique(x, y, ligne[x] - '0');
@@ -108,7 +108,7 @@ void Verifie_Collision_Balle_Brique() {
 bool Niveau_Complet() {
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 100; j++) {
-            if (briques[i][j].estBrique) {
+            if (briques[i][j].estBrique && briques[i][j].estIndestructible == false) {
                 return false;
             }
         }
