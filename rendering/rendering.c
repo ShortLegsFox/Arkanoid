@@ -15,17 +15,27 @@ SDL_Surface* textures_ascii = NULL; // Planche des textures des ASCII (aplphabet
 SDL_Surface* textures_gameover = NULL; // Planche des textures game over
 
 // -- Découpage sur la planche de texture --
-SDL_Rect source_texture_fond = {240, 128, 48, 64 }; // Le point (0,0) est en haut a gauche
-SDL_Rect source_texture_fond_sombre = {240, 192, 48, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond = {0, 128, 48, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_sombre = {0, 192, 48, 64 }; // Le point (0,0) est en haut a gauche
 
 // -- Texture de fond noir --
 SDL_Rect source_texture_noir = {96, 128, 48, 64};
 
-SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
-SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_rouge = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
-SDL_Rect source_texture_fond_ambiance_fossoyeuse = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
-SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_bleu = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
-SDL_Rect source_texture_fond_defaut = {320, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+// -- Autres textures
+SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste = {240, 128, 48, 64  }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_mecanique_en_feu = {192, 128, 48, 64  }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_rouge = {144, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_bleu = {96, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_ambiance_fossoyeuse = {48, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_defaut = {0, 128, 64, 64 }; // Le point (0,0) est en haut a gauche
+
+// -- Autres textures sombre
+SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_sombre = {240, 192, 48, 64  }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_mecanique_en_feu_sombre = {192, 192, 48, 64  }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_rouge_sombre = {144, 192, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_circuit_imprime_retro_futuriste_bleu_sombre = {96, 192, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_ambiance_fossoyeuse_sombre = {48, 192, 64, 64 }; // Le point (0,0) est en haut a gauche
+SDL_Rect source_texture_fond_defaut_sombre = {0, 192, 64, 64 }; // Le point (0,0) est en haut a gauche
 
 // -- Taille de la balle - Pourrait être automatisé ? --
 SDL_Rect source_texture_balle_xs = {0, 64, 16, 16 };
@@ -90,6 +100,38 @@ void Dessine_Texture(SDL_Rect texture, int x, int y) {
 void Dessine_Noir(int x, int y) {
     SDL_Rect curseur_texture = {x, y, 0, 0 };
     SDL_BlitSurface(texture_noir, &source_texture_noir, surface_fenetre, &curseur_texture);
+}
+
+void Sprite_par_niveau(){
+    switch(niveau_actuel) {
+        case 1 :
+            source_texture_fond.x = 0;
+            source_texture_fond_sombre.x = 0;
+            break;
+        case 2 :
+            source_texture_fond.x = 48;
+            source_texture_fond_sombre.x = 48;
+            break;
+        case 3 :
+            source_texture_fond.x = 96;
+            source_texture_fond_sombre.x = 96;
+            break;
+        case 4 :
+            source_texture_fond.x = 144;
+            source_texture_fond_sombre.x = 144;
+            break;
+        case 5 :
+            source_texture_fond.x = 192;
+            source_texture_fond_sombre.x = 192;
+            break;
+        case 6 :
+            source_texture_fond.x = 240;
+            source_texture_fond_sombre.x = 240;
+            break;
+        default:
+            source_texture_fond.x = 0;
+            source_texture_fond_sombre.x = 0;
+    }
 }
 
 void Dessine_Fond() {

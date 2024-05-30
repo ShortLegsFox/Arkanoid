@@ -11,6 +11,7 @@ int vies = 2;
 int score_joueur = 0;
 int max_briques = 100;
 int count_speed_up = 0;
+int niveau_actuel = 1;
 
 int coord_x_brique_cassee;
 int coord_y_brique_cassee;
@@ -168,12 +169,12 @@ bool Niveau_Complet() {
 }
 
 void Niveau_Suivant() {
-    static int niveau_actuel = 1;
     if (Niveau_Complet()) {
-        if (niveau_actuel < 5) { // Suppose qu'il y a 5 niveaux
+        if (niveau_actuel < 6) {    //Verif à pas faire un magic number
             niveau_actuel++;
             char nomFichier[64];
             sprintf(nomFichier, "../niveaux/niveau%d.txt", niveau_actuel);
+            Sprite_par_niveau();
             Charge_Niveau(nomFichier);
             Initialise_Balle();
             Initialise_Vaisseau();
