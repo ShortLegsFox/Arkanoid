@@ -118,6 +118,7 @@ bool Niveau_Complet() {
 
 void Niveau_Suivant() {
     if (Niveau_Complet()) {
+        Vide_Tableau_Briques();
         if (niveau_actuel < 6) {    //Verif à pas faire un magic number
             niveau_actuel++;
             char nomFichier[64];

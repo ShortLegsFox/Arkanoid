@@ -24,5 +24,6 @@ void Initialise_Brique_Indestructible(int x, int y, int code_couleur);
 void Initialise_Position_Vide(int x, int y);
 void Commence_Animation(int x, int y);
 void Animation_Brique_Solide();
+void Vide_Tableau_Briques();
 
 #endif

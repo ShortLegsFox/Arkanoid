@@ -67,3 +67,11 @@ void Animation_Brique_Solide() {
     }
     timer_brique++;
 }
+
+void Vide_Tableau_Briques() {
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) {
+            briques[i][j].estBrique = false;
+        }
+    }
+}
