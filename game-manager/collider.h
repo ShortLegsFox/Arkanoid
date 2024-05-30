@@ -7,5 +7,6 @@ void Gestion_Collision_Balle_Vaisseau();
 void Gestion_Collision_Balle_Sortie_Bas();
 void Gestion_Collision_Bonus_Vaisseau();
 void Gestion_Collision_Bonus_Sortie_Bas();
+void Collision_Balle_Briques(int i, int j);
 
 #endif

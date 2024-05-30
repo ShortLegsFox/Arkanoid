@@ -1,5 +1,7 @@
 #include <time.h>
 #include "game_manager.h"
+
+#include "collider.h"
 #include "../game-objects/bricks.h"
 #include "../game-objects/ball.h"
 #include "../game-objects/bonus.h"
@@ -92,67 +94,13 @@ void Casse_La_Brique(int i, int j) {
     }
 }
 
-#define COOLDOWN_PERIOD 1 // Adjust this value as needed
-
-void Verifie_si_brique(int i, int j) {
-    if (briques[i][j].estBrique) {
-        SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
-        SDL_Rect balleRect = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
-
-        if (SDL_HasIntersection(&balleRect, &briqueRect)) {
-            // Determine the side of the collision
-            float ballCenterX = stats_balle.pos_x + source_texture_balle.w / 2.0;
-            float ballCenterY = stats_balle.pos_y + source_texture_balle.h / 2.0;
-            float brickCenterX = briques[i][j].pos_x + source_texture_brique.w / 2.0;
-            float brickCenterY = briques[i][j].pos_y + source_texture_brique.h / 2.0;
-
-            float dx = ballCenterX - brickCenterX;
-            float dy = ballCenterY - brickCenterY;
-
-            float absDx = fabs(dx);
-            float absDy = fabs(dy);
-
-            if (absDx > absDy) {
-                // Horizontal collision
-                stats_balle.vitesse_x *= -1;
-                // Move the ball out of the brick
-                if (dx > 0) {
-                    stats_balle.pos_x = briques[i][j].pos_x + source_texture_brique.w;
-                } else {
-                    stats_balle.pos_x = briques[i][j].pos_x - source_texture_balle.w;
-                }
-            } else {
-                // Vertical collision
-                stats_balle.vitesse_y *= -1;
-                // Move the ball out of the brick
-                if (dy > 0) {
-                    stats_balle.pos_y = briques[i][j].pos_y + source_texture_brique.h;
-                } else {
-                    stats_balle.pos_y = briques[i][j].pos_y - source_texture_balle.h;
-                }
-            }
-
-            // Always process ball movement, regardless of cooldown
-            printf("Brick hit at (%d, %d): pv_brique = %d\n", i, j, briques[i][j].pv_brique);
-
-            if (briques[i][j].pv_brique <= 1) {
-                Aleatoire_Bonus();
-                Casse_La_Brique(i, j);
-                Incremente_Score(i, j);
-            } else {
-                briques[i][j].pv_brique -= 1;
-                briques[i][j].animation = true;
-                briques[i][j].timer_animation = 0;
-            }
-        }
-    }
-}
-
-void Collision_Balle_Brique() {
+void Verifie_Collision_Balle_Brique() {
     bonus_s = false;
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 100; j++) {
-            Verifie_si_brique(i,j);
+            if (briques[i][j].estBrique) {
+                Collision_Balle_Briques(i,j);
+            }
         }
     }
 }

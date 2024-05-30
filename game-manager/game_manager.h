@@ -21,9 +21,12 @@ extern int coord_y_brique_solide_touchee;
 
 void Charge_Niveau(const char* nomFichier);
 void Ajuster_Score();
-void Collision_Balle_Brique();
+void Verifie_Collision_Balle_Brique();
 bool Bonus_S();
 bool Niveau_Complet();
 void Niveau_Suivant();
+void Aleatoire_Bonus();
+void Casse_La_Brique(int i, int j);
+void Incremente_Score(int i, int j);
 
 #endif // GAME_MANAGER_H
