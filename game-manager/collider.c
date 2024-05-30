@@ -14,13 +14,11 @@ void Gestion_Collision_Balle_Bord() {
     if (stats_balle.pos_x < 15) {
         stats_balle.pos_x = 15; // Move ball away from the wall
         stats_balle.vitesse_x *= -1;
-        stats_balle.vitesse_y += (rand() % 3 - 1); // Add some randomness to the y velocity
         premiere_collision_vaisseau = false;
     }
     else if (stats_balle.pos_x > (surface_fenetre->w - source_texture_balle.w - 15)) {
         stats_balle.pos_x = surface_fenetre->w - source_texture_balle.w - 15; // Move ball away from the wall
         stats_balle.vitesse_x *= -1;
-        stats_balle.vitesse_y += (rand() % 3 - 1); // Add some randomness to the y velocity
         premiere_collision_vaisseau = false;
     }
 }
