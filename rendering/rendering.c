@@ -52,6 +52,11 @@ SDL_Rect source_texture_vaisseau = {384, 303, 128, 16 };
 
 SDL_Rect source_texture_brique = { 0, 0, 32, 16 };
 
+// -- Texture des enemies
+SDL_Rect source_texture_chibre_bleu = {0,256,32,32};
+SDL_Rect source_texture_pyramide_vert_verre = {0,288,32,32};
+SDL_Rect source_texture_chromosome = {0,320,32,32};
+
 // -- Bonus S --
 SDL_Rect source_texture_brique_bonus_s = { 256, 0, 32, 16 };
 // -- Bonus C --
@@ -224,6 +229,18 @@ void Dessine_Vaisseau(int x, int y) {
 
 void Dessine_Balle(int x, int y) {
     Dessine_Texture(source_texture_balle, x, y);
+}
+
+void Dessine_Enemie_Chibre_Bleu(int x, int y) {
+    Dessine_Texture(source_texture_chibre_bleu, x, y);
+}
+
+void Dessine_Enemie_Pyramide_Verte_Verre(int x, int y) {
+    Dessine_Texture(source_texture_pyramide_vert_verre, x ,y);
+}
+
+void Dessine_Enemie_Chromosome(int x, int y) {
+    Dessine_Texture(source_texture_chromosome, x, y);
 }
 
 void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine) {
