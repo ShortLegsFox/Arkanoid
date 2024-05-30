@@ -14,7 +14,7 @@ void Initialise_Balle() {
     stats_balle.pos_x = x_pos_vaisseau + 55;
     stats_balle.pos_y = y_pos_vaisseau - 15;
     stats_balle.vitesse_x = 5.0;
-    stats_balle.vitesse_y = 5.0;
+    stats_balle.vitesse_y = 5.5;
     balle_sur_vaisseau = true;
 }
 

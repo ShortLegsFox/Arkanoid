@@ -110,7 +110,7 @@ int main(int argc, char** argv)
         if (keys[SDL_SCANCODE_SPACE])
             Tirer_Balle();
 
-        Collision_Balle_Brique();
+        Verifie_Collision_Balle_Brique();
         Dessine();
 
         Niveau_Suivant();
