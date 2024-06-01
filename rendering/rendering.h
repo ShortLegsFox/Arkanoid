@@ -26,6 +26,7 @@ extern SDL_Rect source_texture_bordure_porte_horizontale;
 extern SDL_Rect source_texture_chibre_bleu;
 extern SDL_Rect source_texture_pyramide_vert_verre;
 extern SDL_Rect source_texture_chromosome;
+extern SDL_Rect src_explosion;
 
 // -- Game over
 extern SDL_Rect source_texture_gameover;

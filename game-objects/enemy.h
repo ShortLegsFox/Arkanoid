@@ -11,6 +11,8 @@ typedef struct {
     char type;
     int timer_animation;
     bool estMort;
+    bool explose;
+    int timer_explosion;
 } Enemy;
 
 extern Enemy enemies[];
@@ -19,6 +21,7 @@ void Initialise_Enemie(int index, int numero_porte, char type);
 void Animation_Enemie_Pyramide_Vert_Verre(int i);
 void Animation_Enemie_Chibre_Bleu(int i);
 void Animation_Enemie_Chromosome(int i);
+void Animation_Explosion();
 void Chute_Enemies(int index);
 void Deplacement_Enemies(int index);
 void Met_A_Jour_Enemies();

@@ -67,6 +67,24 @@ void Animation_Enemie_Chromosome(int i) {
     }
 }
 
+void Animation_Explosion() {
+    for(int i = 0; i < 2; i++) {
+        if(enemies[i].explose) {
+            Dessine_Texture(src_explosion, enemies[i].pos_x, enemies[i].pos_y);
+
+            if(timer_enemies % 10 == 0) {
+                src_explosion.x = enemies[i].timer_explosion*src_explosion.w;
+                enemies[i].timer_explosion++;
+            }
+
+            if(src_explosion.x == 192) {
+                enemies[i].explose = false;
+            }
+        }
+    }
+
+}
+
 void Chute_Enemies(int index) {
     if(!Collision_Enemie_Brique(index)) {
         enemies[index].pos_y += enemies[index].vitesse_y;

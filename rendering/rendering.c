@@ -76,6 +76,9 @@ SDL_Rect src_bordure_coin_gauche = {41, 85, 15, 15};
 SDL_Rect src_bordure_coin_droit = {73, 85, 15, 15};
 SDL_Rect source_texture_bordure_porte_horizontale = {290, 128, 61, 16};
 
+// -- Explosion
+SDL_Rect src_explosion = {0, 384, 32, 32};
+
 int topMargin = 100;
 int timer_porte = 0;
 int reverse = 1;
@@ -376,4 +379,7 @@ void Animation() {
 
     // Animation des enemies
     Animation_Enemies();
+
+    // Explosion enemies
+    Animation_Explosion();
 }
