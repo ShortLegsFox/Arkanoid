@@ -2,6 +2,7 @@
 #define RENDERING_H
 
 #include <SDL.h>
+#include "../game-objects/enemy.h"
 
 extern SDL_Window* pointeur_fenetre; // Pointeur vers la fenetre SDL
 extern SDL_Surface* surface_fenetre; // Surface de la fenetre
@@ -22,6 +23,9 @@ extern SDL_Rect src_bordure_coin_gauche;
 extern SDL_Rect src_bordure_coin_droit;
 extern SDL_Rect source_texture_bordure_porte_verticale;
 extern SDL_Rect source_texture_bordure_porte_horizontale;
+extern SDL_Rect source_texture_chibre_bleu;
+extern SDL_Rect source_texture_pyramide_vert_verre;
+extern SDL_Rect source_texture_chromosome;
 
 // -- Game over
 extern SDL_Rect source_texture_gameover;
@@ -39,7 +43,12 @@ void Dessine_Bordure();
 void Dessine_Briques();
 void Dessine_Vaisseau(int x, int y);
 void Dessine_Balle(int x, int y);
+void Dessine_Enemie_Chibre_Bleu(int x, int y);
+void Dessine_Enemie_Pyramide_Verte_Verre(int x, int y);
+void Dessine_Enemie_Chromosome(int x, int y);
+void Dessine_Enemies(Enemy enemies[], int nombre_de_enemies);
 void Dessine_Texture(SDL_Rect texture, int x, int y);
+void Dessine_Texture_Bis(SDL_Rect texture, int x, int y);
 void Sprite_par_niveau();
 
 void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int spriteWidth, int spriteHeight, int charsPerLine);

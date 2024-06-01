@@ -130,3 +130,41 @@ void Collision_Balle_Briques(int i, int j) {
         }
     }
 }
+
+bool Collision_Enemie_Brique(int index) {
+    for(int i = 0; i < 100; i++) {
+        for(int j = 0; j < 100; j++) {
+            SDL_Rect brique = {briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h};
+            SDL_Rect enemie = {enemies[index].pos_x, enemies[index].pos_y, 32, 32};
+
+            if(SDL_HasIntersection(&brique, &enemie) && briques[i][j].estBrique) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void Collision_Enemie_Bord(int index) {
+    if (enemies[index].pos_x < 15) {
+        enemies[index].pos_x = 15;
+        enemies[index].vitesse_x *= -1;
+    }
+    else if (enemies[index].pos_x > (surface_fenetre->w - 32 - 15)) {
+        enemies[index].pos_x = surface_fenetre->w - 32 - 15;
+        enemies[index].vitesse_x *= -1;
+    }
+}
+
+void Collision_Enemie_Balle(int index) {
+    if(enemies[index].estMort == false) {
+        SDL_Rect enemie = {enemies[index].pos_x, enemies[index].pos_y, 32, 32};
+        SDL_Rect balle = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
+
+        if(SDL_HasIntersection(&enemie, &balle)) {
+            enemies[index].estMort = true;
+            printf("%s\n", "enemy killed");
+        }
+    }
+}
+

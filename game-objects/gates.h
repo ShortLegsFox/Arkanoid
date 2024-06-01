@@ -1,14 +1,16 @@
 #ifndef GATES_H
 #define GATES_H
 
-struct PorteUn {
+struct Porte {
     int pos_x;
     int pos_y;
+    int hauteur;
+    int largeur;
 };
 
-struct PorteDeux {
-    int pos_x;
-    int pos_y;
-};
+extern struct Porte porteUn;
+extern struct Porte porteDeux;
+
+void Initialise_Portes();
 
 #endif

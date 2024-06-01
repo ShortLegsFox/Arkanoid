@@ -1,11 +1,12 @@
 #include "rendering.h"
-
 #include <time.h>
 
 #include "../utils/utils.h"
 #include "../game-manager/game_manager.h"
 #include "../game-objects/bricks.h"
 #include "../game-objects/bonus.h"
+#include "../game-objects/gates.h"
+#include "../game-objects/enemy.h"
 
 SDL_Window* pointeur_fenetre = NULL; // Pointeur vers la fenetre SDL
 SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
@@ -13,6 +14,8 @@ SDL_Surface* texture_noir = NULL; // Planche de la texture de la fenetre
 SDL_Surface* textures_objets = NULL; // Planche des textures des objets (briques)
 SDL_Surface* textures_ascii = NULL; // Planche des textures des ASCII (aplphabet et chiffres)
 SDL_Surface* textures_gameover = NULL; // Planche des textures game over
+SDL_Surface* textures_2 = NULL; // Planche des textures game over
+
 
 // -- Découpage sur la planche de texture --
 SDL_Rect source_texture_fond = {0, 128, 48, 64 }; // Le point (0,0) est en haut a gauche
@@ -45,7 +48,7 @@ SDL_Rect source_texture_balle_l = {48, 64, 16, 16 };
 SDL_Rect source_texture_balle_xl = {64, 64, 16, 16 };
 SDL_Rect source_texture_balle_2xl = {80, 64, 16, 16 };
 
-SDL_Rect source_texture_balle = {80, 64, 16, 16 };
+SDL_Rect source_texture_balle = {80, 65, 16, 16 };
 
 // -- Taille du vaisseau - idem que la balle ? --
 SDL_Rect source_texture_vaisseau = {384, 303, 128, 16 };
@@ -76,8 +79,6 @@ SDL_Rect source_texture_bordure_porte_horizontale = {290, 128, 61, 16};
 int topMargin = 100;
 int timer_porte = 0;
 int reverse = 1;
-int premiere_porte_x;
-int seconde_porte_x;
 
 void Initialise_Fenetre() {
     // Taille de la fenêtre
@@ -90,16 +91,23 @@ void Initialise_Sprites() {
     textures_objets = SDL_LoadBMP("./assets/sprites2.bmp");
     textures_ascii = SDL_LoadBMP("./assets/Arkanoid_ascii.bmp");
     textures_gameover = SDL_LoadBMP("./assets/gameover.bmp");
+    textures_2 = SDL_LoadBMP("./assets/Arkanoid_sprites.bmp");
 
     // Partie noire du sprite en transparence, sauf pour celui où l'on veut recuperer le noir
     SDL_SetColorKey(textures_ascii, true, 0);
     SDL_SetColorKey(textures_gameover, true, 0);
     SDL_SetColorKey(textures_objets, true, 0);
+    SDL_SetColorKey(textures_2, true, 0);
 }
 
 void Dessine_Texture(SDL_Rect texture, int x, int y) {
     SDL_Rect curseur_texture = {x, y, 0, 0 };
     SDL_BlitSurface(textures_objets, &texture, surface_fenetre, &curseur_texture);
+}
+
+void Dessine_Texture_Bis(SDL_Rect texture, int x, int y) {
+    SDL_Rect curseur_texture = {x, y, 0, 0 };
+    SDL_BlitSurface(textures_2, &texture, surface_fenetre, &curseur_texture);
 }
 
 void Dessine_Noir(int x, int y) {
@@ -174,11 +182,9 @@ void Dessine_Bordure() {
     for (int i = src_bordure_coin_gauche.w; i < surface_fenetre->w - src_bordure_coin_droit.w; i += src_bordure_horizontale.w) {
         if (counter == 7) {
             Dessine_Texture(source_texture_bordure_porte_horizontale, i, topMargin-1);
-            premiere_porte_x = i;
             i += source_texture_bordure_porte_horizontale.w - src_bordure_horizontale.w;
         } else if (counter == 22){
             Dessine_Texture(source_texture_bordure_porte_horizontale, i, topMargin-1);
-            seconde_porte_x = i;
             i += source_texture_bordure_porte_horizontale.w - src_bordure_horizontale.w;
         } else {
             Dessine_Texture(src_bordure_horizontale, i, topMargin);
@@ -237,6 +243,20 @@ void Dessine_Enemie_Chibre_Bleu(int x, int y) {
 
 void Dessine_Enemie_Pyramide_Verte_Verre(int x, int y) {
     Dessine_Texture(source_texture_pyramide_vert_verre, x ,y);
+}
+
+void Dessine_Enemies(Enemy enemies[], int nombre_de_enemies) {
+    for (int i = 0; i < nombre_de_enemies; i++) {
+        if(enemies[i].estMort == false) {
+            if(enemies[i].type == 'c') {
+                Dessine_Enemie_Chromosome(enemies[i].pos_x, enemies[i].pos_y);
+            } else if (enemies[i].type == 'b') {
+                Dessine_Enemie_Chibre_Bleu(enemies[i].pos_x, enemies[i].pos_y);
+            } else if (enemies[i].type == 'p') {
+                Dessine_Enemie_Pyramide_Verte_Verre(enemies[i].pos_x, enemies[i].pos_y);
+            }
+        }
+    }
 }
 
 void Dessine_Enemie_Chromosome(int x, int y) {
@@ -317,8 +337,8 @@ void Afficher_Bonus_S() {
 }
 
 void Animation_Porte_Haut() {
-    Dessine_Texture(source_texture_bordure_porte_horizontale, premiere_porte_x, topMargin-1);
-    Dessine_Texture(source_texture_bordure_porte_horizontale, seconde_porte_x, topMargin-1);
+    Dessine_Texture(source_texture_bordure_porte_horizontale, porteUn.pos_x, topMargin-1);
+    Dessine_Texture(source_texture_bordure_porte_horizontale, porteDeux.pos_x, topMargin-1);
 
     if (timer_porte % 5 == 0 && timer_porte < 50) {
         source_texture_bordure_porte_horizontale.y += (source_texture_bordure_porte_horizontale.h * reverse);
@@ -332,6 +352,18 @@ void Animation_Porte_Haut() {
     }
 }
 
+void Animation_Enemies() {
+    for(int i = 0; i < 3; i++) {
+        if (enemies[i].type == 'c') {
+            Animation_Enemie_Chromosome(i);
+        } else if (enemies[i].type == 'b') {
+            Animation_Enemie_Chibre_Bleu(i);
+        } else if (enemies[i].type == 'p') {
+            Animation_Enemie_Pyramide_Vert_Verre(i);
+        }
+    }
+}
+
 void Animation() {
     // Animation du bonus
     Met_A_Jour_Position_Bonus();
@@ -341,4 +373,7 @@ void Animation() {
 
     // Animation ouverture potes
     Animation_Porte_Haut();
+
+    // Animation des enemies
+    Animation_Enemies();
 }

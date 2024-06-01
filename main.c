@@ -10,6 +10,8 @@
 #include "game-objects/bonus.h"
 #include "utils/utils.h"
 #include "game-manager/collider.h"
+#include "game-objects/enemy.h"
+#include "game-objects/gates.h"
 
 
 const int FPS = 60;
@@ -22,8 +24,11 @@ void Initialise()
     Initialise_Fenetre();
     Initialise_Sprites();
     Charge_Niveau("../niveaux/niveau1.txt");
+    Initialise_Portes();
     Initialise_Vaisseau();
     Initialise_Balle();
+    Initialise_Enemie(0,1,'c');
+    Initialise_Enemie(1,2,'p');
 
     maintenant = SDL_GetPerformanceCounter();
 }
@@ -34,10 +39,14 @@ void Dessine()
     Dessine_Bordure();
     Dessine_Briques();
 
+    Dessine_Enemies(enemies, 2);
+
     Dessine_Vaisseau(x_pos_vaisseau, y_pos_vaisseau);
     Dessine_Balle(stats_balle.pos_x, stats_balle.pos_y);
 
     Met_A_Jour_Position_Balle();
+
+    Met_A_Jour_Enemies();
 
     Gestion_Collision_Balle_Bord();
     Gestion_Collision_Balle_Haut();
