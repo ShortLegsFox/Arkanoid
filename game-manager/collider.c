@@ -165,6 +165,8 @@ void Collision_Enemie_Balle(int index) {
             enemies[index].estMort = true;
             printf("%s\n", "enemy killed");
             enemies[index].explose = true;
+            stats_balle.vitesse_y *= -1;
+            stats_balle.vitesse_x *= -1;
         }
     }
 }

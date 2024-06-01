@@ -1,6 +1,7 @@
 #include "enemy.h"
 
 #include <stdbool.h>
+#include <time.h>
 
 #include "gates.h"
 #include "../game-manager/collider.h"
@@ -20,8 +21,8 @@ void Initialise_Enemie(int index, int numero_porte, char type) {
         enemies[index].pos_x = porteDeux.pos_x + porteDeux.largeur / 4;
         enemies[index].pos_y = porteDeux.pos_y + porteDeux.hauteur;
     }
-    enemies[index].vitesse_x = 2.0;
-    enemies[index].vitesse_y = 2.0;
+    enemies[index].vitesse_x = 1.0;
+    enemies[index].vitesse_y = 1.5;
     enemies[index].numero_porte = numero_porte;
     enemies[index].type = type;
     enemies[index].timer_animation = 0;
@@ -87,8 +88,16 @@ void Animation_Explosion() {
 }
 
 void Chute_Enemies(int index) {
-    if(!Collision_Enemie_Brique(index)) {
-        enemies[index].pos_y += enemies[index].vitesse_y;
+    if (!Collision_Enemie_Brique(index)) {
+        if (enemies[index].pos_y > surface_fenetre->h / 2) {
+            srand(time(NULL));
+            enemies[index].pos_y += enemies[index].vitesse_y / 2;
+            float amplitude = (rand() % 5);
+            float frequency = 0.05;
+            enemies[index].pos_x += sin(enemies[index].pos_y * frequency) * amplitude;
+        } else {
+            enemies[index].pos_y += enemies[index].vitesse_y;
+        }
     }
 }
 
