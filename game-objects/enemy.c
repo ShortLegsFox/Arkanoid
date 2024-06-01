@@ -72,7 +72,7 @@ void Animation_Explosion() {
         if(enemies[i].explose) {
             Dessine_Texture(src_explosion, enemies[i].pos_x, enemies[i].pos_y);
 
-            if(timer_enemies % 10 == 0) {
+            if(timer_enemies % 5 == 0) {
                 src_explosion.x = enemies[i].timer_explosion*src_explosion.w;
                 enemies[i].timer_explosion++;
             }
@@ -113,6 +113,7 @@ void Met_A_Jour_Enemies() {
             Deplacement_Enemies(i);
             Collision_Enemie_Bord(i);
             Collision_Enemie_Balle(i);
+            Collision_Enemie_Vaisseau(i);
         }
     }
 }

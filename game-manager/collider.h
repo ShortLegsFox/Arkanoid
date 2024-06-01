@@ -12,5 +12,6 @@ void Collision_Balle_Briques(int i, int j);
 bool Collision_Enemie_Brique(int index);
 void Collision_Enemie_Bord(int index);
 void Collision_Enemie_Balle(int index);
+void Collision_Enemie_Vaisseau(int index);
 
 #endif

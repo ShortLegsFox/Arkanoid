@@ -169,3 +169,16 @@ void Collision_Enemie_Balle(int index) {
     }
 }
 
+void Collision_Enemie_Vaisseau(int index) {
+    if(enemies[index].estMort == false) {
+        SDL_Rect enemie = {enemies[index].pos_x, enemies[index].pos_y, 32, 32};
+        SDL_Rect vaisseau = {x_pos_vaisseau, surface_fenetre->h - 40, source_texture_vaisseau.w, source_texture_vaisseau.h};
+
+        if(SDL_HasIntersection(&enemie, &vaisseau)) {
+            enemies[index].estMort = true;
+            printf("%s\n", "enemy killed");
+            enemies[index].explose = true;
+        }
+    }
+}
+
