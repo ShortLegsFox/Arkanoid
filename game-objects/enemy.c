@@ -11,7 +11,7 @@
 Enemy enemies[10];
 int timer_enemies = 0;
 bool suiteAnimation = false;
-bool inversePyramide = false;
+int atom_y = 320;
 
 void Initialise_Enemie(int index, int numero_porte, char type) {
     if(numero_porte == 1) {
@@ -28,6 +28,9 @@ void Initialise_Enemie(int index, int numero_porte, char type) {
     enemies[index].timer_animation = 0;
     enemies[index].estMort = false;
     enemies[index].timer_explosion = 0;
+    enemies[index].explose = false;
+    enemies[index].ligneAnimation = 0;
+    timer_porte = 0;
 }
 
 void Animation_Enemie_Pyramide_Vert_Verre(int i) {
@@ -51,27 +54,29 @@ void Animation_Enemie_Chibre_Bleu(int i) {
 }
 
 void Animation_Enemie_Chromosome(int i) {
-    if(timer_enemies % 10 == 0) {
+    if (timer_enemies % 10 == 0) {
         enemies[i].timer_animation++;
-        if(enemies[i].timer_animation == 16) {
+
+        if (enemies[i].timer_animation > 15) {
             enemies[i].timer_animation = 0;
-            source_texture_chromosome.y += source_texture_chromosome.h;
-            suiteAnimation = true;
-        } else if(enemies[i].timer_animation == 8 && suiteAnimation) {
+            enemies[i].ligneAnimation++;
+        }
+
+        if (enemies[i].ligneAnimation == 1 && enemies[i].timer_animation > 7) {
             enemies[i].timer_animation = 0;
-            source_texture_chromosome.y -= source_texture_chromosome.h;
-            suiteAnimation = false;
+            enemies[i].ligneAnimation = 0;
         }
     }
 
     if (enemies[i].type == 'c') {
         source_texture_chromosome.x = source_texture_chromosome.w * enemies[i].timer_animation;
+        source_texture_chromosome.y = atom_y + (source_texture_chromosome.h * enemies[i].ligneAnimation);
     }
 }
 
 void Animation_Explosion() {
     for(int i = 0; i < 2; i++) {
-        if(enemies[i].explose) {
+        if(enemies[i].estMort && enemies[i].explose) {
             Dessine_Texture(src_explosion, enemies[i].pos_x, enemies[i].pos_y);
 
             if(timer_enemies % 5 == 0) {
@@ -79,8 +84,9 @@ void Animation_Explosion() {
                 enemies[i].timer_explosion++;
             }
 
-            if(enemies[i].timer_explosion == 5) {
+            if(enemies[i].timer_explosion > 5) {
                 enemies[i].explose = false;
+                enemies[i].timer_explosion = 0;
             }
         }
     }
@@ -92,7 +98,7 @@ void Chute_Enemies(int index) {
         if (enemies[index].pos_y > surface_fenetre->h / 2) {
             srand(time(NULL));
             enemies[index].pos_y += enemies[index].vitesse_y / 2;
-            float amplitude = (rand() % 5);
+            float amplitude = (rand() % 4)+1;
             float frequency = 0.05;
             enemies[index].pos_x += sin(enemies[index].pos_y * frequency) * amplitude;
         } else {
@@ -107,10 +113,9 @@ void Deplacement_Enemies(int index) {
     }
 }
 
-// Appel de la fonction timer_enemies dans votre boucle principale ou gestionnaire de mise à jour
 void Met_A_Jour_Enemies() {
     timer_enemies++;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 2; i++) {
         if (!enemies[i].estMort) {
             if (enemies[i].type == 'p') {
                 Animation_Enemie_Pyramide_Vert_Verre(i);
@@ -125,6 +130,9 @@ void Met_A_Jour_Enemies() {
             Collision_Enemie_Balle(i);
             Collision_Enemie_Vaisseau(i);
             Gestion_Collision_Enemie_Sortie_Bas(i);
+        } else if(!enemies[i].explose && enemies[i].estMort) {
+            int numero_porte = rand() % 2;
+            Initialise_Enemie(i,numero_porte,'c');
         }
     }
 }

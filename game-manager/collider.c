@@ -163,7 +163,7 @@ void Collision_Enemie_Balle(int index) {
 
         if(SDL_HasIntersection(&enemie, &balle)) {
             enemies[index].estMort = true;
-            printf("%s\n", "enemy killed");
+            printf("enemy killed %d\n",index);
             enemies[index].explose = true;
             stats_balle.vitesse_y *= -1;
             stats_balle.vitesse_x *= -1;

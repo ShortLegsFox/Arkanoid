@@ -27,8 +27,8 @@ void Initialise()
     Initialise_Portes();
     Initialise_Vaisseau();
     Initialise_Balle();
-    Initialise_Enemie(0,1,'c');
-    Initialise_Enemie(1,2,'p');
+    Initialise_Enemie(0,1,'p');
+    Initialise_Enemie(1,2,'c');
 
     maintenant = SDL_GetPerformanceCounter();
 }

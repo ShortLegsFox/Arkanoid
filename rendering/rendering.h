@@ -35,6 +35,7 @@ extern SDL_Rect source_texture_gameover;
 extern SDL_Rect source_texture_brique_bonus_s;
 
 extern int topMargin;
+extern int timer_porte;
 
 void Initialise_Fenetre();
 void Initialise_Sprites();

@@ -13,6 +13,7 @@ typedef struct {
     bool estMort;
     bool explose;
     int timer_explosion;
+    int ligneAnimation;
 } Enemy;
 
 extern Enemy enemies[];
