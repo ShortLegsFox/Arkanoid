@@ -182,3 +182,12 @@ void Collision_Enemie_Vaisseau(int index) {
     }
 }
 
+void Gestion_Collision_Enemie_Sortie_Bas(int index) {
+    SDL_Rect enemie = {enemies[index].pos_x, enemies[index].pos_y, 32, 32};
+    if (enemie.y > (surface_fenetre->h - enemie.w)) {
+        enemies[index].estMort = true;
+        printf("%s\n", "enemy out");
+        enemies[index].explose = true;
+    }
+}
+

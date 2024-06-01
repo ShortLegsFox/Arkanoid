@@ -13,5 +13,6 @@ bool Collision_Enemie_Brique(int index);
 void Collision_Enemie_Bord(int index);
 void Collision_Enemie_Balle(int index);
 void Collision_Enemie_Vaisseau(int index);
+void Gestion_Collision_Enemie_Sortie_Bas(int index);
 
 #endif

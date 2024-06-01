@@ -26,6 +26,7 @@ void Initialise_Enemie(int index, int numero_porte, char type) {
     enemies[index].type = type;
     enemies[index].timer_animation = 0;
     enemies[index].estMort = false;
+    enemies[index].timer_explosion = 0;
 }
 
 void Animation_Enemie_Pyramide_Vert_Verre(int i) {
@@ -77,7 +78,7 @@ void Animation_Explosion() {
                 enemies[i].timer_explosion++;
             }
 
-            if(src_explosion.x == 192) {
+            if(enemies[i].timer_explosion == 5) {
                 enemies[i].explose = false;
             }
         }
@@ -114,6 +115,7 @@ void Met_A_Jour_Enemies() {
             Collision_Enemie_Bord(i);
             Collision_Enemie_Balle(i);
             Collision_Enemie_Vaisseau(i);
+            Gestion_Collision_Enemie_Sortie_Bas(i);
         }
     }
 }
