@@ -79,6 +79,7 @@ SDL_Rect source_texture_bordure_porte_horizontale = {290, 128, 61, 16};
 // -- Explosion
 SDL_Rect src_explosion = {0, 384, 32, 32};
 
+
 int topMargin = 100;
 int timer_porte = 0;
 int reverse = 1;
