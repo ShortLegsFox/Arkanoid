@@ -305,7 +305,7 @@ void Afficher_Game_Over()
     SDL_FillRect(surface_fenetre, NULL, SDL_MapRGB(surface_fenetre->format, 0, 0, 0));
 
     // Afficher Game Over t
-    SDL_Rect gameover = {0, 0, source_texture_gameover.w, source_texture_gameover.h};
+    SDL_Rect gameover = {0, 100, source_texture_gameover.w, source_texture_gameover.h};
     SDL_BlitSurface(textures_gameover, &source_texture_gameover, surface_fenetre, &gameover);
 
     char* t_score = Entier_vers_Tableau(score_joueur);
