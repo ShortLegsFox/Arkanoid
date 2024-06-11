@@ -30,6 +30,7 @@ void Initialise_Enemie(int index, int numero_porte, char type) {
     enemies[index].timer_explosion = 0;
     enemies[index].explose = false;
     enemies[index].ligneAnimation = 0;
+    texturePorteReset = true;
     timer_porte = 0;
 }
 
@@ -133,6 +134,7 @@ void Met_A_Jour_Enemies() {
         } else if(!enemies[i].explose && enemies[i].estMort) {
             int numero_porte = rand() % 2;
             Initialise_Enemie(i,numero_porte,'c');
+            texturePorteReset = true;
         }
     }
 }

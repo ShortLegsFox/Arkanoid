@@ -11,6 +11,7 @@
 #include "utils/utils.h"
 #include "game-manager/collider.h"
 #include "game-objects/enemy.h"
+#include "game-objects/fireshot.h"
 #include "game-objects/gates.h"
 
 
@@ -28,6 +29,7 @@ void Initialise()
     Initialise_Portes();
     Initialise_Vaisseau();
     Initialise_Balle();
+    //Initialise_Tableau_Projectiles();
     Initialise_Enemie(0,1,'p');
     Initialise_Enemie(1,2,'c');
 
@@ -47,14 +49,25 @@ void Dessine()
 
     Met_A_Jour_Position_Balle();
 
+    for(int i = 0; i < 10; i++) {
+        if(objetsProjectiles[i].actif) {
+            Met_A_Jour_Position_Projectile(&objetsProjectiles[i]);
+            Dessine_Projectile(objetsProjectiles[i].pos_x, objetsProjectiles[i].pos_y);
+            Verifie_Collision_Projectile_Brique(objetsProjectiles[i]);
+        }
+    }
+
     Met_A_Jour_Enemies();
 
     Gestion_Collision_Balle_Bord();
     Gestion_Collision_Balle_Haut();
     Gestion_Collision_Balle_Vaisseau();
     Gestion_Collision_Balle_Sortie_Bas();
-    Gestion_Collision_Bonus_Vaisseau();
-    Gestion_Collision_Bonus_Sortie_Bas();
+
+    for(int i = 0; i< indexBonusDansTableau; i++) {
+        Gestion_Collision_Bonus_Vaisseau(&objetBonus[i]);
+        Gestion_Collision_Bonus_Sortie_Bas(&objetBonus[i]);
+    }
 
     char* t_score = Entier_vers_Tableau(score_joueur);
     char* t_vies = Entier_vers_Tableau(vies);
@@ -66,13 +79,13 @@ void Dessine()
     if (vies < 0) Afficher_Game_Over();
 
     if(bonus_s) {
-        //Afficher_Bonus_S();
         Initialise_Position_Bonus(source_texture_brique_bonus_s, 'S');
     }
-
     if(bonus_l) {
-        //Afficher_Bonus_L();
         Initialise_Position_Bonus(source_texture_brique_bonus_l, 'L');
+    }
+    if(bonus_c) {
+        Initialise_Position_Bonus(source_texture_brique_bonus_c, 'C');
     }
 
     Animation();
@@ -83,6 +96,7 @@ int main(int argc, char** argv)
     (void)argc;
     (void)argv;
     int a = 5;
+    bool etatPrecedentS = false;
     
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO ) != 0 )
     {
@@ -125,6 +139,14 @@ int main(int argc, char** argv)
 
         if (keys[SDL_SCANCODE_SPACE])
             Tirer_Balle();
+
+        bool etatActuelS = keys[SDL_SCANCODE_S];
+
+        if(etatActuelS && !etatPrecedentS) {
+            Initialise_Projectile();
+        }
+
+        etatPrecedentS = etatActuelS;
 
         Verifie_Collision_Balle_Brique();
         Dessine();

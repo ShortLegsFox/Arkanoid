@@ -1,5 +1,6 @@
 #ifndef BALL_H
 #define BALL_H
+#include <stdbool.h>
 
 struct Balle {
     double pos_x;
@@ -9,6 +10,8 @@ struct Balle {
 };
 
 extern struct Balle stats_balle;
+
+extern bool balle_sur_vaisseau;
 
 void Initialise_Balle();
 void Met_A_Jour_Position_Balle();

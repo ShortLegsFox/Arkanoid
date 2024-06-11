@@ -3,12 +3,14 @@
 #include "ball.h"
 #include "../game-manager/game_manager.h"
 #include "../rendering/rendering.h"
+#include "../game-objects/fireshot.h"
 
 struct Bonus stats_bonus;
 struct Bonus objetBonus[100];
 int indexBonusDansTableau = 0;
 bool animationBonus;
 int timer = 0;
+bool catch_ball = false;
 
 void Initialise_Bonus(int coord_x, int coord_y, char type_bonus, SDL_Rect sourceTexture) {
     struct Bonus bonusAStocker;
@@ -20,13 +22,14 @@ void Initialise_Bonus(int coord_x, int coord_y, char type_bonus, SDL_Rect source
     bonusAStocker.indexDansTableau = indexBonusDansTableau;
     bonusAStocker.sourceTexture = sourceTexture;
     bonusAStocker.timerAnimation = 0;
+    bonusAStocker.animation = true;
     animationBonus = true;
     objetBonus[indexBonusDansTableau] = bonusAStocker;
     indexBonusDansTableau++;
 }
 
 void Met_A_Jour_Position_Bonus(struct Bonus *objetBonus) {
-    if(animationBonus) {
+    if(objetBonus->animation) {
         objetBonus->pos_y += objetBonus->vitesse_y;// / delta_t;
         SDL_Rect bonusRect = {objetBonus->pos_x, objetBonus->pos_y, objetBonus->sourceTexture.w, objetBonus->sourceTexture.h};
         SDL_BlitSurface(textures_objets, &objetBonus->sourceTexture, surface_fenetre, &bonusRect);
@@ -51,10 +54,18 @@ void Quel_Bonus(char type_bonus) {
     switch (type_bonus) {
         case('S'):
             Bonus_Slow_Down();
+            break;
         case('L'):
-            printf("Laser");
+            Bonus_Laser();
+            printf("Laser\n");
+            break;
+        case('C'):
+            Bonus_Catch_Ball();
+            printf("Catch\n");
+            break;
         default:
-            printf("AAAAA");
+            printf("AAAAA\n");
+            break;
     }
 }
 
@@ -64,4 +75,12 @@ void Bonus_Slow_Down() {
     } else {
         stats_balle.vitesse_y = 4;
     }
+}
+
+void Bonus_Catch_Ball() {
+    Initialise_Balle();
+}
+
+void Bonus_Laser() {
+    Initialise_Tableau_Projectiles();
 }

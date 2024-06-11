@@ -7,6 +7,7 @@
 #include "../game-objects/bonus.h"
 #include "../rendering/rendering.h"
 #include "../game-objects/ship.h"
+#include "../game-objects/fireshot.h"
 
 
 int vies = 2;
@@ -23,6 +24,7 @@ int coord_y_brique_solide_touchee;
 
 bool bonus_s = false;
 bool bonus_l = false;
+bool bonus_c = false;
 
 SDL_Rect bonusTableau[100];
 int indexBonus = 0;
@@ -78,7 +80,7 @@ void Aleatoire_Bonus() {
     int r = rand() % 40;
 
     if(r >= 20) {
-        bonus_s = true;
+        bonus_c = true;
     }
     else if(r >= 0) {
         bonus_l = true;
@@ -88,6 +90,7 @@ void Aleatoire_Bonus() {
         coord_y_brique_cassee = 0;
         bonus_s = false;
         bonus_l = false;
+        bonus_c = false;
     }
 }
 
@@ -105,10 +108,24 @@ void Casse_La_Brique(int i, int j) {
 void Verifie_Collision_Balle_Brique() {
     bonus_s = false;
     bonus_l = false;
+    bonus_c = false;
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 100; j++) {
             if (briques[i][j].estBrique) {
                 Collision_Balle_Briques(i,j);
+            }
+        }
+    }
+}
+
+void Verifie_Collision_Projectile_Brique(struct Projectile projectile) {
+    bonus_s = false;
+    bonus_l = false;
+    bonus_c = false;
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) {
+            if (briques[i][j].estBrique) {
+                Collision_Projectile_Briques(projectile,i,j);
             }
         }
     }

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "../game-objects/fireshot.h"
 
 extern int vies;
 extern int score_joueur;
@@ -14,6 +15,7 @@ extern int niveau_actuel;
 
 extern bool bonus_s;
 extern bool bonus_l;
+extern bool bonus_c;
 extern int coord_x_brique_cassee;
 extern int coord_y_brique_cassee;
 
@@ -26,6 +28,7 @@ void Charge_Niveau(const char* nomFichier);
 void Ajuster_Score();
 void Verifie_Collision_Balle_Brique();
 bool Bonus_S();
+void Verifie_Collision_Projectile_Brique(struct Projectile projectile);
 bool Niveau_Complet();
 void Niveau_Suivant();
 void Aleatoire_Bonus();

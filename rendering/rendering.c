@@ -7,6 +7,7 @@
 #include "../game-objects/bonus.h"
 #include "../game-objects/gates.h"
 #include "../game-objects/enemy.h"
+#include "../game-objects/fireshot.h"
 
 SDL_Window* pointeur_fenetre = NULL; // Pointeur vers la fenetre SDL
 SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
@@ -62,8 +63,10 @@ SDL_Rect source_texture_chromosome = {0,320,32,32};
 
 // -- Bonus S --
 SDL_Rect source_texture_brique_bonus_s = { 256, 0, 32, 16 };
+// -- Bonus C --
+SDL_Rect source_texture_brique_bonus_c = { 256, 16, 32, 16 };
 // -- Bonus L --
-SDL_Rect source_texture_brique_bonus_l = { 256, 32, 32, 16 };
+SDL_Rect  source_texture_brique_bonus_l = { 256, 32, 32, 16 };
 
 // -- Game over
 SDL_Rect source_texture_gameover = {0, 0, 558, 518};
@@ -79,10 +82,14 @@ SDL_Rect source_texture_bordure_porte_horizontale = {290, 128, 61, 16};
 // -- Explosion
 SDL_Rect src_explosion = {0, 384, 32, 32};
 
+// -- Projectile
+SDL_Rect source_texture_projectile = {4, 81, 6, 15};
+
 
 int topMargin = 100;
 int timer_porte = 0;
 int reverse = 1;
+bool texturePorteReset = false;
 
 void Initialise_Fenetre() {
     // Taille de la fenêtre
@@ -241,6 +248,10 @@ void Dessine_Balle(int x, int y) {
     Dessine_Texture(source_texture_balle, x, y);
 }
 
+void Dessine_Projectile(int x, int y) {
+    Dessine_Texture(source_texture_projectile, x, y);
+}
+
 void Dessine_Enemie_Chibre_Bleu(int x, int y) {
     Dessine_Texture(source_texture_chibre_bleu, x, y);
 }
@@ -341,11 +352,19 @@ void Initialise_Position_Bonus(SDL_Rect sourceTextureBonus, char typeBonus) {
 }
 
 void Animation_Porte_Haut() {
+    if(texturePorteReset) {
+        source_texture_bordure_porte_horizontale.x = 290;
+        source_texture_bordure_porte_horizontale.y = 128;
+        reverse = 1;
+        texturePorteReset = false;
+    }
+
     Dessine_Texture(source_texture_bordure_porte_horizontale, porteUn.pos_x, topMargin-1);
     Dessine_Texture(source_texture_bordure_porte_horizontale, porteDeux.pos_x, topMargin-1);
 
     if (timer_porte % 5 == 0 && timer_porte < 50) {
         source_texture_bordure_porte_horizontale.y += (source_texture_bordure_porte_horizontale.h * reverse);
+        printf("%d\n", source_texture_bordure_porte_horizontale.y);
         if (source_texture_bordure_porte_horizontale.y == 208 || source_texture_bordure_porte_horizontale.y == 128) {
             reverse *= -1;
         }

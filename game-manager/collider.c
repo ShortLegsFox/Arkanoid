@@ -6,6 +6,7 @@
 #include "game_manager.h"
 #include "../game-objects/bonus.h"
 #include "../game-objects/bricks.h"
+#include "../game-objects/fireshot.h"
 #include "../utils/utils.h"
 
 #define BALL_SPEED 5 // Adjust as necessary
@@ -34,6 +35,10 @@ void Gestion_Collision_Balle_Vaisseau() {
     SDL_Rect vaisseau = {x_pos_vaisseau, surface_fenetre->h - 40, source_texture_vaisseau.w, source_texture_vaisseau.h};
     SDL_Rect balle = {stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h};
 
+    if(SDL_HasIntersection(&balle, &vaisseau) && catch_ball) {
+        Bonus_Catch_Ball();
+    }
+
     if (SDL_HasIntersection(&balle, &vaisseau) && !premiere_collision_vaisseau) {
         // Calculate the hit position relative to the center of the paddle
         float collisionX = balle.x + balle.w / 2;
@@ -60,20 +65,18 @@ void Gestion_Collision_Balle_Sortie_Bas() {
     }
 }
 
-void Gestion_Collision_Bonus_Vaisseau() {
+void Gestion_Collision_Bonus_Vaisseau(struct Bonus *objetBonus) {
     SDL_Rect vaisseau = {x_pos_vaisseau, surface_fenetre->h - 40, source_texture_vaisseau.w, source_texture_vaisseau.h};
-    SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
-
+    SDL_Rect bonus = {objetBonus->pos_x, objetBonus->pos_y, objetBonus->sourceTexture.w, objetBonus->sourceTexture.h};
     if(SDL_HasIntersection(&vaisseau, &bonus)) {
         animationBonus = false;
-        char type = stats_bonus.type;
-        Quel_Bonus(type);
-        stats_bonus.pos_y += 1000;
+        Quel_Bonus(objetBonus->type);
+        objetBonus->pos_y += 1000;
         score_joueur += 1000;
     }
 }
 
-void Gestion_Collision_Bonus_Sortie_Bas() {
+void Gestion_Collision_Bonus_Sortie_Bas(struct Bonus *objetBonus) {
     if (stats_bonus.pos_y > (surface_fenetre->h - source_texture_brique_bonus_s.h)) {
         animationBonus = false;
     }
@@ -131,6 +134,26 @@ void Collision_Balle_Briques(int i, int j) {
     }
 }
 
+void Collision_Projectile_Briques(struct Projectile projectile ,int i, int j) {
+    SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
+    SDL_Rect projectileRect = { projectile.pos_x, projectile.pos_y, projectile.sourceTexture.w, projectile.sourceTexture.h };
+
+    if (SDL_HasIntersection(&projectileRect, &briqueRect)) {
+        // Always process ball movement, regardless of cooldown
+        printf("Brick hit at (%d, %d): pv_brique = %d\n", i, j, briques[i][j].pv_brique);
+
+        if (briques[i][j].pv_brique == 1) {
+            Aleatoire_Bonus();
+            Casse_La_Brique(i, j);
+            Incremente_Score(i, j);
+        } else {
+            briques[i][j].pv_brique -= 1;
+            briques[i][j].animation = true;
+            briques[i][j].timer_animation = 0;
+        }
+    }
+}
+
 bool Collision_Enemie_Brique(int index) {
     for(int i = 0; i < 100; i++) {
         for(int j = 0; j < 100; j++) {
@@ -161,12 +184,13 @@ void Collision_Enemie_Balle(int index) {
         SDL_Rect enemie = {enemies[index].pos_x, enemies[index].pos_y, 32, 32};
         SDL_Rect balle = { stats_balle.pos_x, stats_balle.pos_y, source_texture_balle.w, source_texture_balle.h };
 
-        if(SDL_HasIntersection(&enemie, &balle)) {
+        if(SDL_HasIntersection(&enemie, &balle) && balle_sur_vaisseau == false) {
             enemies[index].estMort = true;
             printf("enemy killed %d\n",index);
             enemies[index].explose = true;
             stats_balle.vitesse_y *= -1;
             stats_balle.vitesse_x *= -1;
+            texturePorteReset = true;
         }
     }
 }

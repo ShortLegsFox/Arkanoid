@@ -33,10 +33,15 @@ extern SDL_Rect source_texture_gameover;
 
 // -- Bonus
 extern SDL_Rect source_texture_brique_bonus_s;
+extern SDL_Rect source_texture_brique_bonus_c;
 extern SDL_Rect source_texture_brique_bonus_l;
+
+// Projectile
+extern SDL_Rect source_texture_projectile;
 
 extern int topMargin;
 extern int timer_porte;
+extern bool texturePorteReset;
 
 void Initialise_Fenetre();
 void Initialise_Sprites();
@@ -46,6 +51,7 @@ void Dessine_Bordure();
 void Dessine_Briques();
 void Dessine_Vaisseau(int x, int y);
 void Dessine_Balle(int x, int y);
+void Dessine_Projectile(int x, int y);
 void Dessine_Enemie_Chibre_Bleu(int x, int y);
 void Dessine_Enemie_Pyramide_Verte_Verre(int x, int y);
 void Dessine_Enemie_Chromosome(int x, int y);
