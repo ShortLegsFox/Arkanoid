@@ -13,7 +13,8 @@ SDL_Surface* surface_fenetre = NULL; // Surface de la fenetre
 SDL_Surface* texture_noir = NULL; // Planche de la texture de la fenetre
 SDL_Surface* textures_objets = NULL; // Planche des textures des objets (briques)
 SDL_Surface* textures_ascii = NULL; // Planche des textures des ASCII (aplphabet et chiffres)
-SDL_Surface* textures_gameover = NULL; // Planche des textures game over
+SDL_Surface* textures_gameover = NULL;
+SDL_Surface* textures_victoire = NULL;// Planche des textures game over
 SDL_Surface* textures_2 = NULL; // Planche des textures game over
 
 
@@ -65,8 +66,9 @@ SDL_Rect source_texture_brique_bonus_s = { 256, 0, 32, 16 };
 // -- Bonus L --
 SDL_Rect source_texture_brique_bonus_l = { 256, 32, 32, 16 };
 
-// -- Game over
+// -- Game over et Victoire
 SDL_Rect source_texture_gameover = {0, 0, 558, 518};
+SDL_Rect source_texture_victoire = {0, 0, 558, 518};
 
 // -- Bordure du jeu
 SDL_Rect src_bordure_verticale = {41, 100, 15, 15};
@@ -95,11 +97,13 @@ void Initialise_Sprites() {
     textures_objets = SDL_LoadBMP("./assets/sprites2.bmp");
     textures_ascii = SDL_LoadBMP("./assets/Arkanoid_ascii.bmp");
     textures_gameover = SDL_LoadBMP("./assets/gameover.bmp");
+    textures_victoire = SDL_LoadBMP("./assets/victoire.bmp");
     textures_2 = SDL_LoadBMP("./assets/Arkanoid_sprites.bmp");
 
     // Partie noire du sprite en transparence, sauf pour celui où l'on veut recuperer le noir
     SDL_SetColorKey(textures_ascii, true, 0);
     SDL_SetColorKey(textures_gameover, true, 0);
+    SDL_SetColorKey(textures_victoire, true, 0);
     SDL_SetColorKey(textures_objets, true, 0);
     SDL_SetColorKey(textures_2, true, 0);
 }
@@ -310,6 +314,38 @@ void Afficher_Game_Over()
 
     char* t_score = Entier_vers_Tableau(score_joueur);
     AfficheRectangleTextSprite("Score", 190, 10);
+    AfficheRectangleTextSprite(t_score, 320, 10);
+
+    SDL_UpdateWindowSurface(pointeur_fenetre);
+
+    // Attendre une entrée utilisateur avant de quitter
+    SDL_Event evenement;
+    bool attend = true;
+    while (attend) {
+        while (SDL_PollEvent(&evenement)) {
+            if (evenement.type == SDL_KEYDOWN) { // Attend que l'utilisateur appuie sur une touche (bouton power)
+                attend = false;
+            }
+            if (evenement.type == SDL_QUIT) {
+                attend = false;
+            }
+        }
+    }
+
+    SDL_Quit();
+    exit(0);
+}
+
+void Afficher_Victoire() {
+    // Fond noir
+    SDL_FillRect(surface_fenetre, NULL, SDL_MapRGB(surface_fenetre->format, 0, 0, 0));
+
+    // Afficher le sprite de victoire
+    SDL_Rect victoire = {0, 100, source_texture_victoire.w, source_texture_victoire.h}; // Ajustez les valeurs selon la taille réelle de votre sprite
+    SDL_BlitSurface(textures_victoire, &source_texture_victoire, surface_fenetre, &victoire);
+
+    char* t_score = Entier_vers_Tableau(score_joueur); // Supposant que score_joueur contient le score final
+    AfficheRectangleTextSprite("Score :", 190, 10);
     AfficheRectangleTextSprite(t_score, 320, 10);
 
     SDL_UpdateWindowSurface(pointeur_fenetre);
