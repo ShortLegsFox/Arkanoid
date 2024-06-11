@@ -26,5 +26,6 @@ void Animation_Explosion();
 void Chute_Enemies(int index);
 void Deplacement_Enemies(int index);
 void Met_A_Jour_Enemies();
+char Enemie_Aleatoire();
 
 #endif

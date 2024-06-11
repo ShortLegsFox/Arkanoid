@@ -134,12 +134,13 @@ void Collision_Balle_Briques(int i, int j) {
     }
 }
 
-void Collision_Projectile_Briques(struct Projectile projectile ,int i, int j) {
+void Collision_Projectile_Briques(struct Projectile * projectile ,int i, int j) {
     SDL_Rect briqueRect = { briques[i][j].pos_x, briques[i][j].pos_y, source_texture_brique.w, source_texture_brique.h };
-    SDL_Rect projectileRect = { projectile.pos_x, projectile.pos_y, projectile.sourceTexture.w, projectile.sourceTexture.h };
+    SDL_Rect projectileRect = { projectile->pos_x, projectile->pos_y, projectile->sourceTexture.w, projectile->sourceTexture.h };
+    SDL_Rect projectileRectBis = { projectile->pos_x_bis, projectile->pos_y, projectile->sourceTexture.w, projectile->sourceTexture.h };
 
-    if (SDL_HasIntersection(&projectileRect, &briqueRect)) {
-        // Always process ball movement, regardless of cooldown
+
+    if (SDL_HasIntersection(&projectileRect, &briqueRect) || SDL_HasIntersection(&projectileRectBis, &briqueRect)) {
         printf("Brick hit at (%d, %d): pv_brique = %d\n", i, j, briques[i][j].pv_brique);
 
         if (briques[i][j].pv_brique == 1) {
@@ -150,6 +151,28 @@ void Collision_Projectile_Briques(struct Projectile projectile ,int i, int j) {
             briques[i][j].pv_brique -= 1;
             briques[i][j].animation = true;
             briques[i][j].timer_animation = 0;
+        }
+
+        projectile->actif = false;
+    }
+}
+
+void Gestion_Collision_Projectile_Haut(struct Projectile * projectile) {
+    if ((projectile->pos_y < 15 + topMargin)) {
+        projectile->actif = false;
+    }
+}
+
+void Collision_Enemie_Projectile(int index, struct Projectile * projectile) {
+    if(enemies[index].estMort == false) {
+        SDL_Rect enemie = {enemies[index].pos_x, enemies[index].pos_y, 32, 32};
+        SDL_Rect projectileRect = { projectile->pos_x, projectile->pos_y, projectile->sourceTexture.w, projectile->sourceTexture.h };
+
+        if(SDL_HasIntersection(&enemie, &projectileRect)) {
+            enemies[index].estMort = true;
+            printf("enemy killed %d\n",index);
+            enemies[index].explose = true;
+            projectile->actif = false;
         }
     }
 }
@@ -190,6 +213,7 @@ void Collision_Enemie_Balle(int index) {
             enemies[index].explose = true;
             stats_balle.vitesse_y *= -1;
             stats_balle.vitesse_x *= -1;
+            score_joueur += 100;
             texturePorteReset = true;
         }
     }

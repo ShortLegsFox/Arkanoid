@@ -6,6 +6,7 @@
 
 struct Projectile {
     double pos_x;
+    double pos_x_bis;
     double pos_y;
     double vitesse_x;
     double vitesse_y;

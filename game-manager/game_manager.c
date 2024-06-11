@@ -118,7 +118,7 @@ void Verifie_Collision_Balle_Brique() {
     }
 }
 
-void Verifie_Collision_Projectile_Brique(struct Projectile projectile) {
+void Verifie_Collision_Projectile_Brique(struct Projectile * projectile) {
     bonus_s = false;
     bonus_l = false;
     bonus_c = false;

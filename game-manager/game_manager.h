@@ -28,7 +28,7 @@ void Charge_Niveau(const char* nomFichier);
 void Ajuster_Score();
 void Verifie_Collision_Balle_Brique();
 bool Bonus_S();
-void Verifie_Collision_Projectile_Brique(struct Projectile projectile);
+void Verifie_Collision_Projectile_Brique(struct Projectile * projectile);
 bool Niveau_Complet();
 void Niveau_Suivant();
 void Passe_Niveau();

@@ -133,8 +133,23 @@ void Met_A_Jour_Enemies() {
             Gestion_Collision_Enemie_Sortie_Bas(i);
         } else if(!enemies[i].explose && enemies[i].estMort) {
             int numero_porte = rand() % 2;
-            Initialise_Enemie(i,numero_porte,'c');
+            Initialise_Enemie(i,numero_porte,Enemie_Aleatoire());
             texturePorteReset = true;
         }
     }
+}
+
+char Enemie_Aleatoire() {
+    srand(time(NULL));
+    int value = (rand() % 3);
+
+    if(value == 0) {
+        return 'c';
+    }
+
+    if(value == 1) {
+        return 'b';
+    }
+
+    return 'p';
 }

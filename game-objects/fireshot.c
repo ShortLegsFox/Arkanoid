@@ -17,7 +17,8 @@ void Initialise_Tableau_Projectiles() {
 
 void Initialise_Projectile() {
     if(indexProjectile < 10) {
-        objetsProjectiles[indexProjectile].pos_x = x_pos_vaisseau + x_pos_vaisseau / 4;
+        objetsProjectiles[indexProjectile].pos_x = x_pos_vaisseau;
+        objetsProjectiles[indexProjectile].pos_x_bis = x_pos_vaisseau + source_texture_vaisseau.w - 10;
         objetsProjectiles[indexProjectile].pos_y = y_pos_vaisseau;
         objetsProjectiles[indexProjectile].vitesse_x = 5.5;
         objetsProjectiles[indexProjectile].vitesse_y = -10;

@@ -29,8 +29,8 @@ void Initialise()
     Initialise_Portes();
     Initialise_Vaisseau();
     Initialise_Balle();
-    Initialise_Enemie(0,1,'p');
-    Initialise_Enemie(1,2,'c');
+    Initialise_Enemie(0,1, Enemie_Aleatoire());
+    Initialise_Enemie(1,2,Enemie_Aleatoire());
 
     maintenant = SDL_GetPerformanceCounter();
 }
@@ -52,7 +52,11 @@ void Dessine()
         if(objetsProjectiles[i].actif) {
             Met_A_Jour_Position_Projectile(&objetsProjectiles[i]);
             Dessine_Projectile(objetsProjectiles[i].pos_x, objetsProjectiles[i].pos_y);
-            Verifie_Collision_Projectile_Brique(objetsProjectiles[i]);
+            Dessine_Projectile(objetsProjectiles[i].pos_x_bis, objetsProjectiles[i].pos_y);
+            Verifie_Collision_Projectile_Brique(&objetsProjectiles[i]);
+            Gestion_Collision_Projectile_Haut(&objetsProjectiles[i]);
+            Collision_Enemie_Projectile(0, &objetsProjectiles[i]);
+            Collision_Enemie_Projectile(1, &objetsProjectiles[i]);
         }
     }
 
