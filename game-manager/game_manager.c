@@ -161,8 +161,31 @@ void Niveau_Suivant() {
     }
 }
 
+void Niveau_Precedent() {
+        Vide_Tableau_Briques();
+        if (niveau_actuel > 0) {    //Verif à pas faire un magic number
+            niveau_actuel--;
+            char nomFichier[64];
+            sprintf(nomFichier, "../niveaux/niveau%d.txt", niveau_actuel);
+            Sprite_par_niveau();
+            Charge_Niveau(nomFichier);
+            Initialise_Balle();
+            Initialise_Vaisseau();
+            printf("Niveau %d chargé. Bonne chance!\n", niveau_actuel);
+        } else {
+            printf("Vous etes trop revenu en arrière !!!\n");
+            Afficher_Game_Over();
+        }
+}
+
 void Passe_Niveau(){
     Vide_Tableau_Briques();
     Niveau_Complet();
     printf("Triche : Passe niveau. ");
+}
+
+void Perd_Niveau(){
+    Vide_Tableau_Briques();
+    Niveau_Precedent();
+    printf("Triche : Niveau precedent");
 }
