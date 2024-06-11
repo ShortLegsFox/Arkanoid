@@ -22,6 +22,10 @@ int coord_x_brique_solide_touchee;
 int coord_y_brique_solide_touchee;
 
 bool bonus_s = false;
+bool bonus_l = false;
+
+SDL_Rect bonusTableau[100];
+int indexBonus = 0;
 
 bool Briques_Depassent_Limite_X(int index, int largeur_brique, int largeur_max){
     return index * largeur_brique < largeur_max - largeur_brique;
@@ -71,15 +75,19 @@ void Incremente_Score(int x, int y) {
 
 void Aleatoire_Bonus() {
     srand(time(NULL));
-    int r = rand() % 20;
+    int r = rand() % 40;
 
-    if(r == 1) {
+    if(r >= 20) {
         bonus_s = true;
+    }
+    else if(r >= 0) {
+        bonus_l = true;
     }
     else {
         coord_x_brique_cassee = 0;
         coord_y_brique_cassee = 0;
         bonus_s = false;
+        bonus_l = false;
     }
 }
 
@@ -96,6 +104,7 @@ void Casse_La_Brique(int i, int j) {
 
 void Verifie_Collision_Balle_Brique() {
     bonus_s = false;
+    bonus_l = false;
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 100; j++) {
             if (briques[i][j].estBrique) {
@@ -130,6 +139,7 @@ void Niveau_Suivant() {
             printf("Niveau %d chargé. Bonne chance!\n", niveau_actuel);
         } else {
             printf("Félicitations! Vous avez terminé tous les niveaux!\n");
+            Afficher_Game_Over();
             // Ajouter du code ici pour gérer la fin du jeu.
         }
     }

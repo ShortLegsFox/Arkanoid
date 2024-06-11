@@ -13,11 +13,14 @@ extern int count_speed_up;
 extern int niveau_actuel;
 
 extern bool bonus_s;
+extern bool bonus_l;
 extern int coord_x_brique_cassee;
 extern int coord_y_brique_cassee;
 
 extern int coord_x_brique_solide_touchee;
 extern int coord_y_brique_solide_touchee;
+extern SDL_Rect bonusTableau[100];
+extern int indexBonus;
 
 void Charge_Niveau(const char* nomFichier);
 void Ajuster_Score();

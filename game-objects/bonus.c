@@ -1,41 +1,49 @@
 #include "bonus.h"
 
 #include "ball.h"
+#include "../game-manager/game_manager.h"
 #include "../rendering/rendering.h"
 
 struct Bonus stats_bonus;
+struct Bonus objetBonus[100];
+int indexBonusDansTableau = 0;
 bool animationBonus;
 int timer = 0;
 
-void Initialise_Bonus(int coord_x, int coord_y, char type_bonus) {
-    stats_bonus.pos_x = coord_x;
-    stats_bonus.pos_y = coord_y;
-    stats_bonus.vitesse_x = 2.0;
-    stats_bonus.vitesse_y = 2.4;
-    stats_bonus.type = type_bonus;
+void Initialise_Bonus(int coord_x, int coord_y, char type_bonus, SDL_Rect sourceTexture) {
+    struct Bonus bonusAStocker;
+    bonusAStocker.pos_x = coord_x;
+    bonusAStocker.pos_y = coord_y;
+    bonusAStocker.vitesse_x = 2.0;
+    bonusAStocker.vitesse_y = 2.4;
+    bonusAStocker.type = type_bonus;
+    bonusAStocker.indexDansTableau = indexBonusDansTableau;
+    bonusAStocker.sourceTexture = sourceTexture;
+    bonusAStocker.timerAnimation = 0;
     animationBonus = true;
+    objetBonus[indexBonusDansTableau] = bonusAStocker;
+    indexBonusDansTableau++;
 }
 
-void Met_A_Jour_Position_Bonus() {
+void Met_A_Jour_Position_Bonus(struct Bonus *objetBonus) {
     if(animationBonus) {
-        stats_bonus.pos_y += stats_bonus.vitesse_y;// / delta_t;
-        SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w,
-                          source_texture_brique_bonus_s.h};
-        SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
+        objetBonus->pos_y += objetBonus->vitesse_y;// / delta_t;
+        SDL_Rect bonusRect = {objetBonus->pos_x, objetBonus->pos_y, objetBonus->sourceTexture.w, objetBonus->sourceTexture.h};
+        SDL_BlitSurface(textures_objets, &objetBonus->sourceTexture, surface_fenetre, &bonusRect);
 
-        if(timer % 5 == 0) {
-            if (source_texture_brique_bonus_s.x == 480) {
-                source_texture_brique_bonus_s.x = 256;
+        if(objetBonus->timerAnimation % 5 == 0) {
+            if (objetBonus->sourceTexture.x == 480) {
+                objetBonus->sourceTexture.x = 256;
             } else {
-                source_texture_brique_bonus_s.x += 32;
+                objetBonus->sourceTexture.x += 32;
             }
         }
 
-        if(timer > 100) {
-            timer = 0;
+        if(objetBonus->timerAnimation > 100) {
+            objetBonus->timerAnimation = 0;
         }
 
-        timer++;
+        objetBonus->timerAnimation++;
     }
 }
 
@@ -43,6 +51,8 @@ void Quel_Bonus(char type_bonus) {
     switch (type_bonus) {
         case('S'):
             Bonus_Slow_Down();
+        case('L'):
+            printf("Laser");
         default:
             printf("AAAAA");
     }

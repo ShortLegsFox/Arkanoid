@@ -62,8 +62,8 @@ SDL_Rect source_texture_chromosome = {0,320,32,32};
 
 // -- Bonus S --
 SDL_Rect source_texture_brique_bonus_s = { 256, 0, 32, 16 };
-// -- Bonus C --
-SDL_Rect source_texture_brique_bonus_c = { 256, 16, 32, 16 };
+// -- Bonus L --
+SDL_Rect source_texture_brique_bonus_l = { 256, 32, 32, 16 };
 
 // -- Game over
 SDL_Rect source_texture_gameover = {0, 0, 558, 518};
@@ -332,12 +332,12 @@ void Afficher_Game_Over()
     exit(0);
 }
 
-void Afficher_Bonus_S() {
-    SDL_Rect bonus = {stats_bonus.pos_x, stats_bonus.pos_y, source_texture_brique_bonus_s.w, source_texture_brique_bonus_s.h};
+void Initialise_Position_Bonus(SDL_Rect sourceTextureBonus, char typeBonus) {
     int i = coord_x_brique_cassee;
     int j = coord_y_brique_cassee;
-    Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y, 'S');
-    SDL_BlitSurface(textures_objets, &source_texture_brique_bonus_s, surface_fenetre, &bonus);
+    Initialise_Bonus(briques[i][j].pos_x,briques[i][j].pos_y, typeBonus, sourceTextureBonus);
+    SDL_Rect bonus = {objetBonus[indexBonusDansTableau].pos_x, objetBonus[indexBonusDansTableau].pos_y, sourceTextureBonus.w, sourceTextureBonus.h};
+    SDL_BlitSurface(textures_objets, &sourceTextureBonus, surface_fenetre, &bonus);
 }
 
 void Animation_Porte_Haut() {
@@ -368,9 +368,11 @@ void Animation_Enemies() {
     }
 }
 
-void Animation() {
+void  Animation() {
     // Animation du bonus
-    Met_A_Jour_Position_Bonus();
+    for(int i = 0; i < indexBonusDansTableau; i++) {
+        Met_A_Jour_Position_Bonus(&objetBonus[i]);
+    }
 
     // Animation brique solide
     Animation_Brique_Solide();

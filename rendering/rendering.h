@@ -33,6 +33,7 @@ extern SDL_Rect source_texture_gameover;
 
 // -- Bonus
 extern SDL_Rect source_texture_brique_bonus_s;
+extern SDL_Rect source_texture_brique_bonus_l;
 
 extern int topMargin;
 extern int timer_porte;
@@ -58,6 +59,8 @@ void AfficheRectangleCaractereSprite(char character, int coord_x, int coord_y);
 void AfficheRectangleTextSprite(char text[], int coord_x, int coord_y);
 void Afficher_Game_Over();
 void Afficher_Bonus_S();
+void Afficher_Bonus_L();
+void Initialise_Position_Bonus(SDL_Rect sourceTextureBonus, char typeBonus);
 void Animation();
 
 #endif

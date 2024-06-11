@@ -19,6 +19,7 @@ const int RECTIF = 5;
 Uint64 precedent, maintenant; // Timers
 double delta_temps;  // Durée frame en ms
 
+
 void Initialise()
 {
     Initialise_Fenetre();
@@ -65,7 +66,13 @@ void Dessine()
     if (vies < 0) Afficher_Game_Over();
 
     if(bonus_s) {
-        Afficher_Bonus_S();
+        //Afficher_Bonus_S();
+        Initialise_Position_Bonus(source_texture_brique_bonus_s, 'S');
+    }
+
+    if(bonus_l) {
+        //Afficher_Bonus_L();
+        Initialise_Position_Bonus(source_texture_brique_bonus_l, 'L');
     }
 
     Animation();
