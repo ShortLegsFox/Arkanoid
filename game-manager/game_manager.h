@@ -28,6 +28,7 @@ void Verifie_Collision_Balle_Brique();
 bool Bonus_S();
 bool Niveau_Complet();
 void Niveau_Suivant();
+void Passe_Niveau();
 void Aleatoire_Bonus();
 void Casse_La_Brique(int i, int j);
 void Incremente_Score(int i, int j);

@@ -92,6 +92,7 @@ int main(int argc, char** argv)
     Initialise();
 
     bool quitter = false;
+    bool etatPrecedentNiveau = false;
     SDL_Event evenement;
     while (!quitter)
     {
@@ -125,6 +126,12 @@ int main(int argc, char** argv)
 
         if (keys[SDL_SCANCODE_SPACE])
             Tirer_Balle();
+
+        bool etatNiveau = keys[SDL_SCANCODE_UP];
+        if (etatNiveau && !etatPrecedentNiveau) {
+            Passe_Niveau();
+        }
+        etatPrecedentNiveau = etatNiveau;
 
         Verifie_Collision_Balle_Brique();
         Dessine();

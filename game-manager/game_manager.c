@@ -143,3 +143,9 @@ void Niveau_Suivant() {
         }
     }
 }
+
+void Passe_Niveau(){
+    Vide_Tableau_Briques();
+    Niveau_Complet();
+    printf("Triche : Passe niveau. ");
+}
