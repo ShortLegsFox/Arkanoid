@@ -29,7 +29,6 @@ void Initialise()
     Initialise_Portes();
     Initialise_Vaisseau();
     Initialise_Balle();
-    //Initialise_Tableau_Projectiles();
     Initialise_Enemie(0,1,'p');
     Initialise_Enemie(1,2,'c');
 
@@ -79,9 +78,12 @@ void Dessine()
     if (vies < 0) Afficher_Game_Over();
 
     if(bonus_s) {
+        //Afficher_Bonus_S();
         Initialise_Position_Bonus(source_texture_brique_bonus_s, 'S');
     }
+
     if(bonus_l) {
+        //Afficher_Bonus_L();
         Initialise_Position_Bonus(source_texture_brique_bonus_l, 'L');
     }
     if(bonus_c) {
@@ -97,7 +99,7 @@ int main(int argc, char** argv)
     (void)argv;
     int a = 5;
     bool etatPrecedentS = false;
-    
+
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO ) != 0 )
     {
         return 1;
@@ -106,6 +108,7 @@ int main(int argc, char** argv)
     Initialise();
 
     bool quitter = false;
+    bool etatPrecedentNiveau = false;
     SDL_Event evenement;
     while (!quitter)
     {
@@ -147,6 +150,12 @@ int main(int argc, char** argv)
         }
 
         etatPrecedentS = etatActuelS;
+
+        bool etatNiveau = keys[SDL_SCANCODE_UP];
+        if (etatNiveau && !etatPrecedentNiveau) {
+            Passe_Niveau();
+        }
+        etatPrecedentNiveau = etatNiveau;
 
         Verifie_Collision_Balle_Brique();
         Dessine();

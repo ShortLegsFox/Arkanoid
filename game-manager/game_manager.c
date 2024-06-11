@@ -156,8 +156,13 @@ void Niveau_Suivant() {
             printf("Niveau %d chargé. Bonne chance!\n", niveau_actuel);
         } else {
             printf("Félicitations! Vous avez terminé tous les niveaux!\n");
-            Afficher_Game_Over();
-            // Ajouter du code ici pour gérer la fin du jeu.
+            Afficher_Victoire();
         }
     }
+}
+
+void Passe_Niveau(){
+    Vide_Tableau_Briques();
+    Niveau_Complet();
+    printf("Triche : Passe niveau. ");
 }

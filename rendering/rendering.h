@@ -10,6 +10,7 @@ extern SDL_Surface* texture_noir; // Planche de la texture de la fenetre
 extern SDL_Surface* textures_objets; // Planche des textures des objets (briques)
 extern SDL_Surface* textures_ascii; // Planche des textures des ASCII (aplphabet et chiffres)
 extern SDL_Surface* textures_gameover; // Planche des textures game over
+extern SDL_Surface* textures_victoire; // Planche des textures victoire
 
 // -- Découpage sur la planche de texture --
 extern SDL_Rect source_texture_fond; // Le point (0,0) est en haut a gauche
@@ -30,6 +31,9 @@ extern SDL_Rect src_explosion;
 
 // -- Game over
 extern SDL_Rect source_texture_gameover;
+
+// -- Victoire
+extern SDL_Rect source_texture_victoire;
 
 // -- Bonus
 extern SDL_Rect source_texture_brique_bonus_s;
@@ -64,6 +68,7 @@ void CalculRectangleCaractereSprite(char character, SDL_Rect* sourceRect, int sp
 void AfficheRectangleCaractereSprite(char character, int coord_x, int coord_y);
 void AfficheRectangleTextSprite(char text[], int coord_x, int coord_y);
 void Afficher_Game_Over();
+void Afficher_Victoire();
 void Afficher_Bonus_S();
 void Afficher_Bonus_L();
 void Initialise_Position_Bonus(SDL_Rect sourceTextureBonus, char typeBonus);
