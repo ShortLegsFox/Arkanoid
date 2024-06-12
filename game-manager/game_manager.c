@@ -77,13 +77,16 @@ void Incremente_Score(int x, int y) {
 
 void Aleatoire_Bonus() {
     srand(time(NULL));
-    int r = rand() % 40;
+    int r = rand() % 15;
 
-    if(r >= 20) {
+    if(r == 0) {
         bonus_c = true;
     }
-    else if(r >= 0) {
+    else if(r == 5) {
         bonus_l = true;
+    }
+    else if (r == 10) {
+        bonus_s = true;
     }
     else {
         coord_x_brique_cassee = 0;
