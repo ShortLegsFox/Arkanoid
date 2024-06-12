@@ -12,7 +12,7 @@ struct Balle stats_balle;
 
 void Initialise_Balle() {
     stats_balle.pos_x = x_pos_vaisseau + 55;
-    stats_balle.pos_y = y_pos_vaisseau - 15;
+    stats_balle.pos_y = y_pos_vaisseau - 18;
     stats_balle.vitesse_x = 5.0;
     stats_balle.vitesse_y = 5.5;
     balle_sur_vaisseau = true;
@@ -24,7 +24,7 @@ void Met_A_Jour_Position_Balle(){
         stats_balle.pos_y += stats_balle.vitesse_y;// / delta_t;
     } else {
         stats_balle.pos_x = x_pos_vaisseau + 55;
-        stats_balle.pos_y = y_pos_vaisseau - 15;
+        stats_balle.pos_y = y_pos_vaisseau - 18;
     }
 }
 
